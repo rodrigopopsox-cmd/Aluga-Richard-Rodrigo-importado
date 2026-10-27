@@ -1,0 +1,58 @@
+.control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3-5);
+  height: var(--control-h-field);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-control);
+  background: var(--surface-sunken);
+  color: var(--text-body);
+  transition:
+    box-shadow var(--dur-base),
+    background var(--dur-base);
+}
+
+.white {
+  background: var(--surface-card);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+.control:hover { background: var(--surface-hover); }
+.white:hover { background: var(--surface-card); box-shadow: inset 0 0 0 1px var(--border-default); }
+
+.control:focus-within {
+  background: var(--surface-card);
+  box-shadow: 0 0 0 1px var(--brand), 0 0 0 4px var(--focus-ring);
+}
+
+.invalid,
+.invalid:hover {
+  box-shadow: 0 0 0 1px var(--danger);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-size: var(--text-base);
+  color: inherit;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.75;
+}
+
+.kbd {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aluga — Referências visuais</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { padding: var(--space-8) var(--page-gutter) var(--space-11); }
+  h1 { font-weight: var(--weight-regular); font-size: var(--text-3xl); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 var(--space-3); }
+  h1 span { color: var(--brand); }
+  p { color: var(--text-muted); max-width: 680px; line-height: var(--leading-normal); margin: 0 0 var(--space-7); }
+  h2 { font-weight: var(--weight-regular); font-size: var(--text-lg); color: var(--text-strong); margin: var(--space-8) 0 var(--space-4); }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); }
+  a { display: block; background: var(--surface-card); box-shadow: inset 0 0 0 1px var(--border-subtle); border-radius: var(--radius-tile); padding: var(--space-4) var(--space-5); color: var(--text-body); }
+  a:hover { box-shadow: inset 0 0 0 1px var(--border-default); text-decoration: none; color: var(--text-strong); }
+  small { display: block; color: var(--text-muted); font-size: var(--text-xs); margin-top: var(--space-1); }
+</style>
+</head>
+<body>
+<h1>Referências visuais<span>.</span></h1>
+<p>HTMLs originais exportados do Claude Design, preservados como referência (não são componentes). Abrem direto do disco, sem servidor; os cards e o UI kit carregam React/Babel/Lucide do unpkg, então precisam de internet. Os componentes reais ficam em <code>design-system/components</code> e a vitrine viva na rota <code>/design-system</code>.</p>
+
+<h2>Admin dashboard</h2>
+<ul>
+  <li><a href="ui_kits/admin/index.html">Painel administrativo<small>responsivo · login, painel, imóveis, manutenção, financeiro</small></a></li>
+  <li><a href="ui_kits/admin/mobile.html">Painel — mobile<small>o mesmo app num frame de 390px</small></a></li>
+</ul>
+
+<h2>Componentes</h2>
+<ul>
+  <li><a href="components/core/core.card.html">Core<small>Button · IconButton · Badge · Chip · Avatar · Wordmark · Icon</small></a></li>
+  <li><a href="components/forms/forms.card.html">Forms<small>Input · Select · Checkbox · Switch · SegmentedControl</small></a></li>
+  <li><a href="components/data/data.card.html">Data<small>Card · StatCard · Metric · ProgressPill · charts · DataTable</small></a></li>
+  <li><a href="components/navigation/navigation.card.html">Navigation<small>NavPills · SideRail</small></a></li>
+  <li><a href="components/feedback/feedback.card.html">Feedback<small>Dialog · Toast · Tooltip</small></a></li>
+</ul>
+
+<h2>Marca</h2>
+<ul>
+  <li><a href="guidelines/wordmark.html">Wordmark</a></li>
+  <li><a href="guidelines/imagery.html">Imagery</a></li>
+  <li><a href="guidelines/motifs.html">Motifs</a></li>
+  <li><a href="thumbnail.html">Capa (thumbnail)</a></li>
+</ul>
+
+<h2>Cores</h2>
+<ul>
+  <li><a href="guidelines/colors-brand.html">Brand</a></li>
+  <li><a href="guidelines/colors-ink.html">Text colors</a></li>
+  <li><a href="guidelines/colors-neutrals.html">Neutrals</a></li>
+  <li><a href="guidelines/colors-semantic.html">Semantic</a></li>
+  <li><a href="guidelines/colors-viz.html">Data viz</a></li>
+</ul>
+
+<h2>Tipografia</h2>
+<ul>
+  <li><a href="guidelines/type-display.html">Display</a></li>
+  <li><a href="guidelines/type-caps.html">Campaign caps</a></li>
+  <li><a href="guidelines/type-cardtitle.html">Card title</a></li>
+  <li><a href="guidelines/type-metric.html">Metric</a></li>
+  <li><a href="guidelines/type-body.html">Body &amp; labels</a></li>
+  <li><a href="guidelines/type-weights.html">Weights</a></li>
+</ul>
+
+<h2>Espaço e forma</h2>
+<ul>
+  <li><a href="guidelines/spacing-scale.html">Spacing scale</a></li>
+  <li><a href="guidelines/spacing-layout.html">Layout rhythm</a></li>
+  <li><a href="guidelines/radii.html">Corner radii</a></li>
+  <li><a href="guidelines/shadows.html">Elevation</a></li>
+</ul>
+</body>
+</html>

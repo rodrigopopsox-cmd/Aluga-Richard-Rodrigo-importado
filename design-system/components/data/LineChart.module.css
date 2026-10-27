@@ -1,0 +1,34 @@
+.chart {
+  position: relative;
+  width: 100%;
+  font-family: var(--font-sans);
+}
+
+.svg {
+  display: block;
+}
+
+.hatchBg { fill: var(--chart-hatch-bg); }
+.hatchLine { stroke: var(--chart-hatch-line); }
+.dropLine { stroke: var(--chart-ink); }
+.dotRing { stroke: var(--surface-card); }
+
+.tip {
+  position: absolute;
+  transform: translateX(-50%);
+  background: var(--surface-inverse);
+  color: var(--on-inverse);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}

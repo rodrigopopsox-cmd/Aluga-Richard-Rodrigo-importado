@@ -1,0 +1,116 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "react",
+    "import",
+    "jsx-a11y",
+    "nextjs"
+  ],
+  "jsPlugins": [
+    {
+      "name": "eslint-js",
+      "specifier": "oxlint-plugin-eslint"
+    }
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "node_modules/**",
+    "design-system/reference/**",
+    "next-env.d.ts"
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "**/design-system/components/**",
+              "@design-system/components/**",
+              "**/design-system/templates/*/**",
+              "@design-system/templates/*/**"
+            ],
+            "message": "Import design-system components from '@design-system' (and templates from '@design-system/templates/<name>'), not component internals."
+          }
+        ]
+      }
+    ],
+    "eslint-js/no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var(--…)."
+      },
+      {
+        "selector": "TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var(--…)."
+      },
+      {
+        "selector": "Literal[value=/\\b(rgba?|hsla?)\\(/]",
+        "message": "Raw rgb()/hsl() color — use a design-system color token via var(--…)."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing/radius token via var(--…) or a CSS Module class."
+      },
+      {
+        "selector": "TemplateElement[value.raw=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing/radius token via var(--…) or a CSS Module class."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Plus Jakarta Sans|var\\())/i]",
+        "message": "Font not provided by the design system. Use var(--font-sans) (Plus Jakarta Sans)."
+      },
+      {
+        "selector": "Property[key.name='fontFamily'] > Literal",
+        "message": "Font not provided by the design system. Use var(--font-sans) via a CSS Module."
+      }
+    ],
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "react/no-unstable-nested-components": [
+      "warn",
+      {
+        "allowAsProps": true
+      }
+    ],
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": [
+          "**/*.css"
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "design-system/**"
+      ],
+      "rules": {
+        "no-restricted-imports": "off",
+        "nextjs/no-img-element": "off"
+      }
+    },
+    {
+      "files": [
+        "scripts/**"
+      ],
+      "rules": {
+        "eslint-js/no-restricted-syntax": "off"
+      }
+    }
+  ]
+}

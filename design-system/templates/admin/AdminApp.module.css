@@ -1,0 +1,15 @@
+.mobileTabs {
+  display: flex;
+  margin-bottom: var(--card-gap);
+}
+
+.toasts {
+  position: fixed;
+  right: var(--space-5);
+  bottom: calc(var(--space-11) + var(--space-7));
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-5);
+  width: min(380px, calc(100vw - 32px));
+}

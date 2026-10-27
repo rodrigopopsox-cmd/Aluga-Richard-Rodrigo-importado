@@ -1,0 +1,29 @@
+<!-- @dsCard group="Components" viewport="700x880" name="Data" subtitle="Card · StatCard · Metric · ProgressPill · BarChart · LineChart · HeatScale · DataTable" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../vendor/ds-bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:14px}.lbl{font-size:11px;color:var(--text-muted);width:70px}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const NS=window.AlugaDesignSystem_e4b917;
+const {Card,CardHeader,StatCard,Metric,ProgressPill,BarChart,Legend,LineChart,HeatScale,DataTable,Chip,IconButton,Badge,SegmentedControl}=NS;
+const viz=[{label:'Direto',value:27,color:'var(--viz-blue)'},{label:'Site',value:28,color:'var(--viz-green)'},{label:'Instagram',value:34,color:'var(--viz-orange)'},{label:'Parceiro',value:11,color:'var(--viz-lilac)'}];
+function App(){return <div className="col">
+<div style={{display:'grid',gridTemplateColumns:'1.3fr 1fr 1fr',gap:12}}>
+<StatCard title="Total de" subtitle="Unidades" value="432" image="../../../assets/images/house-orange.png" action={<Chip variant="glass" icon="building-2">Ver</Chip>}/>
+<StatCard title="Novos" subtitle="Contratos" value="32" delta="+12" deltaLabel="esta semana"/>
+<Card tone="dark"><CardHeader inverse title="Próximo" subtitle="vencimento" action={<IconButton icon="maximize-2" label="Expandir" variant="ghost" size={32} style={{color:'#fff',background:'rgba(255,255,255,.08)'}}/>}/><Metric inverse value="08" label="nov" style={{marginTop:28}}/></Card>
+</div>
+<div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+<Card><CardHeader title="Visitantes por" subtitle="Origem"/><div style={{display:'flex',gap:16,marginTop:14,alignItems:'flex-end'}}><Legend items={viz.map(v=>({label:v.label,color:v.color,value:v.value+'%'}))} style={{width:130}}/><BarChart data={viz} height={96} style={{flex:1}}/></div></Card>
+<Card><CardHeader title="Manutenção" subtitle="Atividade"/><div className="col" style={{gap:8,marginTop:14}}><ProgressPill label="Vistoria HVAC" value={100} people={[{name:'Ana L'},{name:'Bia M'}]}/><ProgressPill label="Elevador" value={67} tone="light"/><ProgressPill label="Reparo hidráulico" value={43} tone="brand"/></div></Card>
+</div>
+<div style={{display:'grid',gridTemplateColumns:'1.6fr 1fr',gap:12}}>
+<Card><CardHeader title="Receita" subtitle="Análise" action={<SegmentedControl size="sm" options={['Dia','Semana','Mês']} value="Semana"/>}/><LineChart height={150} series={[{name:'r',color:'var(--ink-700)',data:[10.4,12,11.2,16,23.6,15,18.4,14.4]}]} labels={['10 abr','15 abr','20 abr','25 abr']} highlight={4} formatValue={v=><span>R$ {Math.floor(v)}<span style={{opacity:.55}}>.{String(Math.round((v%1)*10))}00</span></span>}/></Card>
+<Card><CardHeader title="Tempo médio de" subtitle="Locação"/><Metric value="18 dias" size="md" style={{marginTop:16}}/><div style={{fontSize:12,marginTop:6}}><span style={{color:'var(--green-500)'}}>3 dias</span> vs mês passado</div><HeatScale level={6} label="Alta procura" style={{marginTop:14,alignItems:'flex-start'}}/></Card>
+</div>
+<Card padding={8}><DataTable columns={[{key:'u',label:'Unidade'},{key:'t',label:'Inquilino'},{key:'v',label:'Aluguel',align:'right'},{key:'s',label:'Status',render:r=><Badge size="sm" tone={r.tone} dot>{r.s}</Badge>}]} rows={[{id:1,u:'Aurora · 402',t:'Marina Costa',v:'R$ 3.200',s:'Pago',tone:'success'},{id:2,u:'Pinheiros · 118',t:'João Pedro',v:'R$ 2.750',s:'Atrasado',tone:'danger'}]}/></Card>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

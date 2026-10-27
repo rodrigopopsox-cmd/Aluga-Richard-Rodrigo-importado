@@ -1,0 +1,19 @@
+/* Aluga — corner radii. Source of truth: DESIGN.md. */
+:root {
+  --radius-xs: 6px;
+  --radius-badge-sm: 7px;
+  --radius-badge: 9px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-tile: 16px;
+  --radius-lg: 20px;
+  --radius-tile-lg: 22px;
+  --radius-xl: 26px;
+  --radius-2xl: 36px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  --radius-card: var(--radius-xl);
+  --radius-panel: var(--radius-2xl);
+  --radius-control: var(--radius-pill);
+}

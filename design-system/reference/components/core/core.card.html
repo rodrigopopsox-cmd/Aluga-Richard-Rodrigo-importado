@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components" viewport="700x330" name="Core" subtitle="Button · IconButton · Badge · Chip · Avatar · Wordmark · Icon" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../vendor/ds-bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--surface-page)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:14px}.lbl{font-size:11px;color:var(--text-muted);width:70px}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const NS=window.AlugaDesignSystem_e4b917;
+const {Button,IconButton,Badge,Chip,Avatar,AvatarGroup,Wordmark,Icon}=NS;
+function App(){return <div className="col">
+<div className="row"><span className="lbl">Button</span><Button icon="plus">Novo contrato</Button><Button variant="dark" size="sm" icon="plus">Adicionar tarefa</Button><Button variant="secondary">Cancelar</Button><Button variant="outline">Exportar</Button><Button variant="ghost">Ghost</Button><Button disabled>Disabled</Button></div>
+<div className="row"><span className="lbl">Sizes</span><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg" iconRight="arrow-right">Large</Button></div>
+<div className="row"><span className="lbl">IconButton</span><IconButton icon="message-circle" label="Mensagens" dot/><IconButton icon="bell" label="Alertas"/><IconButton icon="maximize-2" label="Expandir" variant="dark"/><IconButton icon="building-2" label="Imóveis" variant="brand"/><IconButton icon="settings" label="Config" variant="white"/></div>
+<div className="row"><span className="lbl">Badge</span><Badge tone="brand">Problema 01</Badge><Badge tone="soft">Reservado</Badge><Badge tone="success" dot>Ocupado</Badge><Badge tone="danger" dot>Atrasado</Badge><Badge tone="warning" dot>Pendente</Badge><Badge tone="neutral">Livre</Badge><Badge count={2}/></div>
+<div className="row"><span className="lbl">Chip</span><Chip icon="lightbulb">Saiba mais</Chip><Chip icon="building-2" variant="outline">Ver unidades</Chip><span style={{background:'#878992',padding:6,borderRadius:12,display:'inline-flex',gap:6}}><Chip icon="users" variant="glass">Visitantes</Chip><Chip icon="box" variant="dark">Vista 3D</Chip></span></div>
+<div className="row"><span className="lbl">Avatar</span><Avatar name="Rodrigo Alves"/><Avatar name="Richard Souza" size={32}/><AvatarGroup people={[{name:'Ana Lima'},{name:'Bruno C'},{name:'Caio D'},{name:'Duda E'}]} size={28}/><span style={{width:20}}></span><Wordmark size={26}/><Wordmark variant="spaced" size={14}/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

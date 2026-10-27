@@ -1,0 +1,66 @@
+.nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  font-family: var(--font-sans);
+}
+
+.bar {
+  background: var(--surface-card);
+  box-shadow: var(--shadow-card);
+  gap: var(--space-3);
+  padding: var(--space-2);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  height: var(--control-h-md);
+  padding: 0 var(--space-5-5);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--text-base);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur-base) var(--ease-out),
+    color var(--dur-base),
+    padding var(--dur-base) var(--ease-out);
+}
+
+.item:hover:not([aria-selected='true']) {
+  background: var(--hover-tint);
+}
+
+.item[aria-selected='true'] {
+  background: var(--brand);
+  color: var(--on-brand);
+  box-shadow: var(--shadow-brand);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Mobile bottom bar: inactive items are icon-only gray circles, active expands with label */
+.compact .item {
+  height: var(--control-h-lg);
+  min-width: 52px;
+  padding: 0 var(--space-4-5);
+  background: var(--surface-sunken);
+}
+
+.compact .item[aria-selected='true'] {
+  flex: 1;
+  padding: 0 var(--space-6);
+  background: var(--brand);
+}

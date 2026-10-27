@@ -1,0 +1,36 @@
+/* Aluga — spacing & layout tokens. Source of truth: DESIGN.md. */
+:root {
+  --space-0: 0;
+  --space-0-5: 2px; /* half-steps: values the components use between scale steps */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-3-5: 10px;
+  --space-4: 12px;
+  --space-4-5: 14px;
+  --space-5: 16px;
+  --space-5-5: 18px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --space-7-5: 28px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 56px;
+  --space-11: 72px;
+
+  --card-padding: var(--space-6);
+  --card-gap: var(--space-4-5);
+  --page-gutter: var(--space-7);
+
+  --control-h-xs: 26px;
+  --control-h-sm: 32px;
+  --control-h-md: 40px;
+  --control-h-field: 44px;
+  --control-h-lg: 48px;
+
+  --rail-w: 72px;
+  --topbar-h: 72px;
+
+  /* Breakpoints (documentation only — CSS custom properties can't be used in @media):
+     mobile < 760px · tablet 760–1179px · desktop ≥ 1180px */
+}

@@ -1,0 +1,46 @@
+{
+  "ignoreFiles": ["node_modules/**", ".next/**", "design-system/reference/**"],
+  "rules": {
+    "color-no-invalid-hex": true,
+    "color-no-hex": [true, { "message": "Raw hex color — use a design-system color token via var(--…)." }],
+    "color-named": ["never", { "message": "Named color — use a design-system color token via var(--…)." }],
+    "function-disallowed-list": [
+      ["rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", "oklab", "oklch", "color"],
+      { "message": "Raw color function — use a design-system color token via var(--…)." }
+    ],
+    "declaration-property-unit-disallowed-list": [
+      {
+        "/^(padding|margin)(-.+)?$/": ["px", "rem", "em"],
+        "/^(gap|row-gap|column-gap)$/": ["px", "rem", "em"],
+        "/^border(-.+)?-radius$/": ["px", "rem", "em"],
+        "font-size": ["px", "rem", "em", "pt"]
+      },
+      { "message": "Raw spacing / radius / font-size — use var(--space-*), var(--radius-*) or var(--text-*)." }
+    ],
+    "declaration-property-value-allowed-list": [
+      {
+        "font-family": ["/^var\\(--font-[\\w-]+\\)$/", "inherit"],
+        "font-weight": ["/^var\\(--weight-[\\w-]+\\)$/", "inherit"]
+      },
+      { "message": "Use the design-system font tokens (var(--font-sans), var(--weight-*))." }
+    ],
+    "block-no-empty": true,
+    "declaration-block-no-duplicate-properties": [true, { "ignore": ["consecutive-duplicates-with-different-values"] }],
+    "no-invalid-double-slash-comments": true,
+    "property-no-unknown": true,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global", "local"] }],
+    "unit-no-unknown": true
+  },
+  "overrides": [
+    {
+      "files": ["design-system/tokens/**/*.css"],
+      "rules": {
+        "color-no-hex": null,
+        "color-named": null,
+        "function-disallowed-list": null,
+        "declaration-property-unit-disallowed-list": null,
+        "declaration-property-value-allowed-list": null
+      }
+    }
+  ]
+}

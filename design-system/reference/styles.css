@@ -1,0 +1,4 @@
+/* Entry point for the reference HTMLs (same role as the original styles.css).
+   Points at the canonical tokens in design-system/tokens — the references render with the live tokens. */
+@import '../tokens/fonts.css';
+@import '../tokens/index.css';

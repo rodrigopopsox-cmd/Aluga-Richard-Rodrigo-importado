@@ -1,0 +1,9 @@
+/* Entry point for all design tokens + base styles (no web-font import).
+   App: imported once in src/app/globals.css.
+   Standalone HTML: import fonts.css first, then this file. */
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './radii.css';
+@import './effects.css';
+@import './base.css';

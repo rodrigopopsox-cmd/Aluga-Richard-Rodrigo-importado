@@ -1,0 +1,268 @@
+<!-- @dsCard group="Admin Dashboard" viewport="1440x900" name="Admin dashboard" subtitle="Responsive property-rental admin — login, painel, análises, imóveis, manutenção, financeiro" -->
+<!-- @startingPoint section="Screens" subtitle="Aluga admin dashboard (responsive desktop/mobile)" viewport="1440x900" -->
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aluga — Painel administrativo</title><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../vendor/ds-bundle.js"></script>
+<script src="data.js"></script></head><body><div id="root"></div>
+<script type="text/babel" data-source="Shell.jsx">
+const {SideRail,NavPills,Input,IconButton,Avatar,Wordmark}=window.AlugaDesignSystem_e4b917;
+function useBreakpoint(){const get=()=>window.innerWidth<760?'m':window.innerWidth<1180?'t':'d';const [bp,setBp]=React.useState(get);React.useEffect(()=>{const f=()=>setBp(get());window.addEventListener('resize',f);return()=>window.removeEventListener('resize',f);},[]);return bp;}
+const MODULES=[{id:'dash',label:'Painel',icon:'layout-grid'},{id:'props',label:'Imóveis',icon:'building-2'},{id:'maint',label:'Manutenção',icon:'wrench'},{id:'fin',label:'Financeiro',icon:'wallet'}];
+function TopBar({bp,onLogout}){
+  const user=window.ALUGA_DATA.user;
+  if(bp==='m')return <header style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px 6px'}}><span style={{width:40,height:40,borderRadius:12,background:'var(--brand)',color:'#fff',display:'inline-flex',alignItems:'center',justifyContent:'center',fontWeight:500,fontSize:18}}>A</span><Wordmark variant="spaced" size={15}/><span style={{flex:1}}></span><IconButton icon="message-circle" label="Mensagens" dot/><IconButton icon="bell" label="Notificações"/><button onClick={onLogout} style={{border:0,padding:0,background:'none',cursor:'pointer',borderRadius:'50%'}} title="Sair"><Avatar name={user.name} size={40}/></button></header>;
+  return null;
+}
+function Shell({module,setModule,view,setView,onLogout,children}){
+  const bp=useBreakpoint();const user=window.ALUGA_DATA.user;
+  if(bp==='m')return <div style={{minHeight:'100vh',background:'var(--surface-page)',paddingBottom:96}}>
+    <TopBar bp="m" onLogout={onLogout}/>
+    <main style={{padding:'10px 16px 16px'}}>{children(bp)}</main>
+    <div style={{position:'fixed',left:0,right:0,bottom:0,padding:'10px 16px 18px',display:'flex',justifyContent:'center',background:'linear-gradient(to top,var(--surface-page) 60%,rgba(244,244,248,0))',zIndex:20}}><NavPills compact bar items={MODULES} value={module} onChange={setModule} style={{width:'100%',maxWidth:420}}/></div>
+  </div>;
+  return <div style={{display:'grid',gridTemplateColumns:'88px minmax(0,1fr)',minHeight:'100vh',background:'var(--surface-page)'}}>
+    <div style={{position:'sticky',top:0,height:'100vh',display:'flex',flexDirection:'column',alignItems:'center',padding:'22px 0 20px',gap:28}}>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6}}><span style={{width:44,height:44,borderRadius:14,background:'var(--brand)',color:'#fff',display:'inline-flex',alignItems:'center',justifyContent:'center',fontWeight:500,fontSize:19}}>A</span><Wordmark variant="spaced" size={9}/></div>
+      <SideRail items={MODULES} value={module} onChange={setModule} style={{flex:1}} footer={<IconButton icon="log-out" label="Sair" variant="ghost" onClick={onLogout}/>}/>
+    </div>
+    <div style={{minWidth:0,display:'flex',flexDirection:'column'}}>
+      <header style={{display:'flex',alignItems:'center',gap:14,padding:'20px 24px 16px 0',flexWrap:'wrap'}}>
+        {module==='dash'?<NavPills items={[{id:'overview',label:'Visão geral',icon:'layout-grid'},{id:'analytics',label:'Análises',icon:'chart-spline'}]} value={view} onChange={setView}/>:<div style={{fontSize:24,letterSpacing:'-0.01em',color:'var(--text-strong)',padding:'0 8px'}}>{MODULES.find(m=>m.id===module).label}<span style={{color:'var(--brand)'}}>.</span></div>}
+        <Input icon="search" placeholder="Buscar imóvel, inquilino, contrato…" shortcut="⌘+K" style={{flex:1,minWidth:220,maxWidth:520,marginLeft:'auto'}}/>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}><IconButton icon="message-circle" label="Mensagens" dot/><IconButton icon="bell" label="Notificações"/>{bp==='d'&&<div style={{lineHeight:1.2,fontSize:13,textAlign:'right',marginLeft:6}}><div style={{color:'var(--text-strong)'}}>{user.name}</div><div style={{color:'var(--text-muted)',fontSize:12}}>{user.role}</div></div>}<Avatar name={user.name} size={44}/></div>
+      </header>
+      <main style={{padding:'0 24px 32px 0',minWidth:0}}>{children(bp)}</main>
+    </div>
+  </div>;
+}
+Object.assign(window,{Shell,useBreakpoint,MODULES});
+
+</script>
+<script type="text/babel" data-source="LoginScreen.jsx">
+const {Button:LBtn,Input:LInput,Checkbox:LCheck,Wordmark:LWord}=window.AlugaDesignSystem_e4b917;
+function LoginScreen({onLogin}){
+  const bp=useBreakpoint();const [remember,setRemember]=React.useState(true);const [email,setEmail]=React.useState('rodrigo@aluga.com.br');
+  return <div style={{minHeight:'100vh',display:'grid',gridTemplateColumns:bp==='m'?'1fr':'1.1fr 1fr',background:'var(--surface-page)',padding:bp==='m'?12:20,gap:20}}>
+    {bp!=='m'&&<div style={{position:'relative',borderRadius:40,overflow:'hidden',minHeight:560,background:'#DCE1E6'}}><img src="../../../assets/images/building-brick.png" alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'30% 100%'}}/><div style={{position:'absolute',inset:'0 0 auto 0',height:'48%',background:'linear-gradient(#DCE1E6 55%,rgba(220,225,230,0))'}}></div><div style={{position:'absolute',left:36,top:36,right:36,fontSize:44,lineHeight:1.08,textTransform:'uppercase',color:'#1D3C47',letterSpacing:'-0.01em'}}><span style={{fontWeight:300}}>Feito para</span> <b style={{fontWeight:500}}>administrar</b><br/><span style={{fontWeight:300}}>o que você</span> <b style={{fontWeight:500}}>aluga</b></div><div style={{position:'absolute',right:28,bottom:28,maxWidth:360,color:'rgba(255,255,255,.8)',fontSize:17,lineHeight:1.35,fontWeight:300}}>Reúne <b style={{fontWeight:500,color:'#fff'}}>contratos</b>, <b style={{fontWeight:500,color:'#fff'}}>manutenção</b> e <b style={{fontWeight:500,color:'#fff'}}>finanças</b> em um só lugar.</div></div>}
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',padding:bp==='m'?'40px 12px':24}}>
+      <form onSubmit={e=>{e.preventDefault();onLogin();}} style={{width:'100%',maxWidth:400,display:'flex',flexDirection:'column',gap:18}}>
+        <LWord size={40}/>
+        <div style={{fontSize:28,lineHeight:1.15,letterSpacing:'-0.01em',margin:'18px 0 4px'}}><div style={{color:'var(--text-strong)'}}>Bem-vindo de volta</div><div style={{color:'var(--text-muted)'}}>Entre na sua conta</div></div>
+        <LInput label="E-mail" variant="white" value={email} onChange={setEmail} icon="mail"/>
+        <LInput label="Senha" variant="white" type="password" defaultValue="aluga2026" icon="lock"/>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:13}}><LCheck checked={remember} onChange={setRemember} label="Manter conectado"/><a href="#" onClick={e=>e.preventDefault()}>Esqueci a senha</a></div>
+        <LBtn type="submit" size="lg" fullWidth iconRight="arrow-right">Entrar</LBtn>
+        <div style={{fontSize:13,color:'var(--text-muted)',textAlign:'center'}}>Ainda não tem conta? <a href="#" onClick={e=>e.preventDefault()}>Criar conta</a></div>
+      </form>
+    </div>
+  </div>;
+}
+window.LoginScreen=LoginScreen;
+
+</script>
+<script type="text/babel" data-source="DashboardScreen.jsx">
+(function(){
+const {Card,CardHeader,StatCard,Metric,ProgressPill,LineChart,Chip,IconButton,Button,Badge,Legend}=window.AlugaDesignSystem_e4b917;
+function DashboardScreen({bp,tasks,onAddTask,go}){
+  const D=window.ALUGA_DATA;const cols=bp==='d'?4:2;const m=bp==='m';const full=m?{gridColumn:'span 2'}:{};
+  const grid={display:'grid',gridAutoFlow:'dense',gridTemplateColumns:'repeat('+cols+',minmax(0,1fr))',gap:14};
+  const span=n=>({gridColumn:'span '+Math.min(n,cols)});
+  return <div style={grid}>
+    <div style={{...span(bp==='m'?1:1)}}><StatCard title="Total de" subtitle="Unidades" value="432" image="../../../assets/images/house-orange.png" action={<Chip variant="glass" icon="building-2" onClick={()=>go('props')}>Ver unidades</Chip>}/></div>
+    <div><StatCard title="Visitas" subtitle="Hoje" value="56" image="../../../assets/images/building-glass.png" action={<Chip variant="glass" icon="users">Agenda</Chip>}/></div>
+    <div style={full}><StatCard title="Novos" subtitle="Contratos" value="32" delta="+12" deltaLabel="esta semana"/></div>
+    <Card padding={0} style={{...full,...(bp==='d'?{gridRow:'span 2'}:{}),minHeight:bp==='d'?0:320,display:'flex',flexDirection:'column'}}>
+      <div style={{padding:20}}><CardHeader title="Ed. Aurora," subtitle="São Paulo · SP-04" action={<IconButton icon="maximize-2" label="Abrir imóvel" variant="soft" size={36} onClick={()=>go('props')}/>}/></div>
+      <div style={{flex:1,position:'relative',minHeight:200}}><img src="../../../assets/images/building-brick.png" alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}/><div style={{position:'absolute',left:14,right:14,bottom:14,display:'flex',alignItems:'flex-end',justifyContent:'space-between',gap:8}}><div style={{background:'rgba(255,255,255,.82)',backdropFilter:'var(--blur-glass)',WebkitBackdropFilter:'var(--blur-glass)',borderRadius:18,padding:'10px 14px'}}><div style={{fontSize:12,color:'var(--ink-700)'}}>Ocupação</div><div style={{fontSize:26,fontWeight:300,color:'var(--text-strong)'}}>78%</div><div style={{fontSize:11,color:'var(--green-500)'}}>+6% vs mês passado</div></div><Chip variant="dark" icon="lightbulb">Saiba mais</Chip></div></div>
+    </Card>
+    <Card style={span(2)}>
+      <CardHeader title="Manutenção" subtitle="Atividade" action={<Button variant="dark" size="sm" icon="plus" onClick={onAddTask}>Adicionar tarefa</Button>}/>
+      <div style={{fontSize:12,color:'var(--text-muted)',margin:'14px 0 10px'}}>Status das tarefas em andamento</div>
+      <div style={{display:'flex',flexDirection:'column',gap:8}}>{tasks.slice(0,4).map(t=><ProgressPill key={t.id} label={t.title} value={t.progress} tone={t.tone} people={bp==='m'?undefined:t.people}/>)}</div>
+    </Card>
+    <Card tone="dark" style={{...full,display:'flex',flexDirection:'column',justifyContent:'space-between',minHeight:220}}>
+      <CardHeader inverse title="Próximo" subtitle="vencimento" action={<IconButton icon="maximize-2" label="Financeiro" variant="ghost" size={36} style={{background:'rgba(255,255,255,.08)',color:'#fff'}} onClick={()=>go('fin')}/>}/>
+      <div><Metric inverse value="05" label="nov" size="lg"/><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:16,padding:'10px 14px',borderRadius:16,background:'var(--ink-700)',fontSize:13}}><span style={{color:'rgba(255,255,255,.6)'}}>Faltam</span><span style={{fontSize:20,fontWeight:300}}>13 dias</span></div></div>
+    </Card>
+    <Card style={span(2)}>
+      <CardHeader title="Insights" subtitle="Assistente IA" action={<IconButton icon="lightbulb" label="Insights" size={36}/>}/>
+      <div style={{fontSize:12,color:'var(--text-muted)',marginTop:10,display:'flex',alignItems:'center',gap:6}}>sistema analisando <span style={{color:'var(--brand)'}}>•</span></div>
+      <LineChart height={140} backdrop={false} series={[{name:'Ocupação',color:'var(--brand)',data:[61,64,63,67,66,71,72,76,78],area:true}]} highlight={8} formatValue={v=>v+'%'}/>
+      <div style={{background:'var(--gray-50)',borderRadius:16,padding:'10px 14px',fontSize:13,lineHeight:1.5}}>Previsão de ocupação total: 65 dias<br/><span style={{fontSize:12}}>Reajuste sugerido em 3 unidades: <span style={{color:'var(--green-500)'}}>+4,5%</span></span></div>
+    </Card>
+    <Card style={{...full,display:'flex',flexDirection:'column',justifyContent:'space-between',gap:14}}>
+      <CardHeader title="Saúde" subtitle="Financeira" action={<IconButton icon="maximize-2" label="Financeiro" size={36} onClick={()=>go('fin')}/>}/>
+      <div style={{display:'flex',alignItems:'baseline',justifyContent:'space-between'}}><span style={{fontSize:24,color:'var(--text-strong)'}}>Ótima</span><span style={{fontSize:24,fontWeight:300}}>96%</span></div>
+      <div style={{display:'flex',flexDirection:'column',gap:8,fontSize:12}}>{[['Adimplência',94],['Inadimplência',6]].map(([l,v])=><div key={l} style={{display:'flex',alignItems:'center',gap:10}}><span style={{width:84,color:'var(--text-muted)'}}>{l}</span><div style={{flex:1,height:22,borderRadius:999,background:'var(--gray-100)'}}><div style={{width:Math.max(v,12)+'%',height:'100%',borderRadius:999,background:v>50?'var(--gray-200)':'var(--orange-100)',fontSize:11,display:'flex',alignItems:'center',paddingLeft:8}}>{v}%</div></div></div>)}</div>
+    </Card>
+    <Card style={{...full,display:'flex',flexDirection:'column',justifyContent:'space-between',gap:10}}>
+      <CardHeader title="Receita" subtitle="Mensal"/>
+      <Metric value="R$ 124K" size="md"/>
+      <Legend direction="row" items={[{label:'Aluguéis',color:'var(--brand)'},{label:'Taxas',color:'var(--ink-800)'}]}/>
+      <div style={{display:'flex',height:10,borderRadius:999,overflow:'hidden',gap:3}}><span style={{flex:82,background:'var(--brand)',borderRadius:999}}></span><span style={{flex:18,background:'var(--ink-800)',borderRadius:999}}></span></div>
+    </Card>
+  </div>;
+}
+window.DashboardScreen=DashboardScreen;
+})();
+
+</script>
+<script type="text/babel" data-source="AnalyticsScreen.jsx">
+(function(){
+const {Card,CardHeader,Metric,BarChart,Legend,LineChart,HeatScale,SegmentedControl,Select,Chip}=window.AlugaDesignSystem_e4b917;
+const viz=[{label:'Direto',value:27,color:'var(--viz-blue)'},{label:'Site',value:28,color:'var(--viz-green)'},{label:'Instagram',value:34,color:'var(--viz-orange)'},{label:'Parceiro',value:11,color:'var(--viz-lilac)'}];
+function AnalyticsScreen({bp}){
+  const D=window.ALUGA_DATA;const [r1,setR1]=React.useState('Mês');const [r2,setR2]=React.useState('Semana');
+  const cols=bp==='d'?3:bp==='t'?2:1;const span=n=>({gridColumn:'span '+Math.min(n,cols)});
+  return <div style={{display:'grid',gridTemplateColumns:'repeat('+cols+',minmax(0,1fr))',gap:14}}>
+    <Card>
+      <div style={{display:'flex',justifyContent:'space-between',gap:12}}><CardHeader title="Visitantes por" subtitle="Origem"/><span style={{width:84,height:84,borderRadius:'50%',background:'var(--brand)',color:'#fff',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',flex:'none',marginTop:-4,boxShadow:'var(--shadow-brand)'}}><span style={{fontSize:12}}>Total</span><span style={{fontSize:24,fontWeight:300,lineHeight:1}}>1.562</span></span></div>
+      <div style={{display:'flex',gap:16,alignItems:'flex-end',marginTop:8}}><Legend items={viz.map(v=>({label:v.label,color:v.color,value:v.value+'%'}))} style={{width:130}}/><BarChart data={viz} height={110} style={{flex:1}}/></div>
+    </Card>
+    <Card>
+      <CardHeader title="Desempenho de" subtitle="Visitas" action={<Chip icon="lightbulb">Saiba mais</Chip>}/>
+      <div style={{display:'flex',gap:6,marginTop:22}}><span style={{flex:62,height:22,borderRadius:999,background:'var(--brand)'}}></span><span style={{flex:38,height:22,borderRadius:999,background:'var(--ink-800)'}}></span></div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:10}}><div><div style={{fontSize:12,color:'var(--text-muted)',display:'flex',gap:6,alignItems:'center'}}><span style={{width:6,height:6,borderRadius:'50%',background:'var(--brand)'}}></span>Visitas agendadas</div><Metric value="78%" label="Bom" size="md" style={{marginTop:6}}/></div><div><div style={{fontSize:12,color:'var(--text-muted)',display:'flex',gap:6,alignItems:'center'}}><span style={{width:6,height:6,borderRadius:'50%',background:'var(--ink-800)'}}></span>Realizadas</div><Metric value="64%" label="Estável" size="md" style={{marginTop:6}}/></div></div>
+    </Card>
+    <Card style={bp==='t'?span(2):{}}>
+      <CardHeader title="Tempo médio de" subtitle="Locação"/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',gap:12,flexWrap:'wrap',marginTop:24}}><div><Metric value="18 dias" size="md"/><div style={{fontSize:12,marginTop:8}}><span style={{color:'var(--green-500)'}}>3 dias</span> a menos vs mês passado</div></div><HeatScale level={8} label="Alta procura"/></div>
+    </Card>
+    <Card style={span(2)}>
+      <CardHeader title="Fluxo de" subtitle="Visitantes" action={bp==='m'?null:<><SegmentedControl size="sm" options={['Dia','Semana','Mês']} value={r1} onChange={setR1}/><Select size="sm" options={['Todos os imóveis','Ed. Aurora','Residencial Pinheiros']}/></>}/>
+      <Legend direction="row" style={{margin:'12px 0 4px'}} items={[{label:'Visitantes',color:'var(--viz-green)',line:true},{label:'Recorrentes',color:'var(--brand)',line:true}]}/>
+      <LineChart height={220} series={[{name:'Visitantes',color:'var(--green-500)',data:D.visitors.a},{name:'Recorrentes',color:'var(--brand)',data:D.visitors.b}]} labels={['10 out','15 out','20 out','25 out','31 out']} highlight={2} formatValue={v=>'Visitantes: '+Math.round(v*180).toLocaleString('pt-BR')}/>
+    </Card>
+    <Card style={bp==='d'?{gridRow:'span 2'}:{}}>
+      <CardHeader title="Mapa de interesse" subtitle="por unidade"/>
+      <div style={{display:'flex',gap:16,marginTop:18}}>
+        <div style={{display:'flex',gap:10}}><div style={{width:6,borderRadius:999,background:'linear-gradient(var(--red-500),var(--brand),var(--gray-300))'}}></div><div style={{display:'flex',flexDirection:'column',justifyContent:'space-between',fontSize:13,lineHeight:1.2,minHeight:160}}><span>Alto<br/>interesse</span><span>Baixo<br/>interesse</span></div></div>
+        <div style={{flex:1,display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:5,alignContent:'center'}}>{[7,6,4,2,6,5,3,1,5,7,6,3,2,4,5,6,1,3,2,4,3,1,2,5].map((v,i)=><span key={i} title={'Unidade '+(100+i)} style={{aspectRatio:'1.5',borderRadius:8,background:'var(--heat-'+v+')'}}></span>)}</div>
+      </div>
+      <div style={{display:'flex',gap:8,marginTop:18,flexWrap:'wrap'}}><span style={{background:'var(--brand)',color:'#fff',borderRadius:999,padding:'8px 14px',fontSize:13}}>Livres 28%</span><span style={{background:'var(--surface-sunken)',borderRadius:999,padding:'8px 14px',fontSize:13}}>Reservadas 3%</span><span style={{background:'var(--surface-sunken)',borderRadius:999,padding:'8px 14px',fontSize:13}}>Vencendo 6%</span></div>
+    </Card>
+    <Card style={span(2)}>
+      <CardHeader title="Valor do aluguel" subtitle="Análise" action={<SegmentedControl size="sm" options={['Dia','Semana','Mês']} value={r2} onChange={setR2}/>}/>
+      <LineChart height={200} series={[{name:'Preço',color:'var(--ink-700)',data:D.revenue[r2]}]} labels={['10 out','15 out','20 out','25 out','31 out']} highlight={4} formatValue={v=><span>R$ {Math.round(v*100).toLocaleString('pt-BR')}<span style={{opacity:.55}}>,00</span></span>}/>
+    </Card>
+  </div>;
+}
+window.AnalyticsScreen=AnalyticsScreen;
+})();
+
+</script>
+<script type="text/babel" data-source="PropertiesScreen.jsx">
+(function(){
+const {Card,CardHeader,DataTable,Badge,SegmentedControl,Input,Button,Dialog,Metric,Chip}=window.AlugaDesignSystem_e4b917;
+function PropertiesScreen({bp,toast}){
+  const D=window.ALUGA_DATA;const [f,setF]=React.useState('Todos');const [q,setQ]=React.useState('');const [sel,setSel]=React.useState(null);
+  const rows=D.units.filter(u=>(f==='Todos'||u.status===f)&&(u.property+u.unit+u.tenant).toLowerCase().includes(q.toLowerCase()));
+  const counts=s=>D.units.filter(u=>u.status===s).length;
+  return <div style={{display:'flex',flexDirection:'column',gap:14}}>
+    <div style={{display:'grid',gridTemplateColumns:bp==='m'?'1fr 1fr':'repeat(4,minmax(0,1fr))',gap:14}}>{[['Ocupadas','Ocupado','78%'],['Livres','Livre','14%'],['Reservadas','Reservado','3%'],['Atrasadas','Atrasado','5%']].map(([l,s,p])=><Card key={l} onClick={()=>setF(s)} padding={18} style={{boxShadow:f===s?'inset 0 0 0 1.5px var(--brand)':undefined}}><CardHeader size="sm" title="Unidades" subtitle={l}/><Metric value={p} label={counts(s)+(counts(s)===1?' unidade':' unidades')} size="md" style={{marginTop:18}}/></Card>)}</div>
+    <Card padding={bp==='m'?14:20}>
+      <div style={{display:'flex',gap:12,alignItems:'center',flexWrap:'wrap',marginBottom:12}}>
+        <CardHeader title="Unidades" subtitle={rows.length+' resultados'} style={{marginRight:'auto'}}/>
+        <Input icon="search" placeholder="Filtrar" value={q} onChange={setQ} style={{width:bp==='m'?'100%':220}}/>
+        <div style={{overflowX:'auto',maxWidth:'100%'}}><SegmentedControl size="sm" options={['Todos','Ocupado','Livre','Reservado','Atrasado']} value={f} onChange={setF}/></div>
+        {bp!=='m'&&<Button icon="plus" size="sm" onClick={()=>toast({tone:'info',title:'Cadastro de unidade',message:'Formulário aberto em nova aba (demo).'})}>Nova unidade</Button>}
+      </div>
+      {bp==='m'?<div style={{display:'flex',flexDirection:'column'}}>{rows.map(u=><button key={u.id} onClick={()=>setSel(u)} style={{display:'flex',alignItems:'center',gap:12,padding:'14px 2px',border:0,borderTop:'1px solid var(--border-subtle)',background:'none',textAlign:'left',font:'inherit',cursor:'pointer'}}><div style={{flex:1,minWidth:0}}><div style={{fontSize:14,color:'var(--text-strong)'}}>{u.property} · {u.unit}</div><div style={{fontSize:12,color:'var(--text-muted)'}}>{u.tenant}</div></div><div style={{textAlign:'right',display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4}}><span style={{fontSize:14}}>{window.brl(u.rent)}</span><Badge size="sm" dot tone={window.STATUS_TONE[u.status]}>{u.status}</Badge></div></button>)}</div>
+      :<DataTable onRowClick={setSel} columns={[{key:'u',label:'Unidade',render:r=><div><div style={{color:'var(--text-strong)'}}>{r.property} · {r.unit}</div><div style={{fontSize:12,color:'var(--text-muted)'}}>{r.type}</div></div>},{key:'tenant',label:'Inquilino'},{key:'due',label:'Vencimento'},{key:'rent',label:'Aluguel',align:'right',render:r=>window.brl(r.rent)},{key:'status',label:'Status',render:r=><Badge size="sm" dot tone={window.STATUS_TONE[r.status]}>{r.status}</Badge>}]} rows={rows}/>}
+    </Card>
+    <Dialog open={!!sel} onClose={()=>setSel(null)} width={520} title={sel?sel.property+' · '+sel.unit:''} subtitle={sel?sel.type:''} footer={<><Button variant="secondary" onClick={()=>setSel(null)}>Fechar</Button><Button icon="file-text" onClick={()=>{setSel(null);toast({title:'Contrato enviado',message:'Enviado para assinatura digital.'});}}>Enviar contrato</Button></>}>
+      {sel&&<><div style={{height:170,borderRadius:22,overflow:'hidden'}}><img src="../../../assets/images/house-orange.png" alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/></div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>{[['Inquilino',sel.tenant],['Aluguel',window.brl(sel.rent)],['Vencimento',sel.due],['Status',<Badge dot tone={window.STATUS_TONE[sel.status]}>{sel.status}</Badge>]].map(([k,v])=><div key={k} style={{background:'var(--gray-50)',borderRadius:16,padding:'10px 14px'}}><div style={{fontSize:12,color:'var(--text-muted)'}}>{k}</div><div style={{fontSize:15,marginTop:2}}>{v}</div></div>)}</div></>}
+    </Dialog>
+  </div>;
+}
+window.PropertiesScreen=PropertiesScreen;
+})();
+
+</script>
+<script type="text/babel" data-source="MaintenanceScreen.jsx">
+(function(){
+const {Card,CardHeader,ProgressPill,Badge,Button,AvatarGroup,Metric,SegmentedControl,IconButton}=window.AlugaDesignSystem_e4b917;
+function MaintenanceScreen({bp,tasks,setTasks,onAddTask,toast}){
+  const [f,setF]=React.useState('Abertas');
+  const list=tasks.filter(t=>f==='Todas'||(f==='Abertas'?t.progress<100:t.progress===100));
+  const done=id=>{setTasks(ts=>ts.map(t=>t.id===id?{...t,progress:100,tone:'dark',status:'Concluída'}:t));toast({title:'Tarefa concluída',message:'O inquilino foi notificado.'});};
+  return <div style={{display:'grid',gridTemplateColumns:bp==='d'?'minmax(0,2fr) minmax(0,1fr)':'1fr',gap:14,alignItems:'start'}}>
+    <Card>
+      <div style={{display:'flex',gap:12,alignItems:'center',flexWrap:'wrap'}}><CardHeader title="Tarefas" subtitle="de manutenção" style={{marginRight:'auto'}}/><SegmentedControl size="sm" options={['Abertas','Concluídas','Todas']} value={f} onChange={setF}/><Button variant="dark" size="sm" icon="plus" onClick={onAddTask}>Adicionar</Button></div>
+      <div style={{display:'flex',flexDirection:'column',marginTop:12}}>{list.map(t=><div key={t.id} style={{display:'flex',flexDirection:'column',gap:10,padding:'14px 0',borderTop:'1px solid var(--border-subtle)'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}><div style={{flex:1,minWidth:160}}><div style={{color:'var(--text-strong)',fontSize:15}}>{t.title}</div><div style={{fontSize:12,color:'var(--text-muted)'}}>{t.where} · prazo {t.due}</div></div><Badge size="sm" dot tone={window.STATUS_TONE[t.status]||'neutral'}>{t.status}</Badge>{t.progress<100&&<IconButton icon="check" label="Concluir" size={34} onClick={()=>done(t.id)}/>}</div>
+        <ProgressPill label={t.title} value={t.progress} tone={t.tone} people={t.people}/>
+      </div>)}{list.length===0&&<div style={{padding:'30px 0',textAlign:'center',color:'var(--text-muted)',fontSize:14}}>Nenhuma tarefa neste filtro.</div>}</div>
+    </Card>
+    <div style={{display:'grid',gridTemplateColumns:bp==='t'?'1fr 1fr':'1fr',gap:14}}>
+      <Card><CardHeader title="Desempenho da" subtitle="Manutenção"/><div style={{fontSize:14,color:'var(--text-muted)',margin:'12px 0 18px',lineHeight:1.45}}>Chamados, prestadores, prazos e andamento dos reparos em um só lugar.</div><Metric value="92%" label="Resolvidas no prazo" size="lg"/></Card>
+      <Card tone="dark"><CardHeader inverse title="Chamados" subtitle="abertos"/><div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',marginTop:24}}><Metric inverse value={tasks.filter(t=>t.progress<100).length} label="em andamento"/><AvatarGroup people={[{name:'Ana Lima'},{name:'Caio Dias'},{name:'Felipe Sá'},{name:'Gabi Luz'}]} size={30}/></div></Card>
+    </div>
+  </div>;
+}
+window.MaintenanceScreen=MaintenanceScreen;
+})();
+
+</script>
+<script type="text/babel" data-source="FinanceScreen.jsx">
+(function(){
+const {Card,CardHeader,Metric,LineChart,SegmentedControl,DataTable,Badge,Switch,Button,Legend}=window.AlugaDesignSystem_e4b917;
+function FinanceScreen({bp,toast}){
+  const D=window.ALUGA_DATA;const [r,setR]=React.useState('Mês');const [auto,setAuto]=React.useState(true);const [pays,setPays]=React.useState(D.payments);
+  const cols=bp==='m'?1:3;
+  const charge=p=>{setPays(ps=>ps.map(x=>x.id===p.id?{...x,status:'Cobrança enviada'}:x));toast({tone:'info',title:'Cobrança enviada',message:p.who+' · '+window.brl(p.value)});};
+  return <div style={{display:'flex',flexDirection:'column',gap:14}}>
+    <div style={{display:'grid',gridTemplateColumns:'repeat('+cols+',minmax(0,1fr))',gap:14}}>
+      <Card><CardHeader title="Receita" subtitle="Mensal"/><Metric value="R$ 124K" size="lg" style={{marginTop:22}}/><div style={{fontSize:12,marginTop:8}}><span style={{color:'var(--green-500)'}}>+8,2%</span> vs setembro</div></Card>
+      <Card><CardHeader title="Despesas" subtitle="Recorrentes"/><Metric value="R$ 31K" size="lg" style={{marginTop:22}}/><Legend direction="row" style={{marginTop:10}} items={[{label:'Condomínio',color:'var(--brand)'},{label:'Manutenção',color:'var(--ink-800)'},{label:'Taxas',color:'var(--gray-300)'}]}/></Card>
+      <Card tone="brand"><CardHeader inverse title="A receber" subtitle="este mês"/><Metric inverse value="R$ 18,9K" size="lg" style={{marginTop:22}}/><div style={{marginTop:14}}><Switch checked={auto} onChange={v=>{setAuto(v);toast({tone:'neutral',title:v?'Cobrança automática ativada':'Cobrança automática desativada'});}} label={<span style={{color:'#fff',fontSize:13}}>Cobrança automática</span>}/></div></Card>
+    </div>
+    <Card><CardHeader title="Fluxo de caixa" subtitle="Análise" action={<SegmentedControl size="sm" options={['Dia','Semana','Mês']} value={r} onChange={setR}/>}/><LineChart height={bp==='m'?170:220} series={[{name:'Receita',color:'var(--ink-700)',data:D.revenue[r]}]} labels={['Jan','Mar','Mai','Jul','Set']} highlight={6} formatValue={v=><span>R$ {Math.round(v*100).toLocaleString('pt-BR')}<span style={{opacity:.55}}>,00</span></span>}/></Card>
+    <Card padding={bp==='m'?14:20}><CardHeader title="Pagamentos" subtitle="Recentes" style={{marginBottom:10}}/>
+      <DataTable columns={[{key:'who',label:'Inquilino',render:p=><div><div style={{color:'var(--text-strong)'}}>{p.who}</div><div style={{fontSize:12,color:'var(--text-muted)'}}>{p.unit}</div></div>},{key:'date',label:'Data'},{key:'value',label:'Valor',align:'right',render:p=>window.brl(p.value)},{key:'status',label:'Status',render:p=><Badge size="sm" dot tone={window.STATUS_TONE[p.status]||'soft'}>{p.status}</Badge>},{key:'a',label:'',align:'right',render:p=>p.status==='Atrasado'||p.status==='A vencer'?<Button size="sm" variant="secondary" onClick={()=>charge(p)}>Cobrar</Button>:null}]} rows={pays}/>
+    </Card>
+  </div>;
+}
+window.FinanceScreen=FinanceScreen;
+})();
+
+</script>
+<script type="text/babel" data-source="App.jsx">
+(function(){
+const {Dialog,Button,Input,Select,Checkbox,Toast,SegmentedControl}=window.AlugaDesignSystem_e4b917;
+function App(){
+  const [authed,setAuthed]=React.useState(()=>localStorage.getItem('aluga_kit_auth')==='1');
+  const [module,setModule]=React.useState(()=>localStorage.getItem('aluga_kit_module')||'dash');
+  const [view,setView]=React.useState('overview');
+  const [tasks,setTasks]=React.useState(window.ALUGA_DATA.tasks);
+  const [adding,setAdding]=React.useState(false);const [draft,setDraft]=React.useState({title:'',where:'Ed. Aurora',urgent:false});
+  const [toasts,setToasts]=React.useState([]);
+  React.useEffect(()=>{localStorage.setItem('aluga_kit_module',module);window.scrollTo(0,0);},[module]);
+  const toast=t=>{const id=Date.now()+Math.random();setToasts(x=>[...x,{...t,id}]);setTimeout(()=>setToasts(x=>x.filter(y=>y.id!==id)),3200);};
+  const login=()=>{localStorage.setItem('aluga_kit_auth','1');setAuthed(true);};
+  const logout=()=>{localStorage.setItem('aluga_kit_auth','0');setAuthed(false);};
+  const save=()=>{if(!draft.title.trim())return;setTasks(ts=>[{id:Date.now(),title:draft.title,where:draft.where,progress:5,tone:draft.urgent?'brand':'light',people:[{name:'Rodrigo Alves'}],status:draft.urgent?'Urgente':'Agendada',due:'—'},...ts]);setAdding(false);setDraft({title:'',where:'Ed. Aurora',urgent:false});toast({title:'Tarefa criada',message:'A equipe de manutenção foi notificada.'});};
+  if(!authed)return <LoginScreen onLogin={login}/>;
+  return <>
+    <Shell module={module} setModule={setModule} view={view} setView={setView} onLogout={logout}>{bp=>{
+      if(module==='dash')return <>{bp==='m'&&<SegmentedControl options={[{value:'overview',label:'Visão geral'},{value:'analytics',label:'Análises'}]} value={view} onChange={setView} style={{marginBottom:14,display:'flex'}}/>}{view==='analytics'?<AnalyticsScreen bp={bp}/>:<DashboardScreen bp={bp} tasks={tasks} onAddTask={()=>setAdding(true)} go={setModule}/>}</>;
+      if(module==='props')return <PropertiesScreen bp={bp} toast={toast}/>;
+      if(module==='maint')return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={()=>setAdding(true)} toast={toast}/>;
+      return <FinanceScreen bp={bp} toast={toast}/>;
+    }}</Shell>
+    <Dialog open={adding} onClose={()=>setAdding(false)} title="Nova tarefa" subtitle="Manutenção" footer={<><Button variant="secondary" onClick={()=>setAdding(false)}>Cancelar</Button><Button onClick={save} disabled={!draft.title.trim()}>Salvar tarefa</Button></>}>
+      <Input label="Título" variant="white" placeholder="Ex.: Troca do chuveiro" value={draft.title} onChange={v=>setDraft(d=>({...d,title:v}))}/>
+      <Select label="Imóvel" options={['Ed. Aurora','Residencial Pinheiros','Casa Jardins','Vila Madalena Lofts']} value={draft.where} onChange={v=>setDraft(d=>({...d,where:v}))}/>
+      <Checkbox checked={draft.urgent} onChange={v=>setDraft(d=>({...d,urgent:v}))} label="Marcar como urgente"/>
+    </Dialog>
+    <div style={{position:'fixed',right:16,bottom:96,display:'flex',flexDirection:'column',gap:10,zIndex:200,width:'min(380px,calc(100vw - 32px))'}}>{toasts.map(t=><Toast key={t.id} {...t} onClose={()=>setToasts(x=>x.filter(y=>y.id!==t.id))}/>)}</div>
+  </>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+})();
+
+</script>
+</body></html>

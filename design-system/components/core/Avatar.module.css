@@ -1,0 +1,36 @@
+.avatar {
+  flex: none;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+}
+
+.initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-inverse);
+  color: var(--on-inverse);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+}
+
+.ring {
+  box-shadow: 0 0 0 2px var(--surface-card);
+}
+
+.group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  box-shadow: 0 0 0 2px var(--surface-card);
+}

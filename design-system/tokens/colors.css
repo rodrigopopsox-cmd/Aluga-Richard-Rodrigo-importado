@@ -1,0 +1,194 @@
+/*
+ * Aluga — color tokens.
+ * Source of truth: DESIGN.md (root). Keep values in sync; `npm run tokens:check` verifies it.
+ *
+ * Three layers:
+ *   1. Primitives  — raw palette (only place hex/rgba values may appear).
+ *   2. Semantic    — what components and app code use (`--brand`, `--surface-card`…).
+ *   3. Themes      — light is the default; dark is opt-in via [data-theme="dark"].
+ */
+:root {
+  /* ── 1. Primitives ─────────────────────────────────────────── */
+  /* Brand */
+  --orange-50: #FFF2EE;
+  --orange-100: #FEE3DA;
+  --orange-200: #FBA790;
+  --orange-400: #FF6A44;
+  --orange-500: #F75831;
+  --orange-600: #E04A25;
+  /* Ink */
+  --ink-900: #0B1F27;
+  --ink-800: #1B1B1B;
+  --ink-700: #313131;
+  --ink-600: #4A4B52;
+  --teal-900: #1D3C47; /* campaign caps headline */
+  /* Neutrals (cool) */
+  --gray-500: #878992;
+  --gray-400: #A9ABB3;
+  --gray-300: #C6C6C8;
+  --gray-250: #DCDDE3; /* chart hatch line */
+  --gray-200: #E6E8F1;
+  --gray-150: #EDEEF4;
+  --gray-100: #F4F4F8;
+  --gray-50: #F8F8FB;
+  --mist-200: #DCE1E6; /* sky behind architecture photos */
+  --white: #FFFFFF;
+  --canvas: #F0F0F0;
+  /* Dark-theme neutrals (authored; not in the original reference) */
+  --night-950: #111214;
+  --night-900: #18191C;
+  --night-850: #202125;
+  --night-800: #2A2B30;
+  /* Semantic primitives */
+  --green-500: #22B722;
+  --green-600: #139C13;
+  --green-100: #E3F7E3;
+  --red-500: #FF2D2D;
+  --red-600: #E5484D;
+  --red-100: #FFE5E5;
+  --amber-500: #F5A524;
+  --amber-700: #9A6500;
+  --amber-100: #FFF1D6;
+  /* Data viz */
+  --viz-blue: #8EA2EE;
+  --viz-green: #7FD65A;
+  --viz-orange: #F75831;
+  --viz-lilac: #DDA3EF;
+  --heat-1: #FDE3D2;
+  --heat-2: #FBC9A6;
+  --heat-3: #F8A97E;
+  --heat-4: #F39072;
+  --heat-5: #E56F6A;
+  --heat-6: #D25964;
+  --heat-7: #E8434F;
+  /* Alphas */
+  --white-a08: rgba(255, 255, 255, 0.08);
+  --white-a55: rgba(255, 255, 255, 0.55);
+  --white-a60: rgba(255, 255, 255, 0.6);
+  --white-a70: rgba(255, 255, 255, 0.7);
+  --white-a80: rgba(255, 255, 255, 0.8);
+  --ink-a05: rgba(11, 31, 39, 0.05);
+  --ink-a07: rgba(11, 31, 39, 0.07);
+  --ink-a32: rgba(11, 31, 39, 0.32);
+  --ink-a88: rgba(27, 27, 27, 0.88);
+  --black-a60: rgba(0, 0, 0, 0.6);
+  --orange-a16: rgba(247, 88, 49, 0.16);
+  --orange-a35: rgba(247, 88, 49, 0.35);
+  --green-a16: rgba(34, 183, 34, 0.16);
+  --red-a16: rgba(255, 45, 45, 0.16);
+  --amber-a16: rgba(245, 165, 36, 0.16);
+
+  /* ── 2. Semantic (light, default) ──────────────────────────── */
+  --brand: var(--orange-500);
+  --brand-hover: var(--orange-600);
+  --brand-soft: var(--orange-100);
+  --brand-soft-fg: var(--orange-600);
+  --on-brand: var(--white);
+
+  --text-strong: var(--ink-900);
+  --text-body: var(--ink-800);
+  --text-secondary: var(--ink-600);
+  --text-muted: var(--gray-500);
+  --text-subtle: var(--gray-400);
+  --text-inverse: var(--white);
+  --text-campaign: var(--teal-900);
+
+  --surface-page: var(--gray-100);
+  --surface-canvas: var(--canvas);
+  --surface-card: var(--white);
+  --surface-raised: var(--white); /* selected segment / elevated chip on a sunken track */
+  --surface-subtle: var(--gray-50);
+  --surface-sunken: var(--gray-150);
+  --surface-hover: var(--gray-200);
+  --surface-track: var(--gray-100);
+  --surface-inverse: var(--ink-800);
+  --surface-inverse-2: var(--ink-700);
+  --surface-glass: var(--white-a80);
+  --surface-glass-ink: var(--ink-a88);
+  --surface-photo-sky: var(--mist-200);
+  --on-inverse: var(--white);
+  --on-inverse-muted: var(--white-a60);
+  --on-inverse-ghost: var(--white-a08);
+  --on-photo: var(--white-a80);
+  --scrim: var(--ink-a32);
+  --hover-tint: var(--ink-a05);
+
+  --border-subtle: var(--gray-200);
+  --border-default: var(--gray-300);
+  --border-strong: var(--ink-800);
+  --control-off: var(--gray-300);
+
+  --success: var(--green-500);
+  --success-soft: var(--green-100);
+  --success-fg: var(--green-600);
+  --danger: var(--red-500);
+  --danger-soft: var(--red-100);
+  --danger-fg: var(--red-600);
+  --warning: var(--amber-500);
+  --warning-soft: var(--amber-100);
+  --warning-fg: var(--amber-700);
+
+  --chart-hatch-bg: var(--gray-150);
+  --chart-hatch-line: var(--gray-250);
+  --chart-ink: var(--ink-700);
+  --hatch-light: var(--white-a55);
+  --hatch-ink: var(--ink-a07);
+  --on-glass: var(--ink-700);
+
+  --focus-ring: var(--orange-a35);
+
+  color-scheme: light;
+}
+
+/* ── 3. Dark theme (opt-in) ─────────────────────────────────────
+ * Authored for this project — the Claude Design reference was light-only.
+ * Orange stays the single hot accent; ink/gray roles invert.
+ * Enable with <html data-theme="dark">. Light remains the default.
+ */
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  --brand-soft: var(--orange-a16);
+  --brand-soft-fg: var(--orange-400);
+
+  --text-strong: var(--white);
+  --text-body: var(--gray-200);
+  --text-secondary: var(--gray-300);
+  --text-muted: var(--gray-400);
+  --text-subtle: var(--gray-500);
+  --text-campaign: var(--gray-200);
+
+  --surface-page: var(--night-950);
+  --surface-canvas: var(--night-950);
+  --surface-card: var(--night-900);
+  --surface-raised: var(--night-800);
+  --surface-subtle: var(--night-850);
+  --surface-sunken: var(--night-850);
+  --surface-hover: var(--night-800);
+  --surface-track: var(--night-850);
+  --surface-inverse: var(--ink-700);
+  --surface-inverse-2: var(--ink-600);
+  --surface-glass: var(--ink-a88);
+  --surface-photo-sky: var(--night-850);
+  --scrim: var(--black-a60);
+  --hover-tint: var(--white-a08);
+
+  --border-subtle: var(--night-800);
+  --border-default: var(--ink-600);
+  --border-strong: var(--gray-200);
+  --control-off: var(--ink-600);
+
+  --success-soft: var(--green-a16);
+  --success-fg: var(--green-500);
+  --danger-soft: var(--red-a16);
+  --danger-fg: var(--red-500);
+  --warning-soft: var(--amber-a16);
+  --warning-fg: var(--amber-500);
+
+  --chart-hatch-bg: var(--night-850);
+  --chart-hatch-line: var(--night-800);
+  --chart-ink: var(--gray-200);
+  --hatch-ink: var(--white-a08);
+  --on-glass: var(--white);
+
+  color-scheme: dark;
+}
