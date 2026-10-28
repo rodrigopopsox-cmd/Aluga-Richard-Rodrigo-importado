@@ -68,22 +68,19 @@ export function FinanceScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastI
       <div className={s.grid} style={{ gridTemplateColumns: `repeat(${mobile ? 2 : 4}, minmax(0, 1fr))` }}>
         <Card>
           <CardHeader title="Recebido" subtitle={range} />
-          <Metric value={brl(received)} size="lg" className={s.mt4} />
+          <Metric value={brl(received)} size="md" className={s.mt4} />
         </Card>
         <Card>
           <CardHeader title="Despesas" subtitle={range} />
-          <Metric value={brl(spent)} size="lg" className={s.mt4} />
+          <Metric value={brl(spent)} size="md" className={s.mt4} />
         </Card>
         <Card>
           <CardHeader title="Resultado" subtitle={range} />
-          <Metric value={brl(result)} size="lg" className={s.mt4} />
-          <div className={`${s.small} ${s.mt2}`}>
-            <span className={s.positive}>+8,2%</span> vs setembro
-          </div>
+          <Metric value={brl(result)} size="md" className={s.mt4} />
         </Card>
         <Card>
           <CardHeader title="Ocupação" subtitle={range} />
-          <Metric value={`${occupancy}%`} size="lg" className={s.mt4} />
+          <Metric value={`${occupancy}%`} size="md" className={s.mt4} />
         </Card>
       </div>
 
@@ -97,7 +94,7 @@ export function FinanceScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastI
           }
         />
         <LineChart
-          height={mobile ? 170 : 220}
+          height={mobile ? 150 : 180}
           series={[
             { name: 'Recebido', color: 'var(--chart-ink)', data: [42, 48, 45, 52, 50, 58, 56, 61, 60], area: true },
           ]}
