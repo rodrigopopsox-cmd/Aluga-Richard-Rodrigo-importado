@@ -1,7 +1,7 @@
 # Contexto do projeto — Aluga (para o sócio Rodrigo e para qualquer IA que for assumir)
 
 > Documento de handoff. Ele existe para que **qualquer IA** (ou pessoa) consiga entrar no
-> projeto sem perguntar nada: o que já está pronto, o que está quebrado, como rodar e
+> projeto sem perguntar nada: o que já está pronto, o que foi corrigido, como rodar e
 > quais são as regras inegociáveis.
 >
 > Última atualização: 2026-10-27.
@@ -25,8 +25,10 @@ inventado fora dos tokens.
 ## 2. Ambientes e fonte da verdade
 
 - **Fonte da verdade dos arquivos do projeto: Google Drive** — pasta `Aluga Richard/Rodrigo`
-  (id `1GQtEFPQAQUzX6KLQJjpDvi4uBSjknV3c`). O Drive é onde os arquivos são editados/versionados.
-- **Repo git:** `rodrigopopsox-cmd/Aluga-Richard-Rodrigo-importado` (espelho de validação).
+  (id `1GQtEFPQAQUzX6KLQJjpDvi4uBSjknV3c`).
+- **Repo git:** `rodrigopopsox-cmd/Aluga-Richard-Rodrigo-importado`.
+- **Máquina do Rodrigo:** `C:\Users\Digo Nego\Documents\Aluga-Richard-Rodrigo-importado`
+  (já está com todos os arquivos aplicados e validados).
 - **Preview local:** extração de `origin/main` + patches de sandbox, rodando em `http://localhost:3000`.
 
 Pastas relevantes no Drive:
@@ -37,6 +39,14 @@ Pastas relevantes no Drive:
 | `src/app/design-system` | `1kQ36-EOqYOtWeaJR-RIkFsrNUFcJu_bY` |
 | tokens (`design-system/tokens`) | `1zFBOWwKL4YlR3vERg-3X8s_Bivi24UiQ` |
 | `DESIGN.md` | arquivo `1JyZPbSGWDQWkJwPqq5kEHqv2rwW343B8` |
+
+Arquivos de apoio na raiz do Drive:
+
+| Arquivo | id |
+|---|---|
+| `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
+| `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
+| `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
 ---
 
@@ -56,12 +66,12 @@ Validações obrigatórias antes de dizer "pronto":
 
 ```bash
 node scripts/check-tokens.mjs    # tokens ↔ DESIGN.md (precisa dar 208 OK)
-npx tsc --noEmit                 # TypeScript sem erro
+npx tsc --noEmit                 # TypeScript (ver "armadilhas" — há erros pré-existentes)
 ```
 
 ---
 
-## 4. Estado atual (o que já está entregue e validado)
+## 4. Estado atual (entregue e validado em produção)
 
 ### 4.1 Tokens corrigidos (acessibilidade de cor e tamanho)
 
@@ -91,81 +101,84 @@ cor de ação principal.
 - `design-system/templates/admin/useSettings.ts` — hook com persistência em
   `localStorage` (`aluga_a11y`, `aluga_theme`).
 - `design-system/templates/admin/SettingsMenu.tsx` + `SettingsMenu.module.css` — o menu
-  da engrenagem (ícone `settings`, no mesmo estilo `IconButton` dos demais ícones).
+  da engrenagem (ícone `settings`, no mesmo estilo `IconButton` dos demais ícones),
+  no **rail esquerdo, abaixo dos ícones de módulo e acima do sair**. Painel abre para a
+  **direita**; no mobile fica no header e abre para baixo.
+- Texto de ajuda sem jargão técnico: *"Deixa o texto e os botões maiores."*
 - Duas superfícies compartilham o mesmo estado: o menu do painel e o Switch da vitrine.
 - Overrides por URL: `?a11y=on`, `?theme=dark`.
 
----
+### 4.4 Bug de renderização corrigido (stacking context) — RESOLVIDO
 
-## 5. 🔴 BUG CONHECIDO E CORREÇÃO (leia isso se o menu sumir/ficar atrás)
+**Sintoma original:** clicava na engrenagem e o painel não aparecia — só um fio branco de
+~13px do lado do menu. Os tooltips dos ícones do rail também não apareciam.
 
-### Sintoma
+**Causa raiz:**
 
-Clica na engrenagem (menu esquerdo, embaixo dos ícones) e o painel **não aparece**, ou
-aparece só um fio branco atrás dos cards. Ou os tooltips dos ícones do rail não aparecem.
+1. `Shell.module.css` → `.railColumn { position: sticky }`. **`position: sticky` cria um
+   stacking context.**
+2. `Card.module.css` → `.card { position: relative }`.
+3. Os dois ficam com `z-index: auto` no contexto raiz, então são pintados **na ordem do
+   DOM**. Os cards vêm **depois** do rail → os cards passam por cima de **tudo** que está
+   dentro do rail, inclusive o popover, mesmo ele tendo `z-index: 30` — porque esse `30`
+   fica preso *dentro* do stacking context do rail e nunca é comparado com os cards.
 
-### Causa raiz (não é cache — é stacking context)
-
-1. `design-system/templates/admin/Shell.module.css` → `.railColumn { position: sticky }`.
-   **`position: sticky` cria um stacking context.**
-2. `design-system/components/data/Card.module.css` → `.card { position: relative }`.
-3. Os dois ficam com `z-index: auto` no contexto raiz, então são pintados **na ordem do DOM**.
-   Os cards vêm **depois** do rail → os cards passam por cima de **tudo** que está dentro
-   do rail, inclusive o popover, mesmo ele tendo `z-index: 30` — porque esse `30` fica
-   preso *dentro* do stacking context do rail e não compara com os cards.
-
-### Correção (1 linha)
-
-Em `design-system/templates/admin/Shell.module.css`:
+**Correção aplicada** em `design-system/templates/admin/Shell.module.css`:
 
 ```css
 .railColumn {
   position: sticky;
   top: 0;
   height: 100vh;
-  z-index: 20;   /* ← ADICIONAR. sticky cria stacking context; sem isso o popover
-                    da engrenagem e os tooltips do rail ficam atrás dos cards. */
+  z-index: 20;   /* ← sticky cria stacking context; sem isso o popover da engrenagem
+                    e os tooltips do rail ficam atrás dos cards. */
   /* ...resto igual... */
 }
 ```
 
-Com isso o rail vira um stacking context em `z-index: 20`, pintado acima dos cards
-(`position: relative; z-index: auto`), e o popover (`z-index: 30`, dentro do rail)
-aparece por cima de tudo. Continua abaixo de `Dialog` (`z-index: 100`) e do toast
-(`z-index: 200`), que devem mesmo ficar por cima.
-
-### Armadilha de cache em dev (Turbopack)
-
-O Turbopack serve o CSS de módulo por uma **URL estável** que não muda quando você edita o
-arquivo. Ou seja: editar o CSS **não garante** que o navegador/proxy pegue a versão nova.
-
-- Confie no conteúdo servido, não na URL: baixe o chunk e procure a regra.
-- Sempre peça um **Ctrl+Shift+R** após mudança de CSS.
-- Se precisar furar o cache de verdade, crie um **arquivo CSS module novo** (muda o chunk).
+**Status:** corrigido, aplicado no Drive, no commit e **confirmado pelo Rodrigo em tela**
+(engrenagem no rail, painel por cima dos cards, tema claro/escuro funcionando).
 
 ---
 
-## 6. Armadilhas conhecidas (já pagamos por elas)
+## 5. Armadilhas conhecidas (já pagamos por elas)
 
 1. **`edit_file` em lote no MESMO arquivo perde edições.** Duas ou três edições no mesmo
    arquivo numa mesma resposta podem ser descartadas em silêncio. → Aplique **uma edição
    por chamada** e confira com `grep` depois.
-2. **Push pro Drive altera o mime type** (`.ts` sobe como `text/javascript`, `.css` como
+2. **Cache de CSS em dev (Turbopack).** O Turbopack serve o CSS de módulo por uma **URL
+   estável** que não muda quando você edita o arquivo. Editar o CSS **não garante** que o
+   navegador/proxy pegue a versão nova.
+   - Confie no conteúdo servido, não na URL: baixe o chunk e procure a regra.
+   - Sempre peça um **Ctrl+Shift+R** após mudança de CSS.
+   - Para furar o cache de verdade, crie um **arquivo CSS module novo** (muda o chunk).
+   - Se o markup está novo e o estilo velho, é isso.
+3. **Servidor precisa ser reiniciado** quando arquivos **novos** entram no projeto
+   (ex.: `SettingsMenu.tsx`). O `npm run dev` já em execução não pega. Na dúvida:
+   `Remove-Item -Recurse -Force .next` e subir de novo.
+4. **Push pro Drive altera o mime type** (`.ts` sobe como `text/javascript`, `.css` como
    `text/css`). Não é problema funcional, mas não estranhe.
-3. **Sempre leia de volta o arquivo do Drive** antes de re-enviar, para não sobrescrever
-   edição de outra pessoa.
-4. **Transcrição perde bytes** em comentários JSDoc longos (já aconteceu: 2 bytes). Confira
-   o tamanho após o push.
-5. **`grep` em CSS não-minificado engana:** `-A 4` corta propriedades e `.{0,180}` para na
-   primeira newline. Use `grep -A 12 "<seletor> {"` e inspecione o arquivo.
-6. **`next/font/google` não funciona em sandbox** (sem acesso à internet). Use
-   `@fontsource/plus-jakarta-sans`.
-7. **Componente `Switch`** fica em `design-system/components/forms/Switch.tsx` e usa
+5. **Sempre leia de volta o arquivo do Drive** (ou compare o tamanho com
+   `git cat-file -s origin/main:<path>`) antes de sobrescrever, para não apagar edição de
+   outra pessoa.
+6. **Transcrição perde bytes** em conteúdos longos. Confira o tamanho após o push.
+7. **`grep` em CSS não-minificado engana:** `grep` trabalha linha a linha, então
+   `-A 4` corta propriedades e `.{0,180}` para na primeira newline. Use `grep -A N` com N
+   grande ou inspecione o arquivo.
+8. **Componente `Switch`** fica em `design-system/components/forms/Switch.tsx` e usa
    `Toggle.module.css` (não existe `Switch.module.css`).
+9. **`tsc --noEmit` já erra no `main` limpo:** faltam declarações para os PNG em
+   `design-system/assets/images/` e `LayoutProps` é tipo gerado pelo Next. Não é regressão
+   sua — compare com o base antes de se culpar.
+10. **`next/font/google` não funciona em sandbox** (sem acesso à internet). Use
+    `@fontsource/plus-jakarta-sans`.
+11. **Windows:** caminho com espaço (`C:\Users\Digo Nego\...`) precisa de aspas no
+    PowerShell, senão o `cd` quebra. E "Extrair Tudo" do Windows cria uma subpasta com o
+    nome do zip — sempre confira com `Test-Path`.
 
 ---
 
-## 7. Regras inegociáveis do combinado
+## 6. Regras inegociáveis do combinado
 
 1. **Só executa tarefas do Rodrigo (Marca).** Tarefas do Richard (Produto) ficam com ele —
    inclusive o trabalho dele já feito, os projetos Supabase e o repo `black-navalha`.
@@ -183,17 +196,28 @@ arquivo. Ou seja: editar o CSS **não garante** que o navegador/proxy pegue a ve
    do template.
 10. **Texto de ajuda é para o cliente final:** sem jargão técnico. Ex.: "Deixa o texto e os
     botões maiores." (não mencionar px).
+11. **Commit e push só na branch da sessão**
+    (`arena/8e2745c8-aluga-richard-rodrigo-importad`). Nunca na `main`.
 
 ---
 
-## 8. Próximas tarefas em aberto
+## 7. Git — estado
 
-- [ ] Conferir no navegador, após Ctrl+Shift+R, que o painel da engrenagem abre **por cima**
-      dos cards (correção da seção 5).
-- [ ] Sincronizar o `Showcase.tsx` da vitrine com a versão que compartilha o
-      `localStorage` com o painel (hoje o Drive ainda tem a versão antiga, só com URL).
-- [ ] Engenharia reversa do **Aluga Pro** (produto já no ar) a partir de prints ou exports
-      "Salvar como"/PDF — **bloqueado** até o usuário mandar o material. Não é possível
+- Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
+- Commit do trabalho: **`81af208`** — *feat(design-system): acessibilidade e tema como
+  configuracao no template do painel* — já pushed para o `origin`.
+- O `main` do repo (`33f6853`) **ainda não tem** esse trabalho. Para levar pra `main` é
+  preciso autorização explícita do Rodrigo.
+
+---
+
+## 8. Próximas tarefas
+
+- [x] Painel da engrenagem abre por cima dos cards — **feito e confirmado em tela**.
+- [x] Commit + push do trabalho na branch da sessão (`81af208`).
+- [ ] **Levar o commit para a `main`** — depende de autorização do Rodrigo.
+- [ ] **Engenharia reversa do Aluga Pro** (produto já no ar) a partir de prints ou exports
+      "Salvar como"/PDF — **bloqueado** até o Rodrigo mandar o material. Não é possível
       acessar sites externos do ambiente atual, e não aceitamos credenciais em chat.
 
 ---
@@ -209,11 +233,11 @@ design-system/
   components/
     core/IconButton.tsx        ← botão circular de ícone (variants: soft/dark/brand/white/ghost/inverse)
     forms/Switch.tsx           ← usa Toggle.module.css
-    data/Card.tsx              ← .card { position: relative }  ← envolvido no bug da seção 5
+    data/Card.tsx              ← .card { position: relative }  ← envolvido no bug de stacking
     navigation/SideRail.tsx    ← props: items, value, onChange, footer, className, style
   templates/admin/
     AdminApp.tsx               ← usa useSettings
-    Shell.tsx                  ← rail + topbar + bottom bar (mobile)
+    Shell.tsx                  ← rail + topbar + bottom bar (mobile); passa settings ao SettingsMenu
     Shell.module.css           ← .railColumn (onde entra o z-index: 20)
     SettingsMenu.tsx           ← engrenagem + popover (align: 'rail' | 'header')
     SettingsMenu.module.css    ← .panel / .fromRail / .fromHeader / .hint
