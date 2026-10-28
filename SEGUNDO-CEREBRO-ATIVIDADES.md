@@ -12,7 +12,8 @@
 >   outras tarefas e está marcado
 >
 > O quadro declara **15 tarefas** e **~58h** na coluna `A fazer`. Consegui identificar
-> **13 delas por completo**; 2 ficaram com título cortado (ver seção 5).
+> **13 delas por completo**; 2 ficaram com título cortado (ver seção 5). Dessas 13,
+> **12 têm a observação completa** — as 2 que faltavam chegaram por escrito depois.
 
 ---
 
@@ -66,14 +67,14 @@
 | # | Título | Prio. | Tempo | Estado da leitura |
 |---|---|---|---|---|
 | 12 | Aluga · **Teste de uso com os 5 fundadores** | 🔴 Alta | 6h | ✅ |
-| 13 | Aluga · **Ajustes visuais pós-testes** | Normal | 6h | ⚠️ obs. cortada |
+| 13 | Aluga · **Ajustes visuais pós-testes** | Normal | 6h | ✅ |
 | 14 | Aluga · **Validar preços com os fundadores** | 🔴 Alta | 2h | ✅ |
 
 ### Validação — prazo 15/01/2027
 
 | # | Título | Prio. | Tempo | Estado da leitura |
 |---|---|---|---|---|
-| 15 | Aluga · **Medir o sucesso da v1** | 🔴 Alta | 2h | ⚠️ obs. cortada |
+| 15 | Aluga · **Medir o sucesso da v1** | 🔴 Alta | 2h | ✅ |
 
 **Horas identificadas:** 3+4+4+3+8+4 +8+3+2+4+3 +6+6+2 +2 = **62h**, contra **~58h**
 declarados no quadro. A diferença de 4h provavelmente está nas duas tarefas de título
@@ -200,6 +201,12 @@ grande, alvo de toque grande, passo a passo com imagem, sem jargão.
 > o cadastro e o checklist, anotar travas. Pronto quando: 5 contas criadas e relatório de
 > travas. Depende de: Assinatura do SaaS, Landing. Ref.: `docs/specs/v1.md`
 
+### 13. Ajustes visuais pós-testes — 04/12 · 6h · Normal
+
+> Para: Rodrigo (Marca). Sprint 3. O que fazer: Aplicar os ajustes dos testes da V0 e dos
+> fundadores nas telas e tokens. Pronto quando: ajustes aprovados e no ar. Depende de:
+> Testes de uso. Ref.: `docs/specs/v1.md`
+
 ### 14. Validar preços com os fundadores — 04/12 · 2h · Alta
 
 > Para: Rodrigo (Marca). Sprint 3. O que fazer: Perguntar a disposição de pagar e o plano
@@ -208,14 +215,28 @@ grande, alvo de toque grande, passo a passo com imagem, sem jargão.
 
 **A tabela R$ 59/99/209/269 ainda é hipótese.** Esta tarefa é que a confirma ou derruba.
 
+### 15. Medir o sucesso da v1 — 15/01/2027 · 2h · Alta
+
+> Para: Rodrigo (Marca). Validação. O que fazer: Conferir: mês completo da V0 sem planilha;
+> 3 de 5 fundadores pagando após o mês grátis; % que concluiu o checklist; cobranças
+> baixadas sem clique. Pronto quando: decisão registrada: seguir para a v2 ou ajustar.
+> Depende de: Tudo acima. Ref.: `docs/specs/v1.md`
+
+**São 4 métricas de validação, e uma delas é a mais reveladora do produto:** *"cobranças
+baixadas sem clique"*. O Aluga promete baixa automática — se isso funcionar, é o
+diferencial que justifica a assinatura. As outras três medem adoção (mês completo sem
+planilha), disposição a pagar (3 de 5 fundadores) e conclusão do onboarding.
+
 ---
 
-## 4. Observações cortadas (preciso do texto)
+## 4. Estado das observações
 
-| # | Tarefa | O que li | O que falta |
-|---|---|---|---|
-| 13 | Ajustes visuais pós-testes | *"…ajustes dos testes da V0 e dos fundadores nas telas e tokens. Pronto quando: ajustes aprovados e no ar. Ref.: docs/specs/v1.md"* | o **início** — o "Para/Sprint/O que fazer" |
-| 15 | Medir o sucesso da v1 | *"Para: Rodrigo (Marca). Validação. O que fazer: Conferir: mês completo do V0 sem planilha; 3 de 5 fundadores pagando após o mês grátis; % que concluíu o checklist…"* · *"Depende de: Tudo. Ref.: docs/specs/v1.md"* | o **resto** da lista de conferência |
+Das 13 tarefas identificadas, **12 têm a observação completa**. A exceção é a tarefa 5
+("Desenhar as telas da v1"), que ainda tem um trecho do meio não lido — ver lacuna 5,
+seção 5.
+
+**Nota de leitura:** onde o texto original aparece como *"Vó"*, li **V0** (versão zero) —
+é o que faz sentido no contexto, que fala em *"seguir para a v2"* na mesma frase.
 
 ---
 
@@ -227,6 +248,12 @@ grande, alvo de toque grande, passo a passo com imagem, sem jargão.
    da tela, título cortado. Provavelmente está na coluna `Aguardando`.
 3. **Coluna `Aguardando`** não foi aberta em nenhuma das 3 levas.
 4. **Tarefa 9 "Mensagens"** (20/11 · 2h) — só o título, sem observação.
+5. **Tarefa 5 "Desenhar as telas da v1"** — a observação tem um trecho do meio ainda
+   não lido, entre *"Partir do design-"* e *"system/templates/admin. Ref.:"*.
+
+**Resolvidas nesta rodada** (Rodrigo passou o texto por escrito, 27/10/2026):
+observações das tarefas **13** (Ajustes visuais pós-testes) e **15** (Medir o sucesso
+da v1). A 14 (Validar preços) já estava completa.
 
 ---
 
@@ -264,7 +291,8 @@ for usado como base da v1, ele precisa **encolher**, não crescer.
 ## 7. Roteiro sugerido (a confirmar com o Rodrigo)
 
 1. **Marcar a tarefa 1 como pronta** — destrava a 5, que é a maior da Sprint 1 (8h).
-2. **Fechar as 2 lacunas de título** antes de planejar a Sprint 2.
+2. **Fechar as lacunas que sobraram** (2 títulos, a observação da 5 e da 9, e a coluna
+   `Aguardando`) antes de planejar a Sprint 2.
 3. **Decidir o destino do template:** encolher para o vocabulário da v1
    (`Unidade`, `Cobrança/Recebimento`, modo simples) ou manter o template como está e
    construir a v1 em cima só do que serve.
