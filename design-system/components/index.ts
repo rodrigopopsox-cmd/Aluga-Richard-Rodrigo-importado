@@ -26,6 +26,7 @@ export { LineChart, type LineChartProps, type LineSeries } from './data/LineChar
 export { Metric, type MetricProps } from './data/Metric';
 export { ProgressPill, type ProgressPillProps } from './data/ProgressPill';
 export { StatCard, type StatCardProps } from './data/StatCard';
+export { StepChecklist, type Step, type StepChecklistProps } from './data/StepChecklist';
 
 // marketing
 export { PlanCard, PricingNote, PricingTable, type PlanCardProps, type PlanSpec, type PricingNoteProps, type PricingTableProps } from './marketing';

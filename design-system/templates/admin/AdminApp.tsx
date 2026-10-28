@@ -8,6 +8,7 @@ import { tasks as initialTasks, properties, type Task } from './data';
 import { FinanceScreen } from './FinanceScreen';
 import { LoginScreen } from './LoginScreen';
 import { MaintenanceScreen } from './MaintenanceScreen';
+import { OnboardingScreen } from './OnboardingScreen';
 import { PlansScreen } from './PlansScreen';
 import { PropertiesScreen } from './PropertiesScreen';
 import { Shell, type DashView, type ModuleId } from './Shell';
@@ -96,6 +97,7 @@ export function AdminApp() {
           if (module === 'props') return <PropertiesScreen bp={bp} toast={toast} />;
           if (module === 'maint') return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={() => setAdding(true)} toast={toast} />;
           if (module === 'plans') return <PlansScreen bp={bp} toast={toast} />;
+          if (module === 'start') return <OnboardingScreen bp={bp} toast={toast} />;
           return <FinanceScreen bp={bp} toast={toast} />;
         }}
       </Shell>
