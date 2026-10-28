@@ -1,65 +1,65 @@
 'use client';
 
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { Icon } from '../core/Icon';
-import styles from './ProductTour.module.css';
+import styles from './ProcessDemo.module.css';
 
 /**
- * Um passo do tour: uma tela real do app e o que acontece nela.
+ * Um passo da demonstração: um painel focado e o que ele está mostrando.
  *
- * `children` é a **tela de verdade**, não um desenho dela. Quem monta o
- * tour passa `<ContractsScreen bp="d" toast={noop} />` e a moldura apenas
- * a emoldura. Se a tela mudar no app, o tour muda junto — é a única forma
- * de a demonstração não mentir.
+ * `children` é montado pelo chamador com os **componentes de verdade do
+ * design system** (`Card`, `Metric`, `Badge`, `DataTable`…) e com os
+ * **dados de demonstração de verdade** (`chargesData`, `contractsData`,
+ * `receiptsData`). Não é print, não é maquete, não é tela de concorrente.
  */
-export interface TourStep {
-  /**
-   * Nome da tela como aparece no menu do app ("Contratos", "Cobranças").
-   * É o que a barra da moldura mostra, no lugar do nome do site: o tour é
-   * do produto, não da marca.
-   */
-  screen: string;
-  /** O que acontece neste passo, em poucas palavras. */
+export interface DemoStep {
+  /** O que acontece neste passo. */
   title: string;
-  /** Uma linha explicando o passo. */
+  /** Uma linha explicando. */
   detail: string;
-  /** A tela real. */
+  /** O painel focalizado. */
   children: ReactNode;
-  /**
-   * Onde o cursor para, em porcentagem da área da tela. Sem isso o cursor
-   * fica parado no meio e parece defeito, não demonstração.
-   */
-  cursor?: { x: number; y: number };
 }
 
-export interface ProductTourProps {
+export interface ProcessDemoProps {
   /** Rótulo da seção: "Contratos", "Cobranças", "Recebimentos". */
   label: string;
-  steps: TourStep[];
+  steps: DemoStep[];
   /** Milissegundos por passo. `0` desliga o avanço automático. */
   interval?: number;
 }
 
 /**
- * Tour do produto: moldura com uma tela real do app dentro, contador de
- * passo e narração que avança sozinha.
+ * Demonstração de processo: um cartão com etiqueta, contador, painel que
+ * troca sozinho e a narração embaixo.
  *
- * O formato é o que o mercado usa (etiqueta da tela + `01 / 04` + legenda),
- * mas o conteúdo é nosso: as telas são as do app e os textos vêm do
- * `PRODUCT.md`. Nada é copiado de concorrente — nem texto, nem número, nem
- * imagem.
+ * POR QUE NÃO É A TELA INTEIRA DENTRO DE UMA MOLDURA. A primeira versão
+ * embedava a tela real do painel (`ChargesScreen`, `PropertiesScreen`) numa
+ * moldura de 400px. O resultado foi reprovado, e com razão: tela de
+ * painel é feita para desktop largo, com tipo pequeno e grade de quatro
+ * métricas. Espremida numa moldura de marketing, o texto fica ilegível e a
+ * disposição das fontes deixa de fazer sentido.
  *
- * Três cuidados de acessibilidade, porque animação que ninguém pediu para
- * ver é hostil:
+ * A daqui mostra **um pedaço focado do processo por vez**, com o tipo no
+ * tamanho que o design system manda para leitura. É a mesma coisa que o
+ * mercado faz, e é honesta: o painel é montado com os componentes e os
+ * dados do app, então os números que aparecem são os mesmos que a tela
+ * mostra.
  *
- *   · `prefers-reduced-motion` desliga o avanço automático **e** a
- *     troca com fade. Quem pediu menos movimento recebe menos movimento.
- *   · O ponteiro do mouse em cima pausa, e o foco também — ninguém perde
- *     o passo de vista porque estava lendo.
- *   · Os botões de passo são alvos de 48px e a narração é `aria-live`,
- *     então o tour se usa sem ver a animação.
+ * A moldura é um cartão com sombra leve — **sem a borda grossa** que a
+ * versão anterior usava (`--shadow-device` é um anel preto de 10px, feito
+ * para emular aparelho, não para Painel de produto).
+ *
+ * Três cuidados, porque animação que ninguém pediu para ver é hostil:
+ *
+ *   · `prefers-reduced-motion` desliga o avanço automático **e** a troca.
+ *   · Ponteiro em cima e foco pausam — ninguém perde o passo de vista
+ *     porque estava lendo.
+ *   · Botões com alvo de 48px (o token sobe para 56px no modo
+ *     acessibilidade) e narração em `aria-live`: o painel se usa sem ver a
+ *     animação.
  */
-export function ProductTour({ label, steps, interval = 5600 }: ProductTourProps) {
+export function ProcessDemo({ label, steps, interval = 4200 }: ProcessDemoProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -87,7 +87,7 @@ export function ProductTour({ label, steps, interval = 5600 }: ProductTourProps)
 
   return (
     <figure
-      className={styles.tour}
+      className={styles.demo}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -99,24 +99,24 @@ export function ProductTour({ label, steps, interval = 5600 }: ProductTourProps)
         <span className={styles.barCount}>
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
+        {/* Tempo até o próximo passo. É o que faz a troca parecer
+            automática em vez de acionada: a barra enche sozinha. */}
+        <span className={styles.track} aria-hidden="true">
+          <span
+            key={index}
+            className={styles.fill}
+            style={{ animationDuration: `${interval}ms` } as CSSProperties}
+            data-paused={paused || reduced ? '' : undefined}
+          />
+        </span>
       </div>
 
-      <div className={styles.device}>
-        <div className={styles.screen} key={index} data-reduced={reduced ? '' : undefined}>
-          {step.children}
-        </div>
-        {step.cursor && (
-          <span
-            className={styles.cursor}
-            style={{ left: `${step.cursor.x}%`, top: `${step.cursor.y}%` }}
-            aria-hidden="true"
-          />
-        )}
+      <div className={styles.body} key={index} data-reduced={reduced ? '' : undefined}>
+        {step.children}
       </div>
 
       <figcaption className={styles.foot}>
         <div className={styles.text} aria-live="polite">
-          <span className={styles.screenName}>{step.screen}</span>
           <h3 className={styles.title}>{step.title}</h3>
           <p className={styles.detail}>{step.detail}</p>
         </div>

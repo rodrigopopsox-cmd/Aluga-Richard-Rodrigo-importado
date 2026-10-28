@@ -1,25 +1,23 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import {
+  Avatar,
   Badge,
   Button,
+  Card,
+  CardHeader,
   HowItWorks,
+  Metric,
   PricingNote,
   PricingTable,
-  ProductTour,
+  ProcessDemo,
   Wordmark,
+  type DemoStep,
   type PlanSpec,
-  type TourStep,
 } from '@design-system';
 import { SimpleModeScreen } from '../../design-system/templates/admin/SimpleModeScreen';
-import { PropertiesScreen } from '../../design-system/templates/admin/PropertiesScreen';
-import { TenantsScreen } from '../../design-system/templates/admin/TenantsScreen';
-import { ContractsScreen } from '../../design-system/templates/admin/ContractsScreen';
-import { ChargesScreen } from '../../design-system/templates/admin/ChargesScreen';
-import { FinanceScreen } from '../../design-system/templates/admin/FinanceScreen';
-import { ExpensesScreen } from '../../design-system/templates/admin/ExpensesScreen';
 import type { ToastInput } from '../../design-system/templates/admin/AdminApp';
-import type { ModuleId } from '../../design-system/templates/admin/Shell';
 import s from './page.module.css';
 
 /**
@@ -38,8 +36,7 @@ import s from './page.module.css';
  *     engenharia reversa. O Aluga não lançou — não tem número para contar,
  *     e número emprestado é mentira.
  *   · **Sem comparação com concorrente.** `PRODUCT.md` diz que os termos do
- *     AluggaPro proíbem copiar interface, código e design. Comparar preço
- *     não é copiar tela, mas também não é o que a tarefa pede.
+ *     AluggaPro proíbem copiar interface, código e design.
  *
  * A seção do Modo simples renderiza a **tela de verdade**
  * (`SimpleModeScreen`), não um desenho dela. Se a tela muda, a landing muda
@@ -74,63 +71,136 @@ const STEPS = [
   },
 ];
 
-const noop = () => {};
-const noopToast = noop as unknown as (t: ToastInput) => void;
-const noopGo = noop as unknown as (m: ModuleId) => void;
+/* ------------------------------------------------------------------ *
+ * Peças dos painéis de demonstração.
+ *
+ * São montadas com os componentes de verdade do design system
+ * (`Card`, `CardHeader`, `Metric`, `Badge`, `Avatar`) e com os números de
+ * demonstração de verdade das telas (`chargesData`, `contractsData`,
+ * `receiptsData`). Os totais conferem com a tela de Cobranças e com a de
+ * Recebimentos: R$ 2.600 / R$ 1.800 / R$ 4.400 e R$ 5.600,00 / R$ 962,00 /
+ * R$ 4.638,00 / 78%.
+ * ------------------------------------------------------------------ */
+
+function Panel({
+  title,
+  subtitle,
+  action,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <Card>
+      <CardHeader title={title} subtitle={subtitle} action={action} size="sm" />
+      <div className={s.panelBody}>{children}</div>
+    </Card>
+  );
+}
+
+/** Linha "rótulo · valor", como a ficha de um contrato. */
+function Field({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className={s.field}>
+      <span className={s.fieldLabel}>{label}</span>
+      <span className={s.fieldValue}>{value}</span>
+    </div>
+  );
+}
+
+/** Régua de métricas — a mesma da tela, em três ou quatro cartões. */
+function Metrics({ items }: { items: Array<{ title: string; value: string }> }) {
+  return (
+    <div className={s.metrics}>
+      {items.map((m) => (
+        <Card key={m.title}>
+          <CardHeader title={m.title} size="sm" />
+          <Metric value={m.value} size="md" />
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 /**
- * Os três tours mostram as telas de verdade do app, na ordem em que a
- * pessoa usa. Cada passo renderiza a tela real dentro da moldura — não um
- * desenho dela, não um print, não uma maquete.
+ * As três demonstrações, na ordem em que a pessoa usa.
  *
- * HONESTIDADE, e isso está escrito de propósito: dois passos daqui
- * descrevem automação que **ainda não existe no código**.
+ * HONESTIDADE, escrita de propósito: dois passos descrevem automação que
+ * **ainda não existe no código**.
  *
- *   · A创建criação do pagamento no Mercado Pago, com boleto, é a tarefa 11
- *     do Segundo Cérebro — o tutorial do OAuth. A tela de Cobranças existe;
- *     a geração do boleto, não.
- *   · A régua de lembretes (3 dias antes, no dia, 3 dias depois) é a
- *     tarefa 9. `PRODUCT.md` promete as duas, então a landing pode falar
- *     delas — mas quem ler estes passos como "já está pronto" está lendo
- *     errado. Estão marcados com ⚠️ nos títulos.
+ *   · "Boleto e Pix prontos" — criar o pagamento no Mercado Pago é a
+ *     tarefa 11 do Segundo Cérebro (tutorial do OAuth). A tela de Cobranças
+ *     existe; a geração do boleto, não.
+ *   · "Lembrete no WhatsApp" — a régua de lembretes é a tarefa 9.
  *
- * Fora isso, tudo o que os tours mostram está construído e validado: as
- * telas de Imóveis, Inquilinos, Contratos, Cobranças, Recebimentos e
- * Despesas são as da tarefa 5, commitadas.
+ * `PRODUCT.md` promete as duas, então a landing pode falar delas. Mas quem
+ * lesse como "já está pronto" estaria lendo errado — por isso o título leva
+ * o aviso e a seção explica. Nada aqui é print de tela do concorrente: os
+ * painéis são do nosso design system, com os nossos dados.
  */
-const TOURS: Array<{ label: string; steps: TourStep[] }> = [
+const DEMOS: Array<{ label: string; steps: DemoStep[] }> = [
   {
     label: 'Contratos',
     steps: [
       {
-        screen: 'Imóveis',
-        title: 'Cadastre o imóvel e as unidades',
-        detail: 'Uma vez só. Endereço, unidades e quanto cada uma rende.',
-        cursor: { x: 34, y: 30 },
-        children: <PropertiesScreen bp="d" toast={noopToast} go={noopGo} />,
+        title: 'O contrato, em uma ficha',
+        detail: 'Unidade, inquilino, valor e dia de vencimento. Uma vez só.',
+        children: (
+          <Panel
+            title="Casa do CIC"
+            subtitle="casa · alugada"
+            action={<Badge tone="success">Vigente</Badge>}
+          >
+            <Field label="Inquilino" value="Maria Silva" />
+            <Field label="Valor" value="R$ 1.200" />
+            <Field label="Vence" value="dia 5" />
+            <Field label="Início" value="05/03/2024" />
+          </Panel>
+        ),
       },
       {
-        screen: 'Inquilinos',
-        title: 'Quem mora em cada unidade',
-        detail:
-          'Com CPF ou CNPJ. É o que separa o Imposto de Renda por titular depois.',
-        cursor: { x: 26, y: 44 },
-        children: <TenantsScreen bp="d" toast={noopToast} />,
+        title: 'O reajuste já está no contrato',
+        detail: 'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário.',
+        children: (
+          <Panel title="Reajuste" subtitle="Como o valor corrige todo ano">
+            <Field label="Índice" value="IGP-M (FGV)" />
+            <Field label="Aniversário" value="março" />
+            <Field label="Próximo reajuste" value="março de 2027" />
+          </Panel>
+        ),
       },
       {
-        screen: 'Contratos',
-        title: 'Valor, vencimento e reajuste',
-        detail:
-          'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário. É o que basta para cobrar.',
-        cursor: { x: 62, y: 34 },
-        children: <ContractsScreen bp="d" toast={noopToast} />,
+        title: 'Pessoa física ou jurídica, desde o início',
+        detail: 'É o que separa o Imposto de Renda por titular na hora de declarar.',
+        children: (
+          <Panel title="Titulares" subtitle="Quem assina o contrato">
+            <div className={s.people}>
+              <div className={s.person}>
+                <Avatar name="Maria Silva" size={28} />
+                <span className={s.personName}>Maria Silva</span>
+                <Badge tone="neutral">PF</Badge>
+              </div>
+              <div className={s.person}>
+                <Avatar name="Clínica Vida Ltda" size={28} />
+                <span className={s.personName}>Clínica Vida Ltda</span>
+                <Badge tone="neutral">PJ</Badge>
+              </div>
+            </div>
+          </Panel>
+        ),
       },
       {
-        screen: 'Cobranças',
-        title: 'A primeira cobrança já existe',
-        detail: 'Gerada a partir do contrato, no mês e no dia certos.',
-        cursor: { x: 44, y: 52 },
-        children: <ChargesScreen bp="d" toast={noopToast} />,
+        title: 'A cobrança nasce daqui',
+        detail: 'Do contrato sai a cobrança do mês, no valor e no dia certos.',
+        children: (
+          <Panel title="Cobrança de outubro" subtitle="Casa do CIC · Maria Silva">
+            <Field label="Valor" value="R$ 1.200" />
+            <Field label="Vence" value="05/10/2026" />
+          </Panel>
+        ),
       },
     ],
   },
@@ -138,34 +208,61 @@ const TOURS: Array<{ label: string; steps: TourStep[] }> = [
     label: 'Cobranças',
     steps: [
       {
-        screen: 'Cobranças',
         title: 'A cobrança do mês já está lá',
         detail: 'Gerada a partir do contrato. Você não cria nada.',
-        cursor: { x: 30, y: 36 },
-        children: <ChargesScreen bp="d" toast={noopToast} />,
+        children: (
+          <Metrics
+            items={[
+              { title: 'Recebido', value: 'R$ 2.600' },
+              { title: 'Em aberto', value: 'R$ 1.800' },
+              { title: 'Previsto', value: 'R$ 4.400' },
+            ]}
+          />
+        ),
       },
       {
-        screen: 'Cobranças',
         title: '⚠️ Boleto e Pix prontos',
         detail:
           'O app cria o pagamento no Mercado Pago e o inquilino paga por Pix, boleto ou saldo.',
-        cursor: { x: 70, y: 40 },
-        children: <ChargesScreen bp="d" toast={noopToast} />,
+        children: (
+          <Panel title="Cobrança" subtitle="Casa do CIC · Maria Silva">
+            <Field label="Valor" value="R$ 1.200" />
+            <Field label="Vence" value="05/10/2026" />
+            <div className={s.payRow}>
+              <Button size="sm">Pix</Button>
+              <Button size="sm" variant="secondary" icon="file-text">
+                Boleto
+              </Button>
+            </div>
+          </Panel>
+        ),
       },
       {
-        screen: 'Recebimentos',
-        title: '⚠️ O app lembra antes de vencer',
-        detail:
-          'Lembrete no WhatsApp, do jeito que a pessoa lê. Você pausa quando quiser.',
-        cursor: { x: 82, y: 22 },
-        children: <FinanceScreen bp="d" toast={noopToast} />,
+        title: '⚠️ Lembrete no WhatsApp',
+        detail: 'A mensagem sai do jeito que a pessoa lê. Você pausa quando quiser.',
+        children: (
+          <div className={s.chat}>
+            <div className={s.bubble}>
+              <span className={s.bubbleWho}>Maria · Casa do CIC</span>
+              <p className={s.bubbleText}>
+                Oi Maria, o aluguel de R$ 1.200 vence dia 5. Dá para pagar por Pix ou boleto.
+              </p>
+            </div>
+          </div>
+        ),
       },
       {
-        screen: 'Cobranças',
         title: 'Pagou, deu baixa',
-        detail: 'O pagamento cai e a cobrança fecha. Sem planilha.',
-        cursor: { x: 52, y: 60 },
-        children: <ChargesScreen bp="d" toast={noopToast} />,
+        detail: 'O pagamento cai e a cobrança fecha sozinha. Sem planilha.',
+        children: (
+          <Panel
+            title="Casa do CIC"
+            subtitle="R$ 1.200 · 05/10/2026"
+            action={<Badge tone="success">Paga</Badge>}
+          >
+            <Field label="Baixa" value="automática em 05/10" />
+          </Panel>
+        ),
       },
     ],
   },
@@ -173,36 +270,56 @@ const TOURS: Array<{ label: string; steps: TourStep[] }> = [
     label: 'Recebimentos',
     steps: [
       {
-        screen: 'Recebimentos',
         title: 'Pagamento identificado',
         detail: 'Mercado Pago, WhatsApp ou manual — cada recebimento guarda a origem.',
-        cursor: { x: 24, y: 30 },
-        children: <FinanceScreen bp="d" toast={noopToast} />,
+        children: (
+          <Panel title="Recebimentos" subtitle="O que entrou em outubro">
+            <Field label="Casa do CIC" value={<Badge tone="success">Mercado Pago</Badge>} />
+            <Field label="Casa Água Verde" value={<Badge tone="neutral">WhatsApp</Badge>} />
+            <Field label="Kitnet" value={<Badge tone="neutral">Manual</Badge>} />
+          </Panel>
+        ),
       },
       {
-        screen: 'Cobranças',
         title: 'Baixa com responsável',
-        detail: 'A cobrança guarda quem deu a baixa e quando. Automática quando o pagamento cai.',
-        cursor: { x: 60, y: 48 },
-        children: <ChargesScreen bp="d" toast={noopToast} />,
+        detail: 'A cobrança guarda quem deu a baixa e quando — automática quando o pagamento cai.',
+        children: (
+          <Panel title="Quem deu a baixa" subtitle=" outubro">
+            <Field label="Casa do CIC" value="baixa automática em 05/10" />
+            <Field label="Casa Água Verde" value="você em 03/10, pelo &ldquo;Recebeu?&rdquo;" />
+          </Panel>
+        ),
       },
       {
-        screen: 'Recebimentos',
         title: 'Recibo na hora',
-        detail: 'A confirmação do pagamento sai na hora, com o valor e a unidade.',
-        cursor: { x: 40, y: 56 },
-        children: <FinanceScreen bp="d" toast={noopToast} />,
+        detail: 'A confirmação do pagamento sai com o valor e a unidade.',
+        children: (
+          <Panel title="Recibo" subtitle="Outubro de 2026">
+            <Field label="Recebido de" value="Maria Silva" />
+            <Field label="Referente a" value="Casa do CIC" />
+            <Field label="Valor" value="R$ 1.200" />
+          </Panel>
+        ),
       },
       {
-        screen: 'Despesas',
         title: 'Quanto cada imóvel rende',
         detail: 'Despesas por imóvel e por titular — o Imposto de Renda sai separado.',
-        cursor: { x: 56, y: 38 },
-        children: <ExpensesScreen bp="d" toast={noopToast} />,
+        children: (
+          <Metrics
+            items={[
+              { title: 'Recebido', value: 'R$ 5.600,00' },
+              { title: 'Despesas', value: 'R$ 962,00' },
+              { title: 'Resultado', value: 'R$ 4.638,00' },
+              { title: 'Ocupação', value: '78%' },
+            ]}
+          />
+        ),
       },
     ],
   },
 ];
+
+const noopToast = (() => {}) as unknown as (t: ToastInput) => void;
 
 export function LandingScreen() {
   return (
@@ -232,10 +349,18 @@ export function LandingScreen() {
             e não tem tempo de planilha.
           </p>
           <div className={s.ctas}>
-            <Button size="lg" iconRight="arrow-right" onClick={() => (window.location.href = '/design-system/admin')}>
+            <Button
+              size="lg"
+              iconRight="arrow-right"
+              onClick={() => (window.location.href = '/design-system/admin')}
+            >
               Começar teste grátis
             </Button>
-            <Button size="lg" variant="secondary" onClick={() => document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Ver os planos
             </Button>
           </div>
@@ -246,17 +371,17 @@ export function LandingScreen() {
         <HowItWorks steps={STEPS} lead="Três passos, e o resto é automático." />
 
         {/* ------------- Como funciona, na prática ------------- */}
-        <section className={s.tours} id="como-funciona">
-          <div className={s.toursHead}>
+        <section className={s.demos} id="como-funciona">
+          <div className={s.demosHead}>
             <h2 className={s.sectionTitle}>Como funciona, na prática</h2>
             <p className={s.sectionLead}>
-              Três tours com as telas de verdade do app, na ordem em que você usa. Passa sozinho;
-              se você encostar o mouse, ele espera. Os passos marcados com ⚠️ são promessa do
-              PRODUCT.md que ainda não está construída — estão ditos aqui, não escondidos.
+              O processo andando sozinho, como acontece no app. Cada painel troca por conta
+              própria; se você encostar o mouse, ele espera. Os passos marcados com ⚠️ são promessa
+              do PRODUCT.md que ainda não está construída — estão ditos aqui, não escondidos.
             </p>
           </div>
-          {TOURS.map((t) => (
-            <ProductTour key={t.label} label={t.label} steps={t.steps} />
+          {DEMOS.map((d) => (
+            <ProcessDemo key={d.label} label={d.label} steps={d.steps} />
           ))}
         </section>
 
@@ -276,7 +401,7 @@ export function LandingScreen() {
           </div>
           <div className={s.device}>
             <div className={s.deviceScreen}>
-              <SimpleModeScreen bp="d" toast={noop as unknown as (t: ToastInput) => void} />
+              <SimpleModeScreen bp="d" toast={noopToast} />
             </div>
           </div>
         </section>
@@ -302,7 +427,11 @@ export function LandingScreen() {
           <p className={s.sectionLead}>
             Cadastre um imóvel, um inquilino e um contrato. Se não fizer sentido, não paga nada.
           </p>
-          <Button size="lg" iconRight="arrow-right" onClick={() => (window.location.href = '/design-system/admin')}>
+          <Button
+            size="lg"
+            iconRight="arrow-right"
+            onClick={() => (window.location.href = '/design-system/admin')}
+          >
             Começar teste grátis
           </Button>
         </section>
