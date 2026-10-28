@@ -114,8 +114,7 @@ ativada por `data-a11y="on"`) e o menu da engrenagem no template do painel.
 
 **O nome do produto ainda não está fechado.** "Aluga" é provisório. Direções de marca:
 estilo **Old Parr**, **Mustang**, ou o nome da **Vó/V0** (ver nota de leitura, seção 4).
-Registro de marca nas classes
-**36** (financeiro/seguros) e **42** (software).
+Registro de marca nas classes **36** (financeiro/seguros) e **42** (software).
 
 ### 3. Desenhar o onboarding — 06/11 · 4h · Normal
 
