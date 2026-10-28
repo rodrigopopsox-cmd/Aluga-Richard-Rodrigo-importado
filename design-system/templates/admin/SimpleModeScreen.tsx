@@ -72,29 +72,31 @@ export function SimpleModeScreen({ bp, toast }: SimpleModeScreenProps) {
 
   return (
     <div className={s.stack}>
-      {/* cabeçalho com o mês e a navegação */}
+      {/* cabeçalho com o mês e a navegação — CardHeader é o padrão do app */}
       <Card padding={pad}>
-        <div className={s.monthHead}>
-          <div>
-            <h2 className={s.monthTitle}>Este mês</h2>
-            <p className={s.monthSub}>Tudo o que entra e o que ainda falta</p>
-          </div>
-          <div className={s.monthNav}>
-            <IconButton
-              icon="chevron-left"
-              label="Mês anterior"
-              onClick={() => setMonthIndex((i) => Math.max(0, i - 1))}
-              disabled={monthIndex === 0}
-            />
-            <span className={s.monthLabel}>{month}</span>
-            <IconButton
-              icon="chevron-right"
-              label="Próximo mês"
-              onClick={() => setMonthIndex((i) => Math.min(SIMPLE_MONTHS.length - 1, i + 1))}
-              disabled={monthIndex === SIMPLE_MONTHS.length - 1}
-            />
-          </div>
-        </div>
+        <CardHeader
+          title="Este mês"
+          subtitle="Tudo o que entra e o que ainda falta"
+          action={
+            <div className={s.monthNav}>
+              <IconButton
+                icon="chevron-left"
+                label="Mês anterior"
+                size={36}
+                onClick={() => setMonthIndex((i) => Math.max(0, i - 1))}
+                disabled={monthIndex === 0}
+              />
+              <span className={s.monthLabel}>{month}</span>
+              <IconButton
+                icon="chevron-right"
+                label="Próximo mês"
+                size={36}
+                onClick={() => setMonthIndex((i) => Math.min(SIMPLE_MONTHS.length - 1, i + 1))}
+                disabled={monthIndex === SIMPLE_MONTHS.length - 1}
+              />
+            </div>
+          }
+        />
       </Card>
 
       {/* resumo: recebidos de esperados */}
@@ -103,7 +105,7 @@ export function SimpleModeScreen({ bp, toast }: SimpleModeScreenProps) {
           <Metric
             value={`R$ ${received.toLocaleString('pt-BR')}`}
             label={`de R$ ${expected.toLocaleString('pt-BR')} esperados`}
-            size="xl"
+            size="lg"
           />
           <p className={s.summaryMissing}>
             {missing > 0 ? `Faltam R$ ${missing.toLocaleString('pt-BR')}` : 'Tudo recebido neste mês'}

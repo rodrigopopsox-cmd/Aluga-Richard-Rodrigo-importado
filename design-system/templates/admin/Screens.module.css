@@ -611,39 +611,19 @@
 /* ── "Este mês" — tela do Modo simples (R7 da spec v1) ─────────────────────
    Letra base de 18px e alvos de 48px, como a spec manda para esta tela. */
 
-.monthHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
 
-.monthTitle {
-  margin: 0;
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-bold);
-  line-height: var(--leading-tight);
-  color: var(--text-strong);
-}
 
-.monthSub {
-  margin: var(--space-1) 0 0;
-  font-size: var(--text-base);
-  line-height: var(--leading-snug);
-  color: var(--text-secondary);
-}
 
 .monthNav {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .monthLabel {
   min-width: 7ch;
   text-align: center;
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: var(--weight-semibold);
   color: var(--text-strong);
 }
@@ -659,7 +639,7 @@
 
 .summaryMissing {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
   color: var(--text-body);
@@ -714,7 +694,7 @@
 
 .unitName {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: var(--weight-semibold);
   line-height: var(--leading-snug);
   color: var(--text-strong);
@@ -735,7 +715,7 @@
 }
 
 .unitRentValue {
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   font-weight: var(--weight-semibold);
   line-height: var(--leading-tight);
   color: var(--text-strong);
@@ -760,7 +740,7 @@
 }
 
 .unitStatusText {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
   color: var(--text-body);
