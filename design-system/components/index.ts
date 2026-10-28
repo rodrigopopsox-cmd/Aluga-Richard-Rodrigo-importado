@@ -27,6 +27,9 @@ export { Metric, type MetricProps } from './data/Metric';
 export { ProgressPill, type ProgressPillProps } from './data/ProgressPill';
 export { StatCard, type StatCardProps } from './data/StatCard';
 
+// marketing
+export { PlanCard, PricingNote, PricingTable, type PlanCardProps, type PlanSpec, type PricingNoteProps, type PricingTableProps } from './marketing';
+
 // navigation
 export { NavPills, type NavItem, type NavPillsProps } from './navigation/NavPills';
 export { SideRail, type RailItem, type SideRailProps } from './navigation/SideRail';

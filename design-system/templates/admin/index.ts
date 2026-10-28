@@ -5,6 +5,7 @@ export { DashboardScreen, type DashboardScreenProps } from './DashboardScreen';
 export { FinanceScreen } from './FinanceScreen';
 export { LoginScreen, type LoginScreenProps } from './LoginScreen';
 export { MaintenanceScreen, type MaintenanceScreenProps } from './MaintenanceScreen';
+export { PlansScreen } from './PlansScreen';
 export { PropertiesScreen } from './PropertiesScreen';
 export { MODULES, Shell, type DashView, type ModuleId, type ShellProps } from './Shell';
 export { SettingsMenu, type SettingsMenuProps } from './SettingsMenu';

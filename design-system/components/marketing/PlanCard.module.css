@@ -1,0 +1,168 @@
+/* PlanCard — pricing block. Only tokens, no literal values. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.highlighted {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+/* ---------- head ---------- */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: var(--space-8);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  color: var(--text-strong);
+}
+
+.highlighted .name {
+  color: var(--on-brand);
+}
+
+/* ---------- price ---------- */
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.price {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+}
+
+.highlighted .price {
+  color: var(--on-brand);
+}
+
+.suffix {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.highlighted .suffix {
+  color: var(--white-a80);
+}
+
+.priceNote {
+  margin: calc(-1 * var(--space-3)) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
+
+.highlighted .priceNote {
+  color: var(--white-a80);
+}
+
+/* ---------- limits ---------- */
+.limits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.highlighted .limits {
+  border-color: var(--white-a55);
+}
+
+.limit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.limit dt {
+  font-size: var(--text-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-subtle);
+}
+
+.highlighted .limit dt {
+  color: var(--white-a70);
+}
+
+.limit dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+.highlighted .limit dd {
+  color: var(--on-brand);
+}
+
+/* ---------- features ---------- */
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-secondary);
+}
+
+.highlighted .feature {
+  color: var(--on-brand);
+}
+
+.check {
+  flex: none;
+  margin-top: 2px;
+  color: var(--brand-soft-fg);
+}
+
+.highlighted .check {
+  color: var(--on-brand);
+}
+
+/* ---------- cta ---------- */
+.cta {
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+/* ---------- note ---------- */
+.note {
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--text-muted);
+}
