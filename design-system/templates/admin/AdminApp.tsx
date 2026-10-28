@@ -12,6 +12,7 @@ import { OnboardingScreen } from './OnboardingScreen';
 import { PlansScreen } from './PlansScreen';
 import { PropertiesScreen } from './PropertiesScreen';
 import { Shell, type DashView, type ModuleId } from './Shell';
+import { SimpleModeScreen } from './SimpleModeScreen';
 import { useSettings } from './useSettings';
 import { useStoredState } from './useStoredState';
 import styles from './AdminApp.module.css';
@@ -87,6 +88,9 @@ export function AdminApp() {
           if (module === 'dash') {
             // Enquanto os 5 passos não estão feitos, o painel É o onboarding.
             if (!onbComplete) return <OnboardingScreen bp={bp} done={onbDone} toggle={toggleOnb} />;
+            // Modo simples é a tela "Este mês" da spec (R7), não um painel filtrado:
+            // cards por unidade, status em palavras, botões Recebi e Lembrar.
+            if (settings.view === 'simple') return <SimpleModeScreen bp={bp} toast={toast} />;
             return (
               <>
                 {bp === 'm' && (
@@ -103,7 +107,7 @@ export function AdminApp() {
                 {view === 'analytics' ? (
                   <AnalyticsScreen bp={bp} />
                 ) : (
-                  <DashboardScreen bp={bp} tasks={tasks} onAddTask={() => setAdding(true)} go={goTo} simple={settings.view === 'simple'} />
+                  <DashboardScreen bp={bp} tasks={tasks} onAddTask={() => setAdding(true)} go={goTo} />
                 )}
               </>
             );

@@ -607,3 +607,177 @@
     column-gap: var(--space-7);
   }
 }
+
+/* ── "Este mês" — tela do Modo simples (R7 da spec v1) ─────────────────────
+   Letra base de 18px e alvos de 48px, como a spec manda para esta tela. */
+
+.monthHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.monthTitle {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+}
+
+.monthSub {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--text-secondary);
+}
+
+.monthNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.monthLabel {
+  min-width: 7ch;
+  text-align: center;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+/* resumo: recebidos de esperados */
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.summaryMissing {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--text-body);
+}
+
+.summaryTrack {
+  margin-top: var(--space-5);
+  height: var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
+}
+
+.summaryFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  transition: width 200ms ease;
+}
+
+.summaryPct {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* um card por unidade */
+.unitList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.unitCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.unitHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.unitNames {
+  min-width: 0;
+}
+
+.unitName {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  color: var(--text-strong);
+}
+
+.unitTenant {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--text-secondary);
+}
+
+.unitRent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.unitRentValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.unitRentLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* status em palavras — a frase lidera, a cor só reforça */
+.unitStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.unitStatusIcon {
+  flex: none;
+}
+
+.unitStatusText {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  color: var(--text-body);
+}
+
+.unitActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.unitActions > * {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 479px) {
+  .unitActions > * {
+    flex-basis: 100%;
+  }
+}
