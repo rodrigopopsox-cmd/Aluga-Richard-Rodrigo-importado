@@ -15,7 +15,7 @@ export const MODULES: Array<RailItem & { id: ModuleId }> = [
   { id: 'dash', label: 'Painel', icon: 'layout-grid' },
   { id: 'props', label: 'Imóveis', icon: 'building-2' },
   { id: 'maint', label: 'Manutenção', icon: 'wrench' },
-  { id: 'fin', label: 'Financeiro', icon: 'wallet' },
+  { id: 'fin', label: 'Recebimentos', icon: 'wallet' },
   { id: 'plans', label: 'Planos', icon: 'box' },
   { id: 'charges', label: 'Cobranças', icon: 'file-text' },
 ];

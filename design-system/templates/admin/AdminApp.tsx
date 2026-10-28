@@ -21,7 +21,7 @@ import styles from './AdminApp.module.css';
 export type ToastInput = Pick<ToastProps, 'tone' | 'title' | 'message'>;
 
 /**
- * Click-through admin template: Login → Painel (Visão geral / Análises) → Imóveis → Manutenção → Financeiro.
+ * Click-through admin template: Login → Painel (Visão geral / Análises) → Imóveis → Manutenção → Recebimentos → Cobranças → Planos.
  * Demo state only (fake data; auth flag and current module in localStorage). Use it as the starting composition for real screens.
  */
 export function AdminApp() {

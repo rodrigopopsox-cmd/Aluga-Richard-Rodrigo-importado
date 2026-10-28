@@ -4,7 +4,7 @@ Versão tipada (TSX + CSS Modules) do UI kit `ui_kits/admin` do Claude Design. R
 O HTML original continua em `design-system/reference/ui_kits/admin/`.
 
 Fluxo: Login → Painel (Visão geral / Análises) → Imóveis (filtro, tabela, diálogo da unidade) → Manutenção (tarefas,
-diálogo "Nova tarefa", concluir) → Financeiro (KPIs, fluxo de caixa, pagamentos, "Cobrar", cobrança automática).
+diálogo "Nova tarefa", concluir) → Recebimentos (recebido, despesas, resultado, ocupação, fluxo de caixa, "Precisa de atenção") → Cobranças → Planos.
 Breakpoints (`useBreakpoint`): < 760 mobile (barra inferior em pílula) · 760–1179 tablet (2 colunas) · ≥ 1180 desktop (4 colunas + rail).
 
 | Arquivo | Papel |

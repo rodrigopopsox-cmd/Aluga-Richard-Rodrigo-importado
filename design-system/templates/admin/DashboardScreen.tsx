@@ -80,7 +80,7 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
       </Card>
 
       <Card tone="dark" className={s.between} style={{ ...full, minHeight: 220 }}>
-        <CardHeader inverse title="Próximo" subtitle="vencimento" action={<IconButton icon="maximize-2" label="Financeiro" variant="inverse" size={36} onClick={() => go('fin')} />} />
+        <CardHeader inverse title="Próximo" subtitle="vencimento" action={<IconButton icon="maximize-2" label="Recebimentos" variant="inverse" size={36} onClick={() => go('fin')} />} />
         <div>
           <Metric inverse value="05" label="nov" size="lg" />
           <div className={s.countdown}>
@@ -112,7 +112,7 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
       </Card>
 
       <Card className={s.between} style={{ ...full, gap: 'var(--card-gap)' }}>
-          <CardHeader title="Saúde" subtitle="Financeira" action={<IconButton icon="maximize-2" label="Financeiro" size={36} onClick={() => go('fin')} />} />
+          <CardHeader title="Saúde" subtitle="Financeira" action={<IconButton icon="maximize-2" label="Recebimentos" size={36} onClick={() => go('fin')} />} />
         <div className={s.healthHead}>
           <span className={s.healthWord}>Ótima</span>
           <span className={s.healthPct}>96%</span>
