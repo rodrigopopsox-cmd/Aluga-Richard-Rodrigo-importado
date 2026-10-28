@@ -1,7 +1,8 @@
 /* Aluga — typography tokens. Source of truth: DESIGN.md. */
 :root {
-  /* The Next.js app injects the self-hosted font as --font-plus-jakarta (next/font);
-     standalone HTML references fall back to the Google Fonts import in fonts.css. */
+  /* O app Next.js auto-hospeda a Plus Jakarta Sans com @fontsource
+     (src/app/layout.tsx) — os .woff2 vivem no node_modules, nada de rede
+     em build. HTML avulso usa o @import do Google em fonts.css. */
   --font-sans: var(--font-plus-jakarta, 'Plus Jakarta Sans'), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --weight-light: 300;
