@@ -47,7 +47,7 @@ Arquivos de apoio na raiz do Drive:
 | `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
 | `ENGENHARIA-REVERSA-ALUGGAPRO.md` (mapa do produto no ar) | `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb` |
 | `ALGGAPRO-INVENTARIO-COMPLETO.txt` (inventário de 19 rotas autenticadas) | `1XAirviGZlE2_ajonNBY9k9tcENyNwU0W` |
-| `SEGUNDO-CEREBRO-ATIVIDADES.md` (backlog do Rodrigo, 15 tarefas em 4 sprints) | ver seção 2 |
+| `SEGUNDO-CEREBRO-ATIVIDADES.md` (backlog do Rodrigo, 15 tarefas em 4 sprints) | `1M3ozYzzCaZpmmhKA8Y37cJN6tBAa_CfC` |
 | `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
 | `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
