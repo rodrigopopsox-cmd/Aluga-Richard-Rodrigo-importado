@@ -1,5 +1,23 @@
-/* Landing do Aluga. So tokens de design-system/tokens — nenhum valor solto.
-   Conferivel com o validador que cruza var(--...) com os tokens definidos. */
+/*
+ * Landing do Aluga. Só tokens de design-system/tokens — nenhum valor solto.
+ * Conferivel com o validador que cruza var(--...) com os tokens definidos.
+ *
+ * REGRAS DO DESIGN.md QUE ESTE ARQUIVO OBEDECE — cada uma delas já foi
+ * descumprida aqui e reprovada na revisão:
+ *
+ *   · **Cartão plano.** "Cards have no drop shadow at rest. Depth comes
+ *     from tonal layers (gray page → white cards with a 1px border-subtle
+ *     hairline), not shadows." O cartão de demonstração é hairline plano;
+ *     as versões anteriores usavam `--shadow-card` e `--shadow-device`
+ *     (anel preto de 10px) e as duas foram reprovadas.
+ *   · **Movimento curto e quieto.** "120–360ms, cubic-bezier(.22,1,.36,1).
+ *     No bounces, no parallax."
+ *   · **Respiração.** O `--page-gutter` de 24px é a medida do painel, que
+ *     é denso por natureza. Numa landing em tela larga, 24px deixa o texto
+ *     colado na borda — foi a reclamação "letras coladas na tela". Aqui a
+ *     calha é `--space-9` (40px), ainda dentro da escala.
+ *   · **Laranja é uma só ação primária por vista.**
+ */
 
 .page {
   min-height: 100vh;
@@ -15,7 +33,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
-  padding: var(--space-5) var(--page-gutter);
+  padding: var(--space-5) var(--space-9);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--surface-card);
 }
@@ -43,8 +61,8 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-5);
-  max-width: 74ch;
-  padding: var(--space-11) var(--page-gutter) var(--space-10);
+  max-width: 62ch;
+  padding: var(--space-11) var(--space-9) var(--space-10);
 }
 
 .headline {
@@ -56,6 +74,8 @@
   font-weight: var(--weight-regular);
 }
 
+/* A palavra-chave e o ponto em laranja — o dispositivo de headline do
+   DESIGN.md ("Decisões mais claras."). O ponto é parte da marca. */
 .accent {
   color: var(--brand);
 }
@@ -81,29 +101,84 @@
   color: var(--text-muted);
 }
 
-/* ---------- seções ---------- */
+/* ---------- capítulos: um passo do produto + a prova ---------- */
 
-.simple,
-.plans,
-.final {
-  padding: var(--space-10) var(--page-gutter);
+/*
+ * Cada passo do "Como funciona" ganha a sua seção, com o texto à esquerda e
+ * a demonstração do processo à direita. A versão anterior tinha uma lista
+ * de três passos e, embaixo, três demonstrações repetindo a mesma coisa —
+ * redundante, e fazia a página esticar.
+ */
+.chapter {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-9);
   border-top: 1px solid var(--border-subtle);
+  align-items: start;
 }
 
-.sectionTitle {
+.chapterCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1080px) {
+  .chapter {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-10);
+  }
+}
+
+.chapterHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Número do passo: contador circular, não enfeite. */
+.chapterN {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--brand-soft);
+  color: var(--brand-soft-fg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.chapterKicker {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--brand-soft-fg);
+  letter-spacing: var(--tracking-snug);
+  text-transform: uppercase;
+}
+
+.chapterTitle {
   margin: 0;
-  font: var(--type-card-title);
   font-size: var(--text-2xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-strong);
+  font-weight: var(--weight-regular);
 }
 
-.sectionLead {
-  margin: var(--space-3-5) 0 0;
-  font: var(--type-body);
+.chapterBody {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
   color: var(--text-secondary);
-  max-width: 60ch;
+  max-width: 40ch;
+}
+
+.chapterDemo {
+  min-width: 0;
 }
 
 /* ---------- modo simples ---------- */
@@ -112,6 +187,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-8);
+  padding: var(--space-10) var(--space-9);
+  border-top: 1px solid var(--border-subtle);
   align-items: start;
   background: var(--surface-subtle);
 }
@@ -120,16 +197,41 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3-5);
-  position: sticky;
-  top: var(--space-9);
 }
 
-/* Moldura de app. Usa --shadow-device, que e token do design system. */
+.simpleCopy strong {
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+  font-weight: var(--weight-regular);
+}
+
+.sectionLead {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+  max-width: 46ch;
+}
+
+/*
+ * Moldura de app. Usa --shadow-device, que e token do design system.
+ * Aqui ela faz sentido: a seção mostra uma tela de verdade, e a moldura
+ * separa a tela do fundo. O cartão de demonstração, não.
+ */
 .device {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-device);
   padding: var(--space-2);
   overflow: hidden;
+  min-width: 0;
 }
 
 .deviceScreen {
@@ -138,30 +240,52 @@
   overflow: hidden;
 }
 
-/* ---------- demonstrações de processo ---------- */
-
-.demos {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-10) var(--page-gutter);
-}
-
-.demosHead {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  max-width: 62ch;
-  margin-bottom: var(--space-4);
+@media (min-width: 900px) {
+  .simple {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-10);
+  }
 }
 
 /* ---------- peças dos painéis ---------- */
 
+/*
+ * Interior dos painéis em duas colunas — é o que dá a densidade da ficha
+ * de contrato. `--card-gap` (14px) é o mesmo vão da grade do painel.
+ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--card-gap);
+  align-items: start;
+}
+
+@media (min-width: 720px) {
+  .split {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+.splitSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+}
+
+/*
+ * O `Card` já aplica o `--card-padding` (20px) nele todo — inclusive nas
+ * laterais. Então aqui só entra o vão vertical entre o cabeçalho e o corpo.
+ */
 .panelBody {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4) var(--card-padding) var(--card-padding);
+  padding: var(--space-3) 0 0;
+}
+
+/* `Metric` não tem margem própria: o vão entre o título e o número é nosso. */
+.metricSlot {
+  margin-top: var(--space-3);
 }
 
 .field {
@@ -185,14 +309,8 @@
 
 .metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   gap: var(--card-gap);
-}
-
-.people {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
 }
 
 .person {
@@ -214,23 +332,25 @@
   margin-top: var(--space-1);
 }
 
-/* Balão de WhatsApp. A moldura é o token de carta de chat, não uma cor
-   solta — é o mesmo verde do app. */
+/*
+ * Balão de WhatsApp. A moldura é o token de carta de chat, não uma cor
+ * solta — é o mesmo cinza de superfície que o app usa.
+ */
 .chat {
   display: flex;
   padding: var(--space-2) 0;
 }
 
 .bubble {
-  max-width: 34ch;
-  padding: var(--space-3) var(--space-4);
+  max-width: 38ch;
+  padding: var(--space-4) var(--space-5);
   border-radius: var(--radius-tile) var(--radius-tile) var(--radius-tile) var(--radius-xs);
   background: var(--surface-subtle);
 }
 
 .bubbleWho {
   display: block;
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   color: var(--text-muted);
@@ -238,7 +358,7 @@
 
 .bubbleText {
   margin: 0;
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
   color: var(--text-strong);
   line-height: var(--leading-normal);
 }
@@ -249,6 +369,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-7);
+  padding: var(--space-10) var(--space-9);
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* ---------- CTA final ---------- */
@@ -258,6 +380,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-4);
+  padding: var(--space-10) var(--space-9);
   background: var(--surface-inverse);
 }
 
@@ -269,24 +392,16 @@
   color: var(--on-inverse-muted);
 }
 
-/* ---------- rodape ---------- */
+/* ---------- rodapé ---------- */
 
 .foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-5);
-  padding: var(--space-7) var(--page-gutter);
-  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-7) var(--space-9);
 }
 
 .foot .fine {
   color: var(--text-subtle);
-}
-
-@media (min-width: 900px) {
-  .simple {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--space-10);
-  }
 }

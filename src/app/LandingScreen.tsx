@@ -7,7 +7,7 @@ import {
   Button,
   Card,
   CardHeader,
-  HowItWorks,
+  HowItWorksStep,
   Metric,
   PricingNote,
   PricingTable,
@@ -28,19 +28,31 @@ import s from './page.module.css';
  * `page.module.css` daqui usa só `var(--…)` de `design-system/tokens` — dá
  * para conferir com o validador.
  *
- * FONTE DE TODO TEXTO: `PRODUCT.md`. O que o documento não diz, a landing
+ * FONTE DE TODO TEXTO: o documento de produto. O que ele não diz, a landing
  * não inventa. Duas ausências deliberadas:
  *
  *   · **Sem prova social.** "+300 proprietários", "+1.200 imóveis" e
- *     "32% menos inadimplência" são números do **AluggaPro**, lidos na
+ *     "32% menos inadimplência" são números do concorrente, lidos na
  *     engenharia reversa. O Aluga não lançou — não tem número para contar,
  *     e número emprestado é mentira.
- *   · **Sem comparação com concorrente.** `PRODUCT.md` diz que os termos do
- *     AluggaPro proíbem copiar interface, código e design.
+ *   · **Sem comparação de concorrente.** Os termos do concorrente proíbem
+ *     copiar interface, código e design.
  *
  * A seção do Modo simples renderiza a **tela de verdade**
  * (`SimpleModeScreen`), não um desenho dela. Se a tela muda, a landing muda
  * junto — é a única forma de a promessa não mentir.
+ *
+ * REGRAS DO DESIGN.md QUE ESTA PÁGINA OBEDECE — cada uma delas já foi
+ * descumprida aqui e reprovada na revisão:
+ *
+ *   · **Cartão plano.** "Cards have no drop shadow at rest. Depth comes
+ *     from tonal layers (gray page → white cards with a 1px border-subtle
+ *     hairline), not shadows."
+ *   · **Movimento curto e quieto.** "120–360ms… No bounces, no parallax."
+ *   · **Sem emoji na interface.** O aviso de passo não construído é selo,
+ *     não triângulo amarelo.
+ *   · **Uma frase, até 20 palavras**, sem exclamação, cinza mudado.
+ *   · **Laranja é uma só ação primária por vista.**
  */
 const PLANS: PlanSpec[] = [
   { name: 'Essencial', price: 59, units: 'até 5', holders: '1 titular' },
@@ -49,37 +61,289 @@ const PLANS: PlanSpec[] = [
   { name: 'Investidor', price: 269, units: 'ilimitadas', holders: 'ilimitados' },
 ];
 
-/** Os três passos são o arco do produto, cada um com features da v1. */
-const STEPS = [
+/**
+ * Os três passos do produto. Cada um virou uma seção da landing, com o
+ * texto do passo e a demonstração do processo lado a lado — em vez de uma
+ * lista de três passos solta e, embaixo, três demonstrações repetindo o
+ * que a lista já tinha dito.
+ */
+const CHAPTERS: Array<{
+  n: number;
+  icon: HowItWorksStep['icon'];
+  kicker: string;
+  title: string;
+  body: string;
+  demo: { label: string; steps: DemoStep[] };
+}> = [
   {
     n: 1,
-    title: 'Cadastre',
-    icon: 'building-2' as const,
-    body: 'Imóvel, unidade, inquilino e contrato. Uma vez só — valor, dia de vencimento e reajuste ficam guardados.',
+    icon: 'building-2',
+    kicker: 'Cadastre',
+    title: 'Imóvel, inquilino e contrato. Uma vez só.',
+    body: 'Valor, dia de vencimento e reajuste ficam guardados no contrato. Não se digita nada disso de novo.',
+    demo: {
+      label: 'Contratos',
+      steps: [
+        {
+          title: 'O contrato, em uma ficha',
+          detail: 'Unidade, inquilino, valor e dia de vencimento.',
+          children: (
+            <div className={s.split}>
+              <Panel
+                title="Casa do CIC"
+                subtitle="casa · alugada"
+                action={<Badge tone="success">Vigente</Badge>}
+              >
+                <Field label="Inquilino" value="Maria Silva" />
+                <Field label="Valor" value="R$ 1.200" />
+                <Field label="Vence" value="dia 5" />
+                <Field label="Início" value="05/03/2024" />
+                <Field label="Reajuste" value="IGP-M" />
+              </Panel>
+              <div className={s.splitSide}>
+                <Panel title="Unidade" subtitle="Rua das Palmeiras, 120">
+                  <Field label="Bairro" value="CIC · Curitiba" />
+                </Panel>
+                <Panel title="Titular" subtitle="dono do imóvel">
+                  <div className={s.person}>
+                    <Avatar name="Iara Alves" size={28} />
+                    <span className={s.personName}>Iara Alves</span>
+                    <Badge tone="neutral">100%</Badge>
+                  </div>
+                </Panel>
+              </div>
+            </div>
+          ),
+        },
+        {
+          title: 'O reajuste já está no contrato',
+          detail: 'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário.',
+          children: (
+            <div className={s.split}>
+              <Panel title="Reajuste" subtitle="como o valor corrige">
+                <Field label="Índice" value="IGP-M (FGV)" />
+                <Field label="Aniversário" value="março" />
+                <Field label="Próximo" value="março de 2027" />
+              </Panel>
+              <Panel title="Os outros contratos" subtitle="cada um com o seu">
+                <Field label="Casa Água Verde" value="IPCA" />
+                <Field label="Kitnet" value="fixo 7%" />
+                <Field label="Sala 2" value="IGP-M" />
+              </Panel>
+            </div>
+          ),
+        },
+        {
+          title: 'Pessoa física ou jurídica',
+          detail: 'É o que separa o Imposto de Renda por titular.',
+          children: (
+            <div className={s.split}>
+              <Panel title="Titulares" subtitle="quem assina">
+                <div className={s.person}>
+                  <Avatar name="Maria Silva" size={28} />
+                  <span className={s.personName}>Maria Silva</span>
+                  <Badge tone="neutral">PF</Badge>
+                </div>
+                <div className={s.person}>
+                  <Avatar name="Clínica Vida Ltda" size={28} />
+                  <span className={s.personName}>Clínica Vida Ltda</span>
+                  <Badge tone="neutral">PJ</Badge>
+                </div>
+              </Panel>
+              <Panel title="Na declaração" subtitle="hora do contador">
+                <Field label="Rendimentos" value="separados por titular" />
+                <Field label="Despesas" value="por imóvel" />
+              </Panel>
+            </div>
+          ),
+        },
+        {
+          title: 'A cobrança nasce daqui',
+          detail: 'Do contrato sai a cobrança do mês, no valor e no dia certos.',
+          children: (
+            <div className={s.split}>
+              <Panel
+                title="Cobrança de outubro"
+                subtitle="Casa do CIC · Maria Silva"
+                action={<Badge tone="brand">Aberta</Badge>}
+              >
+                <Field label="Valor" value="R$ 1.200" />
+                <Field label="Vence" value="05/10/2026" />
+              </Panel>
+              <Panel title="Sem digitar nada" subtitle="gerado sozinho">
+                <Field label="Origem" value="contrato" />
+                <Field label="Mês" value="outubro" />
+              </Panel>
+            </div>
+          ),
+        },
+      ],
+    },
   },
   {
     n: 2,
-    title: 'O app cobra',
-    icon: 'message-circle' as const,
-    body: 'Gera a cobrança do mês, lembra o inquilino no WhatsApp 3 dias antes, no dia e 3 dias depois, e cria o pagamento no Mercado Pago.',
+    icon: 'message-circle',
+    kicker: 'O app cobra',
+    title: 'Gera, lembra e dá baixa. Sem você pedir.',
+    body: 'A cobrança do mês sai do contrato, o inquilino é lembrado no WhatsApp e o pagamento no Mercado Pago é criado sem intervenção.',
+    demo: {
+      label: 'Cobranças',
+      steps: [
+        {
+          title: 'A cobrança do mês já está lá',
+          detail: 'Gerada a partir do contrato. Você não cria nada.',
+          children: (
+            <Metrics
+              items={[
+                { title: 'Recebido', value: 'R$ 2.600' },
+                { title: 'Em aberto', value: 'R$ 1.800' },
+                { title: 'Previsto', value: 'R$ 4.400' },
+              ]}
+            />
+          ),
+        },
+        {
+          title: 'Boleto e Pix prontos',
+          detail: 'O inquilino paga por Pix, boleto ou saldo na conta.',
+          pending: 'em construção',
+          children: (
+            <div className={s.split}>
+              <Panel title="Cobrança" subtitle="Casa do CIC · Maria Silva">
+                <Field label="Valor" value="R$ 1.200" />
+                <Field label="Vence" value="05/10/2026" />
+              </Panel>
+              <Panel title="Formas de pagamento" subtitle="Mercado Pago">
+                <div className={s.payRow}>
+                  <Button size="sm">Pix</Button>
+                  <Button size="sm" variant="secondary" icon="file-text">
+                    Boleto
+                  </Button>
+                </div>
+              </Panel>
+            </div>
+          ),
+        },
+        {
+          title: 'Lembrete no WhatsApp',
+          detail: 'A mensagem sai do jeito que a pessoa lê.',
+          pending: 'em construção',
+          children: (
+            <div className={s.chat}>
+              <div className={s.bubble}>
+                <span className={s.bubbleWho}>Maria · Casa do CIC</span>
+                <p className={s.bubbleText}>
+                  Oi Maria, o aluguel de R$ 1.200 vence dia 5. Dá para pagar por Pix ou boleto.
+                </p>
+              </div>
+            </div>
+          ),
+        },
+        {
+          title: 'Pagou, deu baixa',
+          detail: 'O pagamento cai e a cobrança fecha sozinha.',
+          children: (
+            <div className={s.split}>
+              <Panel
+                title="Casa do CIC"
+                subtitle="R$ 1.200 · 05/10/2026"
+                action={<Badge tone="success">Paga</Badge>}
+              >
+                <Field label="Baixa" value="automática em 05/10" />
+              </Panel>
+              <Panel title="Sem planilha" subtitle="nada de conferir na mão">
+                <Field label="Origem" value="Mercado Pago" />
+                <Field label="Recibo" value="na hora" />
+              </Panel>
+            </div>
+          ),
+        },
+      ],
+    },
   },
   {
     n: 3,
-    title: 'Você acompanha',
-    icon: 'chart-spline' as const,
-    body: 'Responde "Recebeu?" e a baixa sai sozinha. Despesas por imóvel e o informe de rendimentos separado por titular, para levar ao contador.',
+    icon: 'chart-spline',
+    kicker: 'Você acompanha',
+    title: 'Quanto cada imóvel rende, e o que precisa de atenção.',
+    body: 'Responda “Recebeu?” e a baixa sai. Despesas por imóvel, resultado do mês e o informe de rendimentos separado por titular.',
+    demo: {
+      label: 'Recebimentos',
+      steps: [
+        {
+          title: 'Pagamento identificado',
+          detail: 'Cada recebimento guarda a origem.',
+          children: (
+            <div className={s.split}>
+              <Panel title="Recebimentos" subtitle="o que entrou em outubro">
+                <Field label="Casa do CIC" value={<Badge tone="success">Mercado Pago</Badge>} />
+                <Field
+                  label="Casa Água Verde"
+                  value={<Badge tone="neutral">WhatsApp</Badge>}
+                />
+                <Field label="Kitnet" value={<Badge tone="neutral">Manual</Badge>} />
+              </Panel>
+              <Panel title="Três caminhos" subtitle="do jeito que a pessoa paga">
+                <Field label="Automático" value="Mercado Pago" />
+                <Field label="Você confirma" value="“Recebeu?”" />
+                <Field label="Na mão" value="manual" />
+              </Panel>
+            </div>
+          ),
+        },
+        {
+          title: 'Baixa com responsável',
+          detail: 'A cobrança guarda quem deu a baixa e quando.',
+          children: (
+            <Panel title="Quem deu a baixa" subtitle="outubro">
+              <Field label="Casa do CIC" value="automática em 05/10" />
+              <Field label="Casa Água Verde" value="você em 03/10" />
+              <Field label="Kitnet" value="você em 06/10" />
+            </Panel>
+          ),
+        },
+        {
+          title: 'Recibo na hora',
+          detail: 'A confirmação do pagamento sai com o valor e a unidade.',
+          children: (
+            <div className={s.split}>
+              <Panel title="Recibo" subtitle="outubro de 2026">
+                <Field label="Recebido de" value="Maria Silva" />
+                <Field label="Referente a" value="Casa do CIC" />
+                <Field label="Valor" value="R$ 1.200" />
+              </Panel>
+              <Panel title="Pronto para mandar" subtitle="sem montar nada">
+                <Field label="Envio" value="WhatsApp" />
+                <Field label="Anexo" value="PDF" />
+              </Panel>
+            </div>
+          ),
+        },
+        {
+          title: 'Quanto cada imóvel rende',
+          detail: 'Despesas por imóvel e por titular.',
+          children: (
+            <Metrics
+              items={[
+                { title: 'Recebido', value: 'R$ 5.600,00' },
+                { title: 'Despesas', value: 'R$ 962,00' },
+                { title: 'Resultado', value: 'R$ 4.638,00' },
+                { title: 'Ocupação', value: '78%' },
+              ]}
+            />
+          ),
+        },
+      ],
+    },
   },
 ];
 
 /* ------------------------------------------------------------------ *
- * Peças dos painéis de demonstração.
+ * Peças dos painéis.
  *
- * São montadas com os componentes de verdade do design system
- * (`Card`, `CardHeader`, `Metric`, `Badge`, `Avatar`) e com os números de
- * demonstração de verdade das telas (`chargesData`, `contractsData`,
- * `receiptsData`). Os totais conferem com a tela de Cobranças e com a de
- * Recebimentos: R$ 2.600 / R$ 1.800 / R$ 4.400 e R$ 5.600,00 / R$ 962,00 /
- * R$ 4.638,00 / 78%.
+ * Montadas com os componentes de verdade do design system e com os dados
+ * de demonstração de verdade. Os totais conferem com as telas: R$ 2.600 /
+ * R$ 1.800 / R$ 4.400 em Cobranças e R$ 5.600,00 / R$ 962,00 /
+ * R$ 4.638,00 / 78% em Recebimentos.
  * ------------------------------------------------------------------ */
 
 function Panel({
@@ -118,206 +382,14 @@ function Metrics({ items }: { items: Array<{ title: string; value: string }> }) 
       {items.map((m) => (
         <Card key={m.title}>
           <CardHeader title={m.title} size="sm" />
-          <Metric value={m.value} size="md" />
+          <div className={s.metricSlot}>
+            <Metric value={m.value} size="md" />
+          </div>
         </Card>
       ))}
     </div>
   );
 }
-
-/**
- * As três demonstrações, na ordem em que a pessoa usa.
- *
- * HONESTIDADE, escrita de propósito: dois passos descrevem automação que
- * **ainda não existe no código**.
- *
- *   · "Boleto e Pix prontos" — criar o pagamento no Mercado Pago é a
- *     tarefa 11 do Segundo Cérebro (tutorial do OAuth). A tela de Cobranças
- *     existe; a geração do boleto, não.
- *   · "Lembrete no WhatsApp" — a régua de lembretes é a tarefa 9.
- *
- * `PRODUCT.md` promete as duas, então a landing pode falar delas. Mas quem
- * lesse como "já está pronto" estaria lendo errado — por isso o título leva
- * o aviso e a seção explica. Nada aqui é print de tela do concorrente: os
- * painéis são do nosso design system, com os nossos dados.
- */
-const DEMOS: Array<{ label: string; steps: DemoStep[] }> = [
-  {
-    label: 'Contratos',
-    steps: [
-      {
-        title: 'O contrato, em uma ficha',
-        detail: 'Unidade, inquilino, valor e dia de vencimento. Uma vez só.',
-        children: (
-          <Panel
-            title="Casa do CIC"
-            subtitle="casa · alugada"
-            action={<Badge tone="success">Vigente</Badge>}
-          >
-            <Field label="Inquilino" value="Maria Silva" />
-            <Field label="Valor" value="R$ 1.200" />
-            <Field label="Vence" value="dia 5" />
-            <Field label="Início" value="05/03/2024" />
-          </Panel>
-        ),
-      },
-      {
-        title: 'O reajuste já está no contrato',
-        detail: 'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário.',
-        children: (
-          <Panel title="Reajuste" subtitle="Como o valor corrige todo ano">
-            <Field label="Índice" value="IGP-M (FGV)" />
-            <Field label="Aniversário" value="março" />
-            <Field label="Próximo reajuste" value="março de 2027" />
-          </Panel>
-        ),
-      },
-      {
-        title: 'Pessoa física ou jurídica, desde o início',
-        detail: 'É o que separa o Imposto de Renda por titular na hora de declarar.',
-        children: (
-          <Panel title="Titulares" subtitle="Quem assina o contrato">
-            <div className={s.people}>
-              <div className={s.person}>
-                <Avatar name="Maria Silva" size={28} />
-                <span className={s.personName}>Maria Silva</span>
-                <Badge tone="neutral">PF</Badge>
-              </div>
-              <div className={s.person}>
-                <Avatar name="Clínica Vida Ltda" size={28} />
-                <span className={s.personName}>Clínica Vida Ltda</span>
-                <Badge tone="neutral">PJ</Badge>
-              </div>
-            </div>
-          </Panel>
-        ),
-      },
-      {
-        title: 'A cobrança nasce daqui',
-        detail: 'Do contrato sai a cobrança do mês, no valor e no dia certos.',
-        children: (
-          <Panel title="Cobrança de outubro" subtitle="Casa do CIC · Maria Silva">
-            <Field label="Valor" value="R$ 1.200" />
-            <Field label="Vence" value="05/10/2026" />
-          </Panel>
-        ),
-      },
-    ],
-  },
-  {
-    label: 'Cobranças',
-    steps: [
-      {
-        title: 'A cobrança do mês já está lá',
-        detail: 'Gerada a partir do contrato. Você não cria nada.',
-        children: (
-          <Metrics
-            items={[
-              { title: 'Recebido', value: 'R$ 2.600' },
-              { title: 'Em aberto', value: 'R$ 1.800' },
-              { title: 'Previsto', value: 'R$ 4.400' },
-            ]}
-          />
-        ),
-      },
-      {
-        title: '⚠️ Boleto e Pix prontos',
-        detail:
-          'O app cria o pagamento no Mercado Pago e o inquilino paga por Pix, boleto ou saldo.',
-        children: (
-          <Panel title="Cobrança" subtitle="Casa do CIC · Maria Silva">
-            <Field label="Valor" value="R$ 1.200" />
-            <Field label="Vence" value="05/10/2026" />
-            <div className={s.payRow}>
-              <Button size="sm">Pix</Button>
-              <Button size="sm" variant="secondary" icon="file-text">
-                Boleto
-              </Button>
-            </div>
-          </Panel>
-        ),
-      },
-      {
-        title: '⚠️ Lembrete no WhatsApp',
-        detail: 'A mensagem sai do jeito que a pessoa lê. Você pausa quando quiser.',
-        children: (
-          <div className={s.chat}>
-            <div className={s.bubble}>
-              <span className={s.bubbleWho}>Maria · Casa do CIC</span>
-              <p className={s.bubbleText}>
-                Oi Maria, o aluguel de R$ 1.200 vence dia 5. Dá para pagar por Pix ou boleto.
-              </p>
-            </div>
-          </div>
-        ),
-      },
-      {
-        title: 'Pagou, deu baixa',
-        detail: 'O pagamento cai e a cobrança fecha sozinha. Sem planilha.',
-        children: (
-          <Panel
-            title="Casa do CIC"
-            subtitle="R$ 1.200 · 05/10/2026"
-            action={<Badge tone="success">Paga</Badge>}
-          >
-            <Field label="Baixa" value="automática em 05/10" />
-          </Panel>
-        ),
-      },
-    ],
-  },
-  {
-    label: 'Recebimentos',
-    steps: [
-      {
-        title: 'Pagamento identificado',
-        detail: 'Mercado Pago, WhatsApp ou manual — cada recebimento guarda a origem.',
-        children: (
-          <Panel title="Recebimentos" subtitle="O que entrou em outubro">
-            <Field label="Casa do CIC" value={<Badge tone="success">Mercado Pago</Badge>} />
-            <Field label="Casa Água Verde" value={<Badge tone="neutral">WhatsApp</Badge>} />
-            <Field label="Kitnet" value={<Badge tone="neutral">Manual</Badge>} />
-          </Panel>
-        ),
-      },
-      {
-        title: 'Baixa com responsável',
-        detail: 'A cobrança guarda quem deu a baixa e quando — automática quando o pagamento cai.',
-        children: (
-          <Panel title="Quem deu a baixa" subtitle=" outubro">
-            <Field label="Casa do CIC" value="baixa automática em 05/10" />
-            <Field label="Casa Água Verde" value="você em 03/10, pelo &ldquo;Recebeu?&rdquo;" />
-          </Panel>
-        ),
-      },
-      {
-        title: 'Recibo na hora',
-        detail: 'A confirmação do pagamento sai com o valor e a unidade.',
-        children: (
-          <Panel title="Recibo" subtitle="Outubro de 2026">
-            <Field label="Recebido de" value="Maria Silva" />
-            <Field label="Referente a" value="Casa do CIC" />
-            <Field label="Valor" value="R$ 1.200" />
-          </Panel>
-        ),
-      },
-      {
-        title: 'Quanto cada imóvel rende',
-        detail: 'Despesas por imóvel e por titular — o Imposto de Renda sai separado.',
-        children: (
-          <Metrics
-            items={[
-              { title: 'Recebido', value: 'R$ 5.600,00' },
-              { title: 'Despesas', value: 'R$ 962,00' },
-              { title: 'Resultado', value: 'R$ 4.638,00' },
-              { title: 'Ocupação', value: '78%' },
-            ]}
-          />
-        ),
-      },
-    ],
-  },
-];
 
 const noopToast = (() => {}) as unknown as (t: ToastInput) => void;
 
@@ -344,9 +416,9 @@ export function LandingScreen() {
             Cobre, receba e saiba quanto cada <span className={s.accent}>imóvel rende.</span>
           </h1>
           <p className={s.lead}>
-            O Aluga gera a cobrança de cada mês, lembra o inquilino no WhatsApp, dá baixa quando o
-            Pix cai e entrega o Imposto de Renda separado por titular. Feito para quem tem imóvel
-            e não tem tempo de planilha.
+            O Aluga gera a cobrança de cada mês, lembra o inquilino no WhatsApp, dá baixa quando
+            o Pix cai e entrega o Imposto de Renda separado por titular. Feito para quem tem
+            imóvel e não tem tempo de planilha.
           </p>
           <div className={s.ctas}>
             <Button
@@ -359,31 +431,34 @@ export function LandingScreen() {
             <Button
               size="lg"
               variant="secondary"
-              onClick={() => document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })
+              }
             >
               Ver os planos
             </Button>
           </div>
-          <p className={s.fine}>14 dias no app, sem cartão. Depois do teste, o app pede para assinar.</p>
+          <p className={s.fine}>
+            14 dias no app, sem cartão. Depois do teste, o app pede para assinar.
+          </p>
         </section>
 
-        {/* ---------------- Como funciona ---------------- */}
-        <HowItWorks steps={STEPS} lead="Três passos, e o resto é automático." />
-
-        {/* ------------- Como funciona, na prática ------------- */}
-        <section className={s.demos} id="como-funciona">
-          <div className={s.demosHead}>
-            <h2 className={s.sectionTitle}>Como funciona, na prática</h2>
-            <p className={s.sectionLead}>
-              O processo andando sozinho, como acontece no app. Cada painel troca por conta
-              própria; se você encostar o mouse, ele espera. Os passos marcados com ⚠️ são promessa
-              do PRODUCT.md que ainda não está construída — estão ditos aqui, não escondidos.
-            </p>
-          </div>
-          {DEMOS.map((d) => (
-            <ProcessDemo key={d.label} label={d.label} steps={d.steps} />
-          ))}
-        </section>
+        {/* ------------- Os três passos, com a prova ------------- */}
+        {CHAPTERS.map((c) => (
+          <section className={s.chapter} key={c.n} id={`passo-${c.n}`}>
+            <div className={s.chapterCopy}>
+              <div className={s.chapterHead}>
+                <span className={s.chapterN}>{c.n}</span>
+                <span className={s.chapterKicker}>{c.kicker}</span>
+              </div>
+              <h2 className={s.chapterTitle}>{c.title}</h2>
+              <p className={s.chapterBody}>{c.body}</p>
+            </div>
+            <div className={s.chapterDemo}>
+              <ProcessDemo label={c.demo.label} steps={c.demo.steps} />
+            </div>
+          </section>
+        ))}
 
         {/* ---------------- Modo simples ---------------- */}
         <section className={s.simple} id="modo-simples">
@@ -415,9 +490,9 @@ export function LandingScreen() {
             onSelect={() => (window.location.href = '/design-system/admin')}
           />
           <PricingNote>
-            Unidade é o que gera aluguel: cada kitnet ou loja conta como uma. Titular extra custa
-            R$ 9 por mês, e cada conta tem 2 logins de ajudante de graça. Os 5 primeiros fundadores
-            têm o primeiro mês grátis.
+            Unidade é o que gera aluguel: cada kitnet ou loja conta como uma. Titular extra
+            custa R$ 9 por mês, e cada conta tem 2 logins de ajudante de graça. Os 5 primeiros
+            fundadores têm o primeiro mês grátis.
           </PricingNote>
         </section>
 

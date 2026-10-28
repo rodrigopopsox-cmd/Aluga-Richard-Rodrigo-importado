@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Icon } from '../core/Icon';
 import styles from './ProcessDemo.module.css';
 
@@ -8,15 +8,25 @@ import styles from './ProcessDemo.module.css';
  * Um passo da demonstração: um painel focado e o que ele está mostrando.
  *
  * `children` é montado pelo chamador com os **componentes de verdade do
- * design system** (`Card`, `Metric`, `Badge`, `DataTable`…) e com os
- * **dados de demonstração de verdade** (`chargesData`, `contractsData`,
+ * design system** (`Card`, `CardHeader`, `Metric`, `Badge`, `Avatar`) e com
+ * os **dados de demonstração de verdade** (`chargesData`, `contractsData`,
  * `receiptsData`). Não é print, não é maquete, não é tela de concorrente.
  */
 export interface DemoStep {
   /** O que acontece neste passo. */
   title: string;
-  /** Uma linha explicando. */
+  /**
+   * Uma linha explicando. `PRODUCT.md`/DESIGN.md mandam: uma frase, até 20
+   * palavras, sem exclamação.
+   */
   detail: string;
+  /**
+   * Aviso de que o passo é promessa e não código. Some da tela — aparece
+   * como `Badge tone="warning"` ao lado do título, porque `DESIGN.md`
+   * proíbe emoji na interface e um selo de verdade é melhor que um
+   * triângulo amarelo.
+   */
+  pending?: string;
   /** O painel focalizado. */
   children: ReactNode;
 }
@@ -30,15 +40,15 @@ export interface ProcessDemoProps {
 }
 
 /**
- * Demonstração de processo: um cartão com etiqueta, contador, painel que
- * troca sozinho e a narração embaixo.
+ * Demonstração de processo: cartão com etiqueta, contador, painel que troca
+ * sozinho e a narração embaixo.
  *
  * POR QUE NÃO É A TELA INTEIRA DENTRO DE UMA MOLDURA. A primeira versão
  * embedava a tela real do painel (`ChargesScreen`, `PropertiesScreen`) numa
- * moldura de 400px. O resultado foi reprovado, e com razão: tela de
- * painel é feita para desktop largo, com tipo pequeno e grade de quatro
- * métricas. Espremida numa moldura de marketing, o texto fica ilegível e a
- * disposição das fontes deixa de fazer sentido.
+ * moldura de 400px. Foi reprovado, e com razão: tela de painel é feita para
+ * desktop largo, com tipo pequeno e grade de quatro métricas. Espremida
+ * numa moldura de marketing, o texto fica ilegível e a disposição das
+ * fontes deixa de fazer sentido.
  *
  * A daqui mostra **um pedaço focado do processo por vez**, com o tipo no
  * tamanho que o design system manda para leitura. É a mesma coisa que o
@@ -46,9 +56,21 @@ export interface ProcessDemoProps {
  * dados do app, então os números que aparecem são os mesmos que a tela
  * mostra.
  *
- * A moldura é um cartão com sombra leve — **sem a borda grossa** que a
- * versão anterior usava (`--shadow-device` é um anel preto de 10px, feito
- * para emular aparelho, não para Painel de produto).
+ * O QUE O `DESIGN.md` MANDA E ESTE COMPONENTE OBEDECE — cada item abaixo já
+ * foi descumprido uma vez e reprovado na revisão:
+ *
+ *   · **Cartão plano, sem sombra.** "Cards have no drop shadow at rest.
+ *     Depth comes from tonal layers (gray page → white cards with a 1px
+ *     border-subtle hairline), not shadows." A moldura é hairline. A
+ *     versão anterior usava `--shadow-card` e depois `--shadow-device`
+ *     (anel preto de 10px) — as duas contra a regra.
+ *   · **Movimento curto e quieto.** "120–360ms, cubic-bezier(.22,1,.36,1).
+ *     No bounces, no parallax." A troca de painel é 360ms de fade com
+ *     subida curta. A versão anterior tinha uma barra de progresso que
+ *     corria 4,2 s — doze vezes o limite, e laranja, competindo com a ação
+ *     primária. Saiu.
+ *   · **Sem emoji.** O aviso de "promessa não construída" é `Badge`, não
+ *     ⚠️.
  *
  * Três cuidados, porque animação que ninguém pediu para ver é hostil:
  *
@@ -59,7 +81,7 @@ export interface ProcessDemoProps {
  *     acessibilidade) e narração em `aria-live`: o painel se usa sem ver a
  *     animação.
  */
-export function ProcessDemo({ label, steps, interval = 4200 }: ProcessDemoProps) {
+export function ProcessDemo({ label, steps, interval = 4600 }: ProcessDemoProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -99,16 +121,6 @@ export function ProcessDemo({ label, steps, interval = 4200 }: ProcessDemoProps)
         <span className={styles.barCount}>
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
-        {/* Tempo até o próximo passo. É o que faz a troca parecer
-            automática em vez de acionada: a barra enche sozinha. */}
-        <span className={styles.track} aria-hidden="true">
-          <span
-            key={index}
-            className={styles.fill}
-            style={{ animationDuration: `${interval}ms` } as CSSProperties}
-            data-paused={paused || reduced ? '' : undefined}
-          />
-        </span>
       </div>
 
       <div className={styles.body} key={index} data-reduced={reduced ? '' : undefined}>
@@ -117,7 +129,10 @@ export function ProcessDemo({ label, steps, interval = 4200 }: ProcessDemoProps)
 
       <figcaption className={styles.foot}>
         <div className={styles.text} aria-live="polite">
-          <h3 className={styles.title}>{step.title}</h3>
+          <div className={styles.titleRow}>
+            <h3 className={styles.title}>{step.title}</h3>
+            {step.pending && <span className={styles.pending}>{step.pending}</span>}
+          </div>
           <p className={styles.detail}>{step.detail}</p>
         </div>
 
