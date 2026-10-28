@@ -46,6 +46,7 @@ Arquivos de apoio na raiz do Drive:
 |---|---|
 | `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
 | `ENGENHARIA-REVERSA-ALUGGAPRO.md` (mapa do produto no ar) | `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb` |
+| `ALGGAPRO-INVENTARIO-COMPLETO.txt` (inventário de 19 rotas autenticadas) | `1XAirviGZlE2_ajonNBY9k9tcENyNwU0W` |
 | `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
 | `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
@@ -238,8 +239,13 @@ cor de ação principal.
   `ENGENHARIA-REVERSA-ALUGGAPRO.md` (id `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb`).
   Mapeadas as 3 superfícies, os módulos, as 12 calculadoras públicas e o vocabulário
   do domínio, tudo a partir das páginas públicas, **sem login**.
-- [ ] **Fechar a árvore de telas do app autenticado** com 6–10 screenshots (um por
-      módulo do menu + dashboard + portal do inquilino). É o que ainda falta.
+- [x] **Árvore de telas do app autenticado** — **fechada** via o inventário que o Rodrigo
+  trouxe (`ALGGAPRO-INVENTARIO-COMPLETO.txt`, id
+  `1XAirviGZlE2_ajonNBY9k9tcENyNwU0W`): 19 rotas com campos, filtros, validações,
+  estados vazios e defaults. O que **ainda** falta não é tela, é **efeito externo**:
+  boleto/Pix gerado, baixa automática, assinatura eletrônica válida, PDF/CSV real,
+  conexão bancária, portal do inquilino autenticado, vitrine publicada e cálculos
+  fiscais com valores reais. Resolve com conta de homologação e dados sintéticos.
 - [ ] **Levar o commit para a `main`** — depende de autorização do Rodrigo.
 
 ---
