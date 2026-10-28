@@ -6,8 +6,10 @@ export type Theme = 'light' | 'dark';
 
 /**
  * Como o painel é mostrado.
- * `simple` = o essencial (unidades, quanto entrou, o que vence agora, primeiros passos).
- * `full`   = tudo (ocupação, visitas, manutenção, insights, saúde financeira).
+ *
+ * `full` é o PADRÃO: terminar o onboarding tem que devolver o painel inteiro,
+ * com todas as funções. `simple` é opt-in para quem quer ver menos — encurta
+ * o painel para as unidades, quanto entrou no mês e o que vence agora.
  */
 export type ViewMode = 'simple' | 'full';
 
@@ -61,7 +63,7 @@ const viewFrom = (value: string | null): ViewMode | null =>
 export function useSettings(): AppSettings {
   const [a11y, setA11yState] = useState(false);
   const [theme, setThemeState] = useState<Theme>('light');
-  const [view, setViewState] = useState<ViewMode>('simple');
+  const [view, setViewState] = useState<ViewMode>('full');
 
   // Hidrata do storage/URL somente no cliente (evita divergência de hidratação).
   useEffect(() => {
@@ -69,7 +71,7 @@ export function useSettings(): AppSettings {
     const urlA11y = params.get('a11y');
     setA11yState(urlA11y ? urlA11y === 'on' : read(A11Y_KEY) === 'on');
     setThemeState(themeFrom(params.get('theme')) ?? themeFrom(read(THEME_KEY)) ?? 'light');
-    setViewState(viewFrom(params.get('view')) ?? viewFrom(read(VIEW_KEY)) ?? 'simple');
+    setViewState(viewFrom(params.get('view')) ?? viewFrom(read(VIEW_KEY)) ?? 'full');
   }, []);
 
   useEffect(() => {
