@@ -31,9 +31,9 @@ rentabilidade, não em cadastro de imóvel.
 | Portal do inquilino | `inquilino.aluggapro.com.br` (subdomínio separado) |
 | Site institucional | `aluggapro.com.br` |
 | Provas sociais | +300 proprietários, +1.200 imóveis, 32% menos inadimplência |
-| Plano observado na conta | **Starter**, em período de teste de 7 dias |
-| Planos citados nos Termos | **Basic, Pro, Elite** — *divergência a confirmar (ver 3.7)* |
-| Intermediador de pagamento | **ASAAS** (confirmado na Política de Privacidade) |
+| Plano da conta inspecionada | **Starter** — teste de 7 dias, término 31/10/2026 |
+| **Planos e preços reais** | Starter R$ 79 (até 5 imóveis) · Pro R$ 119 (até 10) · Enterprise R$ 229 (até 50) · Scale R$ 299 (ilimitado). Anual = 2 meses grátis |
+| Provedores de cobrança | **Mercado Pago, Banco Inter e Cora** (tela Financeiro). ASAAS citado na Política de Privacidade |
 
 **Promessa central:** *"Administre seus aluguéis em 15 minutos por mês. Sem planilha."*
 O discurso é sempre **antes/depois**: planilha e sensação → dashboard e indicador.
@@ -197,16 +197,86 @@ estar em `Configurações` ou ser recurso de plano superior — a confirmar)*
 
 Plano observado: **Starter**, em teste de 7 dias.
 
-### 3.7 Divergência de nomenclatura de planos
+### 3.7 Divergência de nomenclatura de planos — RESOLVIDA
 
 | Fonte | Nomes |
 |---|---|
-| Termos de Uso (§7) | Basic, Pro, Elite |
-| Conta real | **Starter** |
+| Termos de Uso (§7) | Basic, Pro, Elite — **desatualizado** |
+| Página de planos e conta | **Starter, Pro, Enterprise, Scale** |
 
-Duas explicações possíveis: *Starter* é o nome do período de teste antes de virar Basic,
-ou os planos foram renomeados e os Termos não foram atualizados. **A confirmar** — vale
-perguntar ao time, porque afeta a tela de planos.
+Os Termos de Uso estão defasados em relação ao produto. Os nomes e preços reais são os
+da página de planos: **Starter R$ 79 · Pro R$ 119 · Enterprise R$ 229 · Scale R$ 299**,
+com o limite de imóveis como única diferença entre eles ("todos os recursos em todos os
+planos"). **A tela de planos do design system deve usar esses quatro nomes.**
+
+### 3.8 Mapa completo de rotas — 19 telas autenticadas
+
+Do inventário completo (`ALGGAPRO-INVENTARIO-COMPLETO.txt`):
+
+```
+/                    Dashboard
+/crm                 CRM — leads, central de negócios (kanban), histórico
+/vitrine-digital     Vitrine Digital — imóveis, placas, QR Codes, analytics, tema
+/properties          Meus Imóveis
+/properties/new      Cadastro de imóvel (3 etapas)
+/owners              Proprietários
+/tenants             Inquilinos
+/contracts           Contratos, Modelos e Aditamentos
+/contracts/new       Novo contrato (5 etapas)
+/leases              Recebimentos — Fluxo e Calendário
+/vistorias           Vistorias e vistoriadores
+/finance             Financeiro — Minha Conta, Lançamentos, Indicadores,
+                     Fiscal, Otimizador Tributário, Calculadora de GC
+/repasses            Folha de Repasse
+/relatorios          Relatórios — apuração, extrato, informe, DIMOB (em breve)
+/parceiros           Parceiros — 2 cadastrados (contabilidade, seguros)
+/settings            Configurações — 5 abas
+/subscription        Assinatura
+/novidades           Central de novidades (5 publicações)
+/support             Central de ajuda
+/suggestions         Central de melhorias + roadmap da comunidade
+```
+
+Mais `/vitrine/{slug}` (vitrine pública) e `blog.aluggapro.com.br`.
+
+### 3.9 Os fluxos de criação — os mais importantes do produto
+
+**Novo imóvel — 3 etapas:** `Imóvel` → `Anúncio` → `Revisão`
+
+Campos da etapa 1: nome/apelido interno, tipo (Apartamento/Casa/Comercial/Terreno),
+propriedade (Próprio/Terceiro/Sociedade/Outro), status (Locado/Vago), regime fiscal
+(PF/PJ), valor de aquisição, endereço completo (CEP → UF), características (área,
+quartos, banheiros, vagas), **17 comodidades**, observações (500 caracteres) e até 40
+fotos (JPG/PNG, 10 MB cada, primeira é capa).
+
+**Novo contrato — 5 etapas:** `Partes` → `Pagamento e cobrança` → `Garantia` →
+`Regras` → `Revisão`
+
+A etapa 4 (Regras) carrega os **defaults do produto**, que são a assinatura da régua de
+cobrança: multa rescisória em aluguéis, aviso prévio em dias, **multa por atraso 10%** e
+**juros 1% ao mês**. Garantia aceita 6 formas: sem garantia, caução, fiador, fiador PJ,
+seguro-fiança e título de capitalização.
+
+**Validação observada:** clicar em Continuar sem dados mostra
+*"Falta algo nesta etapa — Imóvel: Selecione um imóvel"*. O produto **nomeia o campo**
+que falta, em vez de genérico "preencha os campos".
+
+### 3.10 A régua de cobrança e o fiscal
+
+Cadeia completa de dados, confirmada na interface:
+
+```
+imóvel → inquilino/proprietário → contrato → cobrança → recebimento → repasse/relatório
+```
+
+O fiscal tem **dois regimes** explícitos: **PF/Carnê-Leão** e **PJ/Lucro Presumido**, com
+alíquota efetiva/presumida e detalhamento de lançamentos. Mais duas peças que o marketing
+não deixa claro: **Otimizador Tributário** (análise, oportunidades, processos de
+migração) e **Calculadora de Ganho de Capital** (com isenção por reinvestimento em outro
+imóvel residencial em até 180 dias).
+
+Relatórios geram **apuração do mês**, **extrato de lançamentos**, **informe de
+rendimentos** e **DIMOB** (marcada "em breve", desabilitada).
 
 ---
 
@@ -356,22 +426,22 @@ tributária sem se tornar consultoria.
 ## 8. O que ainda não dá para ver (e o que resolveria)
 
 **Já resolvido:** menu lateral completo, dashboard inicial, indicadores, onboarding de
-5 etapas, nomenclatura real dos módulos, plano da conta.
+5 etapas, nomenclatura real dos módulos, plano e preços, **mapa de 19 rotas**, campos e
+etapas dos cadastros de imóvel e contrato, validações, estados vazios e defaults.
 
-**Ainda fechado:**
+**Ainda fechado** (exige execução real, não só leitura):
 
-1. **As telas de cada módulo** — cadastro de imóvel, de inquilino, de proprietário,
-   criação de contrato. Sei os nomes e a ordem, não os campos.
-2. **CRM e Vitrine Digital** — o funil de pré-locação inteiro.
-3. **Recebimentos e Folha de Repasse** — como o dado de cobrança é apresentado.
-4. **Relatórios** — quais relatórios existem e em que formato.
-5. **Parceiros** — é marketplace ou só uma lista?
-6. **Configurações** — onde mora assinatura, plano, dados bancários, fiscais.
-7. **Portal do inquilino autenticado**.
-8. **Preços reais** dos planos.
+1. **Efeitos externos** — boleto/Pix gerado, baixa automática, recibo, assinatura
+   eletrônica válida, PDF/CSV/Excel baixado de verdade.
+2. **Conexão bancária** — Mercado Pago, Inter ou Cora.
+3. **Portal do inquilino autenticado** — não havia credencial de inquilino.
+4. **Vitrine publicada** — a URL pública retornou "Vitrine indisponível" com a vitrine
+   desativada; não foi ativada.
+5. **Cálculos fiscais e de ganho de capital** com valores reais.
+6. **Fluxos ponta a ponta** com dados sintéticos autorizados.
 
-**O que resolve:** um screenshot por item de menu (são 14) — ou só dos 6 que importam
-agora: Imóveis, Inquilinos, Contratos, Recebimentos, Financeiro, Configurações.
+**O que resolve:** teste em conta de homologação com dados sintéticos, ou execução guiada
+na própria conta com autorização explícita por etapa.
 
 > Continuo sem pedir e sem aceitar login. Screenshot resolve.
 
@@ -396,7 +466,16 @@ agora: Imóveis, Inquilinos, Contratos, Recebimentos, Financeiro, Configuraçõe
 
 ---
 
-## 10. Fontes
+## 10. Inventário completo
+
+O relatório integral — com **todas** as telas, campos, filtros, validações, estados
+vazios, mensagens e defaults, separando `[OBSERVADO]` de `[PROMESSA/MARKETING]` e
+`[NÃO TESTADO]` — está em **`ALGGAPRO-INVENTARIO-COMPLETO.txt`** (53 KB, 948 linhas),
+no mesmo diretório. Ele é a fonte primária; este documento é a leitura.
+
+---
+
+## 11. Fontes
 
 - `https://aluggapro.com.br/` — posicionamento, features, provas sociais
 - `https://aluggapro.com.br/demo` — antes/depois, dashboard
@@ -410,3 +489,6 @@ agora: Imóveis, Inquilinos, Contratos, Recebimentos, Financeiro, Configuraçõe
 - `https://aluggapro.com.br/sitemap.xml`, `/robots.txt` — mapa completo de URLs públicas
 - **Screenshots do app autenticado** (27/10/2026, fornecidos pelo Rodrigo) — menu lateral
   real, dashboard inicial, checklist de onboarding, plano da conta
+- **`ALGGAPRO-INVENTARIO-COMPLETO.txt`** — inventário de 19 rotas autenticadas, campos,
+  validações, estados vazios e defaults, com separação entre observado, promessa e não
+  testado

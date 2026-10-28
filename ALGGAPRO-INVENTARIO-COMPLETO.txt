@@ -1,0 +1,948 @@
+RELATÓRIO DE ENGENHARIA REVERSA FUNCIONAL E DOCUMENTAL — ALUGGAPRO
+====================================================================
+
+Data de referência: 27/10/2026 (fuso do usuário: America/Sao_Paulo)
+Observação de relógio: em várias telas o aplicativo exibiu 28/10/2026 e o contador de teste indicou aproximadamente três dias restantes. Essa diferença de data exibida foi registrada como comportamento observado, não corrigida.
+
+Escopo
+------
+Inspeção somente leitura da área pública, autenticação, portal público do inquilino, vitrine pública, área autenticada do proprietário e telas auxiliares alcançáveis pela conta autorizada. Foram registrados rotas, finalidade, menus, campos, filtros, estados vazios, fluxos, validações aparentes, integrações e mensagens de marketing.
+
+Regra operacional adotada
+--------------------------
+- Nenhum imóvel, proprietário, inquilino, lead, contrato, despesa, vistoria, repasse, cobrança, QR Code, link rastreável ou documento real foi criado.
+- Nenhum dado foi preenchido com valores de teste em formulário persistente.
+- Nenhum pagamento, cobrança, envio de relatório, upload, conexão bancária, assinatura, alteração de senha ou upgrade foi executado.
+- Alguns modais e abas foram abertos; em casos necessários, foram cancelados. A validação de campos obrigatórios foi acionada apenas sem dados, para observar mensagens de interface.
+- Não foram registrados no relatório senhas, tokens, cookies, chaves, credenciais bancárias ou o e-mail da conta.
+- Dados de pessoas e telefones que apareceram na interface foram deliberadamente omitidos ou generalizados.
+
+Legenda de evidência
+---------------------
+[OBSERVADO] Elemento efetivamente renderizado na interface durante a inspeção.
+[PROMESSA/MARKETING] Texto da página pública, FAQ, anúncio, material institucional ou novidade; não equivale a validação técnica.
+[NÃO TESTADO] Fluxo que exigiria dados, envio, conexão externa, geração real ou autorização adicional.
+
+
+1. MAPA EXECUTIVO DE ROTAS
+==========================
+
+Área pública / institucional
+----------------------------
+- https://aluggapro.com.br/ — landing page de marketing.
+- https://aluggapro.com.br/entrar/ — escolha entre área do proprietário e portal do inquilino.
+- https://aluggapro.com.br/termos/ — Termos de Uso.
+- https://aluggapro.com.br/privacidade/ — Política de Privacidade.
+- https://aluggapro.com.br/sobre-nos/ — história e posicionamento da empresa.
+- https://aluggapro.com.br/metodologia/ — explicação de seis etapas da automação.
+- https://aluggapro.com.br/contato/ — canais de atendimento.
+- https://aluggapro.com.br/ferramentas/ — diretório de calculadoras e guias.
+- https://aluggapro.com.br/demo/ — demonstração em vídeo e comparação do processo antigo com o AluggaPro.
+- Guias públicos: manual financeiro, prevenção de inadimplência e documentos essenciais.
+- Calculadoras públicas: rentabilidade, reajuste, atraso, fluxo de caixa, payback, custo real, IR, rescisão, caução, aluguel proporcional, IPTU e economia em relação a imobiliária.
+- https://blog.aluggapro.com.br — link externo anunciado como blog.
+
+Autenticação e portal do inquilino
+----------------------------------
+- https://app.aluggapro.com.br/auth — login do proprietário.
+- https://app.aluggapro.com.br/auth?signup=true — cadastro do proprietário.
+- Recuperação de senha — modal aberto pelo botão “Esqueci minha senha”.
+- https://inquilino.aluggapro.com.br/ — login do portal do inquilino e primeiro acesso.
+- https://app.aluggapro.com.br/vitrine/richard-kakashudo — URL pública da vitrine exibida na conta; durante a inspeção retornou “Vitrine indisponível”.
+
+Área autenticada do proprietário
+--------------------------------
+- / — Dashboard.
+- /crm — CRM.
+- /vitrine-digital — Vitrine Digital, placas, QR Codes, analytics e configurações.
+- /properties — Meus Imóveis.
+- /properties/new — cadastro de imóvel.
+- /owners — Proprietários.
+- /tenants — Inquilinos.
+- /contracts — Contratos, modelos e aditamentos.
+- /contracts/new — novo contrato de locação.
+- /leases — Recebimentos.
+- /vistorias — Vistorias e vistoriadores.
+- /finance — Financeiro e módulos fiscais.
+- /repasses — Folha de Repasse.
+- /relatorios — Relatórios.
+- /parceiros — Parceiros.
+- /settings — Configurações, acessada pelo botão lateral.
+- /subscription — Assinatura, acessada pelo menu da conta.
+- /novidades — Novidades, acessada pelo menu da conta.
+- /support — Central de ajuda, acessada pelo botão Suporte.
+- /suggestions — Central de melhorias, acessada pelo botão Ideias da Comunidade.
+- Notificações — diálogo lateral/modal aberto pelo botão Notificações; não possuiu rota visível própria.
+
+Menu lateral observado [OBSERVADO]
+----------------------------------
+- Dashboard.
+- Grupo “Pré-Locação”: CRM; Vitrine Digital.
+- Grupo “Cadastros”: Meus Imóveis; Proprietários; Inquilinos; Contratos.
+- Grupo “Operação”: Recebimentos; Vistorias.
+- Grupo “Financeiro”: Financeiro; Folha de Repasse; Relatórios.
+- Grupo “Serviços”: Parceiros.
+- Ações auxiliares: Configurações; Suporte; Ideias da Comunidade; Notificações; menu da conta.
+
+
+2. ÁREA PÚBLICA E MENSAGENS DE MARKETING
+=========================================
+
+2.1 Landing page — https://aluggapro.com.br/
+----------------------------------------------
+[OBSERVADO]
+- Menu principal: Como funciona, Recursos, Planos, Clientes, Entrar e Começar grátis.
+- “Começar grátis” leva ao cadastro em app.aluggapro.com.br/auth?signup=true.
+- Há CTA para cadastro e CTA de cadastro Google.
+- Hero: “Administre seus aluguéis em 15 minutos por mês. Sem planilha.”
+- Texto do hero anuncia boleto e Pix antes do vencimento, lembrete na véspera, baixa e recibo após pagamento.
+- A página exibe uma imagem de dashboard e números de prova social.
+- Seção de recursos com, entre outros: boletos/Pix automáticos, contratos em um clique, assinatura eletrônica, lembretes, rentabilidade, baixa/recibo automáticos, vitrine digital, módulo fiscal/IR, contratos pelo WhatsApp, vistorias com fotos, reajuste IGP-M/IPCA, portal do inquilino, folha de repasse, relatórios PDF/CSV, placas inteligentes e multa/juros no boleto.
+- Seção “Do contrato ao recebimento” e uma navegação de demonstração por Contratos, Cobranças, Recebimentos, Reajustes, Vitrine e Financeiro.
+- Seção “Como funciona” usa três grandes etapas ilustrativas: imóveis/inquilinos, contrato/regras de cobrança e recebimento/recibo.
+- Há depoimentos de clientes e FAQ com perguntas sobre automação, teste, cobrança, Mercado Pago, reajuste, segurança, portal do inquilino e gestão de imóveis de terceiros.
+- Rodapé: Ferramentas, Blog, Planos, Sobre, Metodologia, Contato, Termos, Privacidade, redes sociais e link ASTTRUM DIGITAL.
+
+[PROMESSA/MARKETING — não validado]
+- “+300 proprietários”, “+1.200 imóveis” e “32% menos inadimplência”.
+- Cobrança automática por boleto/Pix, assinatura eletrônica, reajuste automático, portal do inquilino, pagamentos e baixa automática.
+- A FAQ afirma que o Mercado Pago possui integração nativa para boleto e Pix, que o sistema aplica multa/juros e que o reajuste gera próximos boletos automaticamente.
+- A FAQ afirma que os dados são criptografados, armazenados em infraestrutura empresarial e não compartilhados com terceiros; isso é declaração de marketing/legal, não teste de segurança.
+
+2.2 Menu “Recursos” da landing page
+------------------------------------
+[OBSERVADO]
+O menu abre as seguintes famílias:
+- Aprender: Blog; Manual financeiro do proprietário; Como evitar inadimplência; Documentos essenciais do aluguel.
+- Calculadoras grátis: Rentabilidade; Reajuste de aluguel IGP-M/IPCA; Multa e juros; IR sobre aluguel; Aluguel proporcional; Custo real de manter um imóvel.
+- Link “Ver todas as 12 calculadoras”.
+- Calculadora de economia comparando taxa de imobiliária com AluggaPro.
+- Demonstração de aproximadamente 7 minutos, Metodologia, Sobre nós e Contato.
+- Texto “Suporte responde no mesmo dia”.
+
+2.3 Planos e preços da landing page
+------------------------------------
+[OBSERVADO]
+- Widget mensal/anual; opção anual identificada como “2 meses grátis”.
+- Slider de quantidade de imóveis com marcas 1, 5, 10, 50 e 50+.
+- Cards observados: Starter até 5 imóveis, R$ 79/mês; Pro até 10, R$ 119/mês; Enterprise até 50, R$ 229/mês; Scale ilimitado, R$ 299/mês.
+- O texto afirma que todos os recursos estão em todos os planos e o que muda é o limite da carteira; também cita suporte/acesso prioritários no Scale.
+- A página lista cobrança automática, contratos/aditamentos, assinatura eletrônica, lembretes/baixa/recibos, financeiro/fiscal/rentabilidade, vitrine/placas, vistorias/laudo, portal do inquilino, relatórios e reajuste/renovação.
+- O widget mostrou uma inconsistência aparente em um snapshot: selecionando sete imóveis, um rótulo dizia “Plano Pro, R$ 119 por mês”, mas outro valor dinâmico apareceu como “R$ 0/mês”. Não foi feita tentativa de compra ou de alteração do plano; precisa de confirmação em teste funcional posterior.
+
+2.4 Página de entrada pública — /entrar/
+------------------------------------------
+[OBSERVADO]
+- Cartão “Sou Proprietário”: acesso a imóveis, contratos, cobranças e relatórios; link para https://app.aluggapro.com.br/.
+- Cartão “Sou Inquilino”: acesso a boletos, recibos e contratos; link para https://inquilino.aluggapro.com.br/.
+- Links para Termos de Uso e Política de Privacidade.
+- Não há formulário nesta página; ela funciona como roteador entre os dois portais.
+
+2.5 Página “Sobre nós” — /sobre-nos/
+-------------------------------------
+[PROMESSA/MARKETING]
+- Headline baseada na história de dois investidores frustrados com planilhas, reajustes esquecidos, boletos e arquivos dispersos.
+- Posiciona a AluggaPro como forma de liberar o investidor do operacional e devolver tempo para crescimento patrimonial.
+- Usa exemplos narrativos de portfólio, perda por reajuste não aplicado e custo de tarefas administrativas.
+- É material institucional e narrativo; não foi tratado como prova de métricas ou histórico empresarial.
+
+2.6 Metodologia — /metodologia/
+--------------------------------
+[PROMESSA/MARKETING]
+Apresenta seis passos:
+1. Cadastrar imóveis, inquilinos e contratos.
+2. Configurar reajuste automático por IGP-M, IPCA ou percentual.
+3. Cobranças automáticas por Pix e boleto.
+4. Dar autonomia ao inquilino via portal.
+5. Organizar receitas, despesas e documentos.
+6. Acompanhar tudo pelo dashboard.
+Também anuncia teste de sete dias sem cartão de crédito e CTA para demonstração/cadastro.
+
+2.7 Contato — /contato/
+------------------------
+[OBSERVADO]
+- Não há formulário de contato.
+- Canal de e-mail com promessa de retorno em até um dia útil.
+- Canal WhatsApp.
+- Links Instagram e Facebook.
+- Rodapé repete links de produto, empresa, legal e redes.
+
+2.8 Termos de Uso — /termos/
+----------------------------
+[OBSERVADO]
+- Última atualização exibida: 26/02/2026.
+- Aceitação por cadastro, marcação de “Li e concordo” ou uso efetivo.
+- Objeto: SaaS para gestão, análise financeira/tributária e controle de imóveis/receitas.
+- Funcionalidades listadas: imóveis, contratos, fluxo de caixa, cálculo estimado de impostos, simulações tributárias, rentabilidade, ganho de capital, holding e análise patrimonial.
+- O próprio documento exclui consultoria jurídica, contábil, tributária e financeira formal; simulações são estimativas educacionais.
+- Contém cláusulas de cadastro, responsabilidade sobre dados inseridos, limitação de responsabilidade, planos/pagamentos/cancelamento, propriedade intelectual, proteção contra responsabilidade tributária, alterações dos termos e foro.
+- Não foi aceita nenhuma nova versão nem alterado qualquer dado.
+
+2.9 Política de Privacidade — /privacidade/
+--------------------------------------------
+[OBSERVADO]
+- Última atualização exibida: 28/03/2026.
+- Declara coleta de dados fornecidos pelo usuário, imóveis, financeiros, contratos e locatários; também IP, logs, navegador, sistema operacional e páginas acessadas.
+- Descreve bases legais: execução de contrato, obrigação legal, legítimo interesse e consentimento.
+- Afirma que não vende dados; cita provedores de infraestrutura e compartilhamento com a ASAAS para contas/pagamentos/KYC.
+- Declara HTTPS, controle de acesso, autenticação segura e segregação; reconhece que nenhum sistema é totalmente seguro.
+- Inclui retenção, direitos do titular, atendimento e regras para dados de terceiros.
+- Trata-se de declaração legal; não foi conduzida auditoria técnica de privacidade.
+
+2.10 Ferramentas — /ferramentas/
+---------------------------------
+[OBSERVADO]
+- Página “Ferramentas gratuitas para quem aluga imóveis”, prometendo uso sem cadastro e sem limite.
+- Destaques: rentabilidade, reajuste, multa/juros, fluxo de caixa, payback e custo real.
+- Todas as ferramentas listadas: IR sobre aluguel, multa por quebra de contrato, devolução de caução corrigida, aluguel proporcional e IPTU, além dos destaques.
+- Guias/ebooks: Manual Financeiro do Proprietário; Guia Rápido para Evitar Inadimplência; Guia de Documentos Essenciais.
+- Os calculadores foram abertos sem preencher valores e sem clicar nos botões de cálculo; resultados e fórmulas não foram validados em cenários reais.
+
+2.11 Demonstração — /demo/
+--------------------------
+[OBSERVADO/PROMESSA]
+- Headline “Veja a AluggaPro em ação”.
+- Player de vídeo/demo do AluggaPro com controles de play, compartilhamento e link para YouTube.
+- Comparação visual “O jeito antigo” versus “Com AluggaPro”.
+- CTA para começar gratuitamente e texto de teste de sete dias sem cartão.
+- O vídeo não foi reproduzido nem considerado validação de funcionalidade.
+
+2.12 Guias públicos
+--------------------
+[OBSERVADO]
+- /guia-manual-financeiro-do-proprietario/ — lucro real, receita líquida, custos, organização por imóvel, prejuízos ocultos e acompanhamento ao longo do tempo.
+- /guia-para-evitar-inadimplencia-no-aluguel/ — prevenção, seleção de inquilino, cláusulas, comunicação nos primeiros dias de atraso e próximos passos.
+- /guia-de-documentos-essenciais-para-imoveis-de-aluguel/ — documentos do imóvel, contrato, vistorias, pagamentos, reajustes, saída e caução; possui botão “Baixar PDF grátis”, não acionado.
+- Os guias incluem FAQs, links para calculadoras e CTAs para o produto. Download real não foi realizado.
+
+2.13 Calculadoras públicas e campos visíveis
+---------------------------------------------
+Todas foram apenas inspecionadas em estado inicial; nenhum cálculo foi enviado.
+
+- /calculadora-de-rentabilidade-de-imovel-alugado/ — valor do imóvel, aluguel mensal, despesas mensais, vacância anual; botão calcular rentabilidade.
+- /calculadora-de-reajuste-de-aluguel/ — aluguel atual e índice; botão calcular novo aluguel.
+- /calculadora-de-multa-e-juros-por-atraso-no-aluguel/ — valor, data de vencimento, data de pagamento, multa, juros e periodicidade; botão calcular atraso.
+- /calculadora-de-fluxo-de-caixa-para-imoveis-de-aluguel/ — aluguel mensal, despesas, financiamento sim/não e meses de vacância.
+- /calculadora-de-payback-de-imovel-para-locacao/ — investimento, aluguel, despesas, vacância e financiamento sim/não.
+- /calculadora-de-custo-real-de-manter-um-imovel-alugado/ — aluguel, gastos mensais, gastos anuais/eventuais e vacância.
+- /calculadora-de-ir-sobre-aluguel/ — aluguel recebido, mês, tipo de locatário PF/PJ/não sei e despesas dedutíveis.
+- /calculadora-de-multa-por-quebra-de-contrato-de-aluguel/ — aluguel, multa contratual, quantidade de aluguéis, prazo total, meses cumpridos ou restantes.
+- /devolucao-de-caucao-corrigida/ — valor da caução, data do pagamento, data de devolução e opção de abatimentos.
+- /calculadora-de-aluguel-proporcional/ — aluguel, mês, modalidade de entrada/saída/período personalizado, datas e critério do valor diário.
+- /calculadora-de-iptu/ — valor venal, alíquota e perguntas sobre repasse ao inquilino.
+- /calculadora-de-economia-com-aluggapro/ — aluguel mensal, quantidade de imóveis e slider de comparação com imobiliária; simulação de economia.
+
+2.14 Vitrine pública
+---------------------
+[OBSERVADO]
+A URL de vitrine disponibilizada na área autenticada retornou:
+- “Vitrine indisponível”.
+- “Este link não existe ou a vitrine está desativada no momento.”
+Isso foi registrado sem tentar ativar, publicar ou alterar a vitrine.
+
+
+3. AUTENTICAÇÃO E PORTAL DO INQUILINO
+=====================================
+
+3.1 Login do proprietário — /auth
+----------------------------------
+[OBSERVADO]
+- Painel de marketing do produto com as mensagens “Aluguel cobrado sem você lembrar”, “Contrato assinado sem cartório” e “Saiba quanto cada imóvel rende de verdade”.
+- Aviso visual de dados protegidos conforme LGPD.
+- Link “Área do Inquilino”.
+- Botão “Continuar com Google”.
+- Campo E-mail.
+- Botão “Esqueci minha senha”.
+- Campo Senha e botão de mostrar/ocultar senha.
+- Botão Entrar.
+- Bloco “Ainda não tem conta? Teste grátis por 7 dias” e botão Criar conta.
+- Links Termos de Uso e Política de Privacidade.
+- Na primeira abertura da inspeção houve resposta HTTP 403 em desafio anti-bot, mas a página renderizou após aguardar alguns segundos; não foi tentado contornar o mecanismo.
+
+3.2 Cadastro do proprietário — /auth?signup=true
+--------------------------------------------------
+[OBSERVADO]
+- Headline: “Do cadastro à primeira cobrança, no mesmo dia.”
+- Mensagens de etapas: criar conta; cadastrar o primeiro imóvel; gerar contrato e primeira cobrança.
+- Botão Google.
+- Campos: Nome, Sobrenome, e-mail, Telefone/WhatsApp, senha.
+- Checkbox de aceite dos Termos e da Política de Privacidade.
+- Botão Criar conta.
+- O texto informa sete dias grátis, aviso dois dias antes da cobrança, cancelamento em um clique e continuidade dos dados.
+- Nenhum cadastro foi enviado.
+
+3.3 Recuperação de senha
+-------------------------
+[OBSERVADO]
+Modal aberto pelo botão “Esqueci minha senha”:
+- Título “Recuperar Senha”.
+- Texto orientando informar e-mail para receber link de redefinição.
+- Campo Email.
+- Botão Enviar Link.
+- Botão Close.
+[NÃO TESTADO] Nenhum endereço foi informado e nenhum e-mail foi solicitado.
+
+3.4 Portal do inquilino — https://inquilino.aluggapro.com.br/
+---------------------------------------------------------------
+[OBSERVADO]
+- Branding “Portal do inquilino”.
+- Mensagem: “Seu aluguel em dia. Sem complicação.”
+- Recursos anunciados na tela: faturas e segunda via com boleto/Pix; recibos e histórico; contrato com vencimento, prazo e andamento.
+- Link Área do proprietário para app.aluggapro.com.br/auth.
+- Login com CPF ou CNPJ e senha.
+- Botão mostrar senha.
+- Botão Entrar.
+- Botão Fazer primeiro acesso.
+- Mensagem para falar com proprietário/administradora caso não consiga acessar.
+
+Primeiro acesso
+---------------
+Ao abrir “Fazer primeiro acesso”:
+- Título Primeiro acesso.
+- CPF ou CNPJ.
+- E-mail cadastrado.
+- Botão Receber acesso seguro.
+- Botão Voltar para login.
+[NÃO TESTADO] Não foi usado CPF/CNPJ, e-mail de inquilino ou primeiro acesso; não havia autorização/credencial de inquilino.
+
+
+4. ÁREA AUTENTICADA DO PROPRIETÁRIO
+===================================
+
+4.1 Dashboard — /
+------------------
+[OBSERVADO]
+- Saudação personalizada, data e quantidade de imóveis sob gestão.
+- Filtros de período: Este mês, Trimestre, Ano.
+- Ações rápidas: Despesa e Novo contrato.
+- Indicadores: Receita, Despesas, Resultado líquido e Ocupação.
+- Comparação percentual com mês anterior e margem do resultado.
+- Fluxo de caixa com receitas/despesas por mês, legenda e escala.
+- Despesas por categoria, botão Ver tudo, valor e quantidade de lançamentos.
+- Área “Precisa de atenção” com vencimentos/pendências próximos; no estado observado não havia itens.
+- “Transações recentes” com filtro Todos e tabela Data, Descrição, Categoria, Imóvel, Status e Valor; estado vazio “Nenhuma transação recente”.
+- Checklist de onboarding “Configure sua conta”, originalmente exibido como 0/5 e depois como 1/5; o último passo passou a aparecer como concluído depois da navegação pelas telas financeiras. Isso parece ser progresso automático por visualização, não um cadastro financeiro realizado.
+- Passos: cadastrar imóvel; cadastrar inquilino; criar contrato; conectar conta bancária; ver lançamentos do mês.
+
+Estado observado: 0 imóveis, 0 receita, 0 despesas, 0 resultado, 0% ocupação, sem transações e sem pendências.
+
+4.2 CRM — /crm
+---------------
+[OBSERVADO]
+Cabeçalho:
+- 0 leads; 0 novos hoje; 0 negócios em andamento; R$ 0,00 em negociação.
+- Tutorial desabilitado e Adicionar lead.
+
+Aba Leads:
+- Estado vazio: nenhum lead; contatos da Vitrine Digital e do QR Code aparecem automaticamente.
+- Botão Adicionar lead.
+
+Modal Adicionar lead:
+- Nome completo.
+- Telefone/WhatsApp.
+- E-mail.
+- Imóvel de interesse.
+- Mensagem opcional.
+- Origem descrita como indicação, ligação ou portal; leads da Vitrine/QR entram automaticamente.
+- Nenhum lead salvo.
+
+Aba Central de negócios:
+- Métricas: 0 negócios abertos, R$ 0,00 em negociação, ticket médio — e tempo médio até fechamento —.
+- Ordenação “Mais antigos primeiro”.
+- Kanban com etapas Contato, Visita, Proposta, Documentação e Fechamento.
+- Cada etapa mostra contagem e valor; cards vazios informam que é possível arrastar um negócio.
+- Botão Adicionar negócio na etapa Contato.
+- Fechamento informa que negócios ganhos vão para Histórico automaticamente.
+
+Aba Histórico:
+- Estado vazio: nenhum negócio encerrado.
+- Mensagem explica que negócios marcados como ganhos no Fechamento aparecem no histórico.
+- Botão Ver Central de negócios.
+
+4.3 Vitrine Digital — /vitrine-digital
+---------------------------------------
+[OBSERVADO]
+Cabeçalho:
+- Abrir vitrine, Link rastreável e Adicionar imóvel.
+- URL pública no formato /vitrine/{slug}.
+- Estado observado: “Sua vitrine está desativada”, atualizada há três dias e 0 leads recebidos.
+- Nenhum imóvel publicado.
+
+Aba Imóveis na vitrine:
+- Estado vazio e orientação para Adicionar imóvel.
+
+Aba Placas estáticas:
+- Seleção de imóvel.
+- Modelos: Mínima, Clássico e Direto.
+- Tamanhos A4, A3 e A2.
+- Texto do topo, com “ALUGA” como valor inicial visível.
+- Telefone.
+- Preview ao vivo.
+- Baixar PDF (Gráfico), Imprimir e Baixar QR Code estavam desabilitados porque não havia anúncio/imóvel.
+
+Aba Placas inteligentes:
+- Abas internas Meus QR Codes, Analytics e Gerar placa.
+- Meus QR Codes: nenhum QR gerado; textos explicam que o QR pode nascer sem destino, apontar depois para imóvel ou vitrine e registrar leituras.
+- Analytics: filtro Este mês; filtros Ambos, Locação e Venda; métricas de leituras, formulários e conversão em zero; mapa sem imóveis geocodificados; ranking sem leituras; botão Localizar imóveis sem coordenadas.
+- Gerar placa: escolha de QR Code, texto de topo (ALUGA/VENDE/ALUGA OU VENDE/ALUGA-SE), tamanhos A4/A3/A2, aviso de logo ausente e botão Gerar placa em PDF. Não foi gerado QR, placa ou PDF.
+
+Aba Performances:
+- Períodos 7 dias, Este mês, 90 dias e 12 meses.
+- Métricas: visualizações, contatos, taxa de conversão e contratos fechados.
+- Gráficos/áreas: visualizações e contatos por dia, funil, origem dos contatos, horário dos acessos, imóveis mais populares.
+- Estado vazio: nenhuma visualização; orientação para publicar anúncio.
+
+Aba Configurações:
+- Endereço/slug da vitrine e botão Copiar.
+- Controle de publicação pública.
+- Marca: modelo Completa/Simples; topo com Logo ou Nome; upload de logo.
+- Formulário de interesse: exigir CPF; avisar por e-mail a cada lead; pedir identificação antes de mostrar QR Code.
+- Redes sociais: WhatsApp, Instagram, Facebook, YouTube, LinkedIn, X e TikTok.
+- Tema e prévias desktop/celular.
+- Temas nomeados Santorini, Oxford, Terracota, Safari, Marsala e Grafite, com cores hex exibidas.
+- Botão Salvar e publicar. Não foi acionado.
+
+Modal Link rastreável:
+- Explica que o link registra origem de visitas e leads.
+- Abas Criar novo e Meus links.
+- Canais: Instagram, Facebook, Google, WhatsApp e Outro.
+- Campo Como foi divulgado e Nome da campanha.
+- Botões Cancelar e Gerar e copiar.
+- Não foi gerado link.
+
+4.4 Meus Imóveis — /properties
+-------------------------------
+[OBSERVADO]
+- Cabeçalho com 0 imóveis, 0 alugados, 0 vagos e R$ 0/mês de receita.
+- Tutorial.
+- Exportar desabilitado no estado vazio.
+- Novo imóvel.
+- Busca por nome ou endereço, com indicação de atalho de teclado.
+- Filtros: Status (Todos os Status, Locado, Vago); Tipo (Todos os Tipos, Apartamento, Casa, Comercial, Terreno); Ordenar (Recentes, Nome, Maior aluguel).
+- Visualização em cards ou lista.
+- Estado vazio: “Nenhum imóvel encontrado” e explicação de que ainda não há cadastro ou resultado de busca.
+
+Cadastro — /properties/new
+---------------------------
+Fluxo de três etapas: Imóvel, Anúncio e Revisão.
+Primeira etapa observada em branco:
+- Nome/apelido interno.
+- Tipo, inicialmente Apartamento.
+- Propriedade: Próprio, Terceiro, Sociedade ou Outro.
+- Status atual: Locado ou Vago; padrão observado Vago.
+- Regime fiscal: Pessoa física ou Pessoa jurídica.
+- Valor de aquisição opcional.
+- Endereço: CEP, logradouro, número, complemento, bairro, cidade e UF.
+- Características: área, quartos, banheiros e vagas.
+- Comodidades: Piscina, Academia, Portaria 24h, Elevador, Churrasqueira, Varanda Gourmet, Playground, Quadra Poliesportiva, Ar Condicionado, Mobiliado, Sauna, Aceita Pets, Salão de Festas, Lavanderia, Despensa e botão Ver mais comodidades.
+- Observações opcionais com contador 0/500.
+- Fotos: até 40, JPG/PNG, 10 MB cada; primeira foto vira capa.
+- Texto de obrigatoriedade: nome, tipo, propriedade e endereço.
+- Resumo lateral com endereço, bairro/cidade, área/quartos/vagas, status e aquisição.
+- Se status for Locado, a interface informa que o contrato é feito no mesmo fluxo; anúncio na Vitrine é opcional.
+- O texto de revisão informa que nada é publicado nem cobrado até confirmação.
+[NÃO TESTADO] As etapas Anúncio e Revisão não foram preenchidas; nenhum imóvel foi salvo.
+
+4.5 Proprietários — /owners
+----------------------------
+[OBSERVADO]
+- 0 proprietários.
+- Tutorial desabilitado e Novo proprietário.
+- Estado vazio: cadastrar dono do imóvel para vincular contratos e repasses.
+
+Modal Novo proprietário:
+- Descrição: dados entram no contrato e na folha de repasse.
+- Etapas visíveis: Dados pessoais, Endereço, Dados bancários e Revisão.
+- Tipo: Pessoa física ou Pessoa jurídica.
+- Na etapa inicial PF: nome completo, CPF obrigatório, RG opcional, e-mail, telefone/WhatsApp, estado civil, nacionalidade e observações.
+- Mensagem de obrigatoriedade: nome e CPF.
+- Ao alternar para PJ: razão social e CNPJ substituem a identificação PF; mensagem indica nome e CNPJ como obrigatórios.
+- Não foi avançado para endereço, dados bancários ou revisão e o modal foi cancelado.
+
+4.6 Inquilinos — /tenants
+--------------------------
+[OBSERVADO]
+- 0 inquilinos.
+- Tutorial e Novo inquilino.
+- Estado vazio: cadastrar a pessoa antes de criar o contrato.
+
+Modal PF:
+- Identificação: nome completo, CPF, RG opcional.
+- Contato: e-mail, telefone/WhatsApp.
+- Complementares usados no contrato: nacionalidade, estado civil, profissão.
+- Observações opcionais.
+- Mensagem: apenas nome e CPF obrigatórios; restante pode ser completado depois.
+- Botões Cancelar e Salvar inquilino.
+
+Modal PJ:
+- Razão social, CNPJ e campos complementares de identificação.
+- Contato e-mail/telefone.
+- Nome do responsável opcional.
+- Observações.
+- Mensagem: nome e CNPJ obrigatórios.
+- Nenhuma pessoa foi salva.
+
+4.7 Contratos — /contracts
+---------------------------
+[OBSERVADO]
+Cabeçalho e abas:
+- 0 contratos.
+- Abas Contratos, Modelos e Aditamentos.
+- Após o carregamento, Modelos mostrou 2 modelos do sistema e Aditamentos 0.
+
+Aba Contratos:
+- Busca por inquilino, imóvel ou código.
+- Filtros rápidos Todos, Ativos, Vencendo, Encerrados e Rascunhos.
+- Ordenação por Término.
+- Mais filtros.
+- Colunas: Imóvel e contrato, Inquilino, Vigência, Aluguel, Cobrança, Status e Ações.
+- Estado vazio: criar primeiro contrato a partir de imóvel e inquilino.
+
+Aba Modelos:
+- Busca por nome.
+- Filtros Todos, Do sistema e Meus modelos.
+- Dois modelos de sistema, não editáveis, com ações Visualizar e Duplicar; a tela indica que é necessário duplicar para personalizar.
+- Meus modelos 0; botão Começar em branco; Novo modelo.
+- Visualizar abriu nova aba de prévia de modelo, sem editar. A prévia contém aviso de que o texto é instrumento de apoio, deve ser revisado e não substitui avaliação jurídica.
+- Não foi duplicado nem criado modelo.
+
+Aba Aditamentos:
+- 0 aditamentos.
+- Botão Novo Aditamento.
+- Estado vazio de modelo de aditamento.
+- Não foi criado aditamento.
+
+Novo contrato — /contracts/new
+------------------------------
+Fluxo de cinco etapas: Partes; Pagamento e cobrança; Garantia; Regras; Revisão.
+
+Etapa 1 — Partes:
+- seleção de imóvel;
+- seleção de inquilino;
+- atalho Novo inquilino;
+- validação observada ao clicar Continuar sem dados: “Falta algo nesta etapa — Imóvel: Selecione um imóvel” e também exigência de inquilino.
+
+Etapa 2 — Pagamento e cobrança:
+- Período: Início e Fim; prazo calculado.
+- Dia de vencimento.
+- Valor do aluguel.
+- Cobrança vencida ou adiantada.
+- Switch para gerar boleto/Pix e cobrar o inquilino; a descrição informa que pode ser desligado se outra imobiliária administrar.
+- Encargos na fatura: Condomínio e IPTU.
+- Lançamentos extras, botão Adicionar lançamento.
+- Administração por você/imobiliária e taxa que alimenta receita/folha de repasse.
+- Switches para lançar condomínio/IPTU como despesa do proprietário.
+- Resumo lateral mostra fatura, aluguel, total previsto, garantia, renovação e atraso.
+
+Etapa 3 — Garantia:
+- Sem garantia, Caução, Fiador, Fiador PJ, Seguro-fiança e Título de capitalização.
+- Campos adicionais seriam condicionais ao tipo; não foram preenchidos.
+- Com “Sem garantia”, a interface informa que uma garantia pode ser adicionada depois nos detalhes.
+
+Etapa 4 — Regras e penalidades:
+- Renovação automática.
+- Aviso prévio em dias.
+- Multa rescisória em quantidade de aluguéis.
+- Isenção da multa após determinada quantidade de meses.
+- Multa por atraso em percentual.
+- Juros ao mês em percentual.
+- Valores default exibidos no estado inicial: 10% de multa e 1% ao mês.
+- Texto informa aplicação automática pelo Mercado Pago quando o pagamento é posterior ao vencimento.
+
+Etapa 5 — Revisão:
+- O resumo lateral identifica a etapa de revisão e o botão Criar contrato permanece indisponível até requisitos.
+- A etapa não foi concluída por falta de imóvel/inquilino; nenhum PDF, assinatura ou contrato foi criado.
+
+4.8 Recebimentos — /leases
+---------------------------
+[OBSERVADO]
+Cabeçalho:
+- 0 contratos ativos; R$ 0/mês recorrentes.
+- Abas Fluxo e Calendário.
+
+Aba Fluxo:
+- Receita recorrente mensal.
+- Recebido no mês versus total.
+- Em atraso.
+- Contratos vencendo em 60 dias.
+- Fluxo de recebimentos com previsto e realizado por mês.
+- Navegação de meses, botão Hoje, visualização em cartões ou tabela.
+- Estado observado para outubro, novembro e dezembro: sem lançamentos e valores R$ 0.
+- Busca de contrato e visualização cards/lista.
+- Estado vazio: nenhum contrato encontrado; botão Criar Contrato.
+
+Aba Calendário:
+- Mês anterior, Próximo mês, Hoje.
+- Filtros/toggles Recebimentos, Despesas e Fim de contrato.
+- Resumo “Outubro em números”: previsto, recebido, despesas/pagos e eventos.
+- Dia atual exibido sem eventos.
+
+4.9 Vistorias — /vistorias
+---------------------------
+Cabeçalho [OBSERVADO]:
+- 0 vistorias no período; 0 assinadas; 0 vistoriadores ativos.
+- Período padrão de seis meses exibido.
+- Tutorial e Solicitar vistoria.
+
+Aba Estatísticas:
+- Filtros de período: 30 dias, 90 dias, 6 meses, Este ano e período personalizado.
+- Combos Vistoriador e Tipo; Limpar filtros.
+- Cards Total no período, Assinadas, Em aberto, Canceladas e arquivadas.
+- Gráficos Por tipo: Entrada, Saída, Recebimento, Devolução.
+- Gráfico Por status: Pendente, Solicitada, Em andamento, Assinatura pendente, Assinada, Cancelada, Arquivada.
+- Tabela Vistoriador × status com total, status e conclusão; estado vazio nenhum vistoriador.
+
+Aba Vistorias:
+- Nova Vistoria.
+- Busca por imóvel, inquilino ou contrato.
+- Filtro Status.
+- Combos Tipo e Vistoriador.
+- Estado vazio: nenhuma vistoria criada.
+
+Aba Vistoriadores:
+- Novo vistoriador.
+- Busca por nome, e-mail ou CPF.
+- Estado vazio: 0 vistoriadores.
+
+Modal Novo vistoriador:
+- Nome completo obrigatório.
+- E-mail para receber links.
+- Telefone/WhatsApp opcional.
+- CPF para identificação no laudo e assinatura eletrônica.
+- Salvar vistoriador/Cancelar; não salvo.
+
+Modal Nova vistoria:
+- Escolha do tipo, com explicação do que cada laudo registra.
+- Com o inquilino: Entrada ou Saída.
+- Com o proprietário: Recebimento ou Devolução.
+- Texto informa que o vistoriador recebe link por e-mail e o laudo sai pronto para assinatura.
+- Não foi escolhido tipo nem solicitado vistoria.
+
+4.10 Financeiro — /finance
+---------------------------
+Estado geral observado: “Conta não conectada” e cobranças em modo manual.
+
+Aba Minha Conta:
+- Mensagem de conectar conta de recebimento para cobranças automáticas e baixa automática.
+- Mercado Pago: PF ou PJ, boleto automático, conexão por login, cerca de dois minutos.
+- Banco Inter: somente PJ, boleto e Pix, exige certificado/credenciais, fluxo guiado.
+- Cora: PJ/MEI, boleto e Pix, conexão por login; a tela exibe tarifas do parceiro.
+- Avisos sobre instituições autorizadas pelo Banco Central e sobre não guardar senha bancária.
+- Explicação de cobranças automáticas, baixa automática e alimentação de extrato/repasses.
+- Comparação por tipo de conta, conexão, meios de pagamento e possibilidade de trocar depois.
+- Nenhum botão Conectar foi acionado.
+
+Aba Lançamentos:
+- Mês anterior, Próximo mês e Hoje.
+- Cards de recebido no mês, despesas, resultado previsto e pendências.
+- Seção Recebimentos.
+- Despesas administrativas: estado vazio, explicação e Registrar.
+- Despesas de imóveis: estado vazio, explicação e Registrar.
+- Nova despesa abre primeiro uma escolha entre despesa de imóvel e administrativa.
+
+Modal Despesa de imóvel:
+- imóvel, descrição, categorias rápidas Manutenção/IPTU/Jurídico/Outros, valor, data, parcelamento e comprovante.
+- Permite anexar comprovante/nota fiscal; texto diz que arquivos ficam guardados por seis anos.
+- Nenhuma despesa ou arquivo foi salvo.
+
+Modal Despesa administrativa:
+- descrição, categorias Jurídico/Contabilidade/Administrativo/Outros, valor, data, parcelamento e comprovante.
+- Também oferece anexo de comprovante/nota fiscal e Registrar.
+- Nenhuma despesa foi registrada.
+
+Aba Indicadores:
+- Receita prevista, recebido e percentual do previsto.
+- Despesas e resultado líquido previsto.
+- Indicador de contratos com caução/seguro; média dos últimos 12 meses.
+- Critério de atraso no mês.
+- Despesas do mês por categoria e Ver lançamentos.
+- Sem dados no estado observado.
+
+Aba Fiscal:
+- Subabas Apuração mensal e Histórico anual.
+- Como funciona, Mês anterior, Próximo mês, Relatório do mês e Exportar e enviar.
+- Apuração PF/Carnê-Leão e PJ/Lucro Presumido; valores estimados, alíquota efetiva/presumida e detalhamento de lançamentos.
+- Histórico anual lista meses e ações de detalhamento fiscal.
+- Relatórios e exportações não foram gerados.
+
+Aba Otimizador Tributário:
+- Subabas Análise e simulação, Oportunidades e Processos de migração.
+- Análise: estado vazio pedindo imóveis próprios com valor de aluguel.
+- Oportunidades: simulação de proteção patrimonial/sucessão e possível economia no inventário, dependente dos valores cadastrados.
+- Processos: estado vazio, nenhum processo em andamento.
+- Aviso explícito de caráter informativo/educacional, sem aconselhamento contábil, fiscal ou jurídico.
+
+Aba Calculadora de GC:
+- Data de aquisição, data de venda, valor de aquisição, valor de venda, reformas, corretagem.
+- Switch de isenção por reinvestimento em outro imóvel residencial em até 180 dias.
+- Botão de tutorial.
+- Nenhuma simulação foi executada.
+
+4.11 Folha de Repasse — /repasses
+----------------------------------
+[OBSERVADO]
+- Mês selecionável com navegação anterior/próximo; outubro de 2026 no snapshot.
+- 0 repasses no mês.
+- Confirmar repasses pendentes desabilitado.
+- Cards: Total a repassar, Repasse pendente, Aguardando o inquilino e Já repassado.
+- Todos R$ 0,00; estado vazio informa que repasses aparecem quando há aluguéis previstos.
+- Não houve confirmação ou pagamento.
+
+4.12 Relatórios — /relatorios
+------------------------------
+[OBSERVADO]
+- Texto: exportar e enviar relatórios para o contador.
+- Períodos: Mês, Ano e Personalizado.
+- Mês/Ano anterior e próximo.
+- Personalizado exibe botões Início e Fim.
+- Seção “Para o contador”.
+- Apuração do mês: receita recebida, deduções, base de cálculo e imposto estimado por regime de caixa; Gerar PDF.
+- Extrato de lançamentos: receitas/despesas linha a linha, vencimento, pagamento, status, imóvel, proprietário e inquilino; modos Por pagamento e Por vencimento; filtro imóvel; Exportar para Excel/CSV.
+- Informe de rendimentos: aluguéis recebidos por mês e por inquilino PF/PJ; Gerar PDF.
+- DIMOB: descrita, mas marcada Em breve e desabilitada.
+- Enviar direto para o contador: depende de e-mail configurado em Configurações.
+- Botões de geração/exportação não foram acionados para evitar documento real.
+
+4.13 Parceiros — /parceiros
+----------------------------
+[OBSERVADO]
+- Texto explica que são profissionais que complementam a gestão; contratação é direta com o parceiro.
+- Filtros Todos (2), Contabilidade (1) e Seguros (1).
+- Card de parceiro de contabilidade com descrição de Carnê-Leão, declaração de aluguéis, IR, holdings e planejamento tributário.
+- Card de seguros com seguro residencial, seguro-fiança e coberturas.
+- Cada card possui ação de copiar número e link “Chamar no WhatsApp”; números omitidos neste relatório.
+- “Sugerir um parceiro” leva a /suggestions.
+
+
+5. CONFIGURAÇÕES, CONTA E TELAS AUXILIARES
+===========================================
+
+5.1 Configurações — /settings
+------------------------------
+A tela informa plano Starter e apresenta botão Salvar alterações. Abas observadas:
+
+Dados pessoais
+- Nome, sobrenome e CPF obrigatórios; RG, data de nascimento, nacionalidade, estado civil e profissão opcionais.
+- Foto de perfil: JPG/PNG/WEBP até 5 MB; Alterar foto e Remover.
+- Telefone/WhatsApp.
+- E-mail de acesso aparece como não editável na aba, com indicação de alterar em Segurança.
+- Endereço completo: CEP, logradouro, número, complemento, bairro, cidade e UF.
+- Texto informa que dados entram automaticamente nos contratos e que contratos já emitidos não mudam.
+
+Dados bancários
+- Chave Pix.
+- Banco, agência, conta com dígito e tipo Corrente/Poupança.
+- Texto informa que dados aparecem em contratos/recibos quando não há conta conectada; para boleto/Pix automático é necessário conectar em Financeiro.
+- Prévia textual da cláusula de pagamento.
+
+Empresa
+- CNPJ, CRECI opcional para corretores/imobiliárias, razão social, nome fantasia, e-mail comercial, telefone comercial.
+- E-mail do contador opcional.
+- Endereço completo da empresa.
+- Checkbox/controle para envio da apuração fiscal mensal ao contador.
+
+Vistorias
+- Opção de usar logo da empresa no cabeçalho do termo PDF.
+- Upload de logo JPEG/PNG/WebP até 5 MB.
+- Opção de usar nome da empresa no termo.
+- Texto informa que a marca usada no termo é a mesma da Vitrine Digital.
+
+Segurança
+- Senha atual, nova senha e confirmação.
+- Mínimo de seis caracteres.
+- Atualizar senha.
+- Nenhum valor foi informado nem senha alterada.
+
+5.2 Menu da conta
+------------------
+[OBSERVADO]
+Menu aberto pelo botão com iniciais/nome da conta:
+- Conectado como — e-mail omitido.
+- Configurações de Conta.
+- Configurações da Empresa.
+- Integrações — desabilitado.
+- Assinatura.
+- Novidades.
+- Tema claro, tema escuro e tema do sistema.
+- Sair.
+
+5.3 Assinatura — /subscription
+-------------------------------
+[OBSERVADO]
+- Período de teste, com data de término exibida como 31/10/2026 no snapshot.
+- Plano atual Starter, R$ 79,00 por mês, status Ativo.
+- Uso: 0 de 5 imóveis; contratos ativos ilimitados na tela.
+- Ações Gerenciar cobrança, Mudar de plano e Escolher plano.
+- Comparação mensal/anual, anual identificado como dois meses grátis.
+- Planos comparados: Starter R$79, Pro R$119, Enterprise R$229, Scale R$299/mês; upgrades disponíveis em botões.
+- Recursos comparados: limite de imóveis, módulo fiscal, contratos em um clique, WhatsApp, suporte; tela também lista recursos comuns.
+- Texto diz que mudança de plano vale na hora e pode gerar cobrança/crédito.
+[NÃO TESTADO] Não foi aberto portal de cobrança, upgrade, cancelamento ou pagamento.
+
+5.4 Novidades — /novidades
+---------------------------
+[OBSERVADO]
+- Título Central de novidades e indicação de cinco publicações.
+- Filtros Todas, Novidades e Correções.
+- Publicações visíveis em julho de 2026:
+  - Anexos em despesas.
+  - Atualização de contrato ativo e despesas vinculadas/não vinculadas a imóvel.
+  - Correções em baixa de despesas atrasadas e mobile.
+  - Serviços Públicos para água, energia, gás, internet, condomínio e outros.
+  - Melhorias de faturas, financeiro/mobile e contratos.
+- Botões Ler mais/Mostrar menos.
+- São notas de produto/declarações da empresa; a implementação de cada item não foi revalidada além do texto/telas atuais.
+
+5.5 Central de ajuda — /support
+-------------------------------
+[OBSERVADO]
+- Título “Como podemos te ajudar hoje?”.
+- Chips de busca: senha, cobrança e imposto.
+- Temas: Conta e Acesso; Planos e Assinatura; Imóveis, Inquilinos e Contratos; Otimizador Tributário; Plataforma; Sugestões e Feedback; Financeiro e Relatórios; Segurança.
+- Formulário Nova solicitação de suporte, com campos obrigatórios não preenchidos e envio desabilitado.
+- Perguntas recentes sobre senha, compartilhamento de conta, teste, cobrança, upgrade/cancelamento, cadastro, contratos, pagamentos, vencimento, otimizador, celular, exportações e segurança.
+- Guias passo a passo: automatizar aluguel; recebimentos; conectar conta bancária; cobrança automática; folha de repasse; vistorias; Vitrine; CRM; contratos; modelos/aditamentos; placas inteligentes.
+- Ações Enviar mensagem ao suporte e Falar no WhatsApp.
+- Nenhuma solicitação foi enviada.
+
+5.6 Central de melhorias — /suggestions
+----------------------------------------
+[OBSERVADO]
+- Título Central de melhorias e botão Enviar sugestão.
+- Abas Sugestões da comunidade e Roadmap da comunidade.
+- Categorias: Todas, Funcionalidade nova, Melhoria, Relatórios, Financeiro e Contratos.
+- Havia uma sugestão visível sobre aba para inquilino consultar segunda via por CPF e solicitar reparos, com um voto; não foi votada.
+- Roadmap: colunas Planejado, Em desenvolvimento, Em teste e Lançado. As três primeiras estavam vazias; Lançado tinha seis itens, incluindo placas inteligentes, assinatura eletrônica, vistorias, separação de contas, lançamentos avulsos e boleto.
+- Como funciona: Sugira, Vote e Acompanhe.
+- Não foi enviada sugestão nem voto.
+
+5.7 Notificações
+-----------------
+[OBSERVADO]
+- Diálogo “Notificações”.
+- Estado vazio: nenhuma notificação.
+- Texto diz que avisos sobre cobranças em atraso ou perto do vencimento aparecerão ali.
+
+
+6. FLUXOS E INTEGRAÇÕES APARENTES
+==================================
+
+Fluxo de dados central inferido da interface [OBSERVADO]
+-----------------------------------------------------------
+1. Imóvel é a base para contratos, cobranças e relatórios.
+2. Proprietário pode ser vinculado a imóvel, contratos e repasses.
+3. Inquilino é cadastrado antes do contrato.
+4. Contrato recebe partes, período, aluguel, vencimento, encargos, garantia, reajuste e penalidades.
+5. Contrato pode alimentar boleto/Pix, recebimentos, despesas, repasse e relatórios.
+6. Vitrine/QR pode gerar leads para CRM.
+7. Recebimento do aluguel alimenta extrato, indicadores fiscais e folha de repasse.
+8. Vistorias podem produzir laudo e assinatura eletrônica, mas o fluxo completo não foi executado.
+
+Integrações e dependências visíveis
+------------------------------------
+- Google na autenticação.
+- Mercado Pago, Banco Inter e Cora na conta de recebimento.
+- Mercado Pago aparece relacionado à aplicação de multa/juros em atraso.
+- WhatsApp em leads, parceiros e marketing.
+- YouTube em tutoriais/demonstração.
+- ASAAS citado na Política de Privacidade para contas/pagamentos/KYC.
+- PDF/CSV/Excel em relatórios, contratos, placas e termos.
+- E-mail usado em leads, portal, suporte, contador, vistoriador e cobrança.
+
+
+7. VALIDAÇÕES E ESTADOS VAZIOS RELEVANTES
+==========================================
+
+Validações observadas
+----------------------
+- Contrato sem imóvel/inquilino não avança; toast identifica o campo faltante.
+- Cadastro de imóvel declara obrigatórios nome, tipo, propriedade e endereço.
+- Proprietário PF exige nome e CPF; PJ exige nome/razão social e CNPJ.
+- Inquilino exige nome/CPF ou nome/CNPJ conforme tipo.
+- Senha de configurações indica mínimo de seis caracteres.
+- Uploads de fotos do imóvel: máximo 40, JPG/PNG, 10 MB por arquivo.
+- Upload de logo: JPEG/PNG/WebP, até 5 MB.
+- Observações do imóvel: 500 caracteres.
+- Botões de exportação/geração ficam desabilitados quando não há dados ou o período não permite a ação.
+- Botões de conexão bancária exigem fluxo externo; nenhum foi acionado.
+
+Estados vazios principais
+-------------------------
+- Dashboard sem imóveis, lançamentos, atenção ou transações.
+- CRM sem leads, negócios abertos e histórico.
+- Vitrine sem anúncios, QR Codes, visualizações e contatos.
+- Meus Imóveis sem cadastro.
+- Proprietários sem cadastro.
+- Inquilinos sem cadastro.
+- Contratos sem contratos e sem aditamentos; modelos do sistema disponíveis após carregamento.
+- Recebimentos sem contratos/lançamentos.
+- Vistorias sem vistorias e vistoriadores.
+- Financeiro sem conta conectada e sem lançamentos.
+- Repasses sem itens.
+- Relatórios com ações disponíveis ou desabilitadas conforme período/dados, mas sem arquivos.
+- Notificações sem itens.
+
+
+8. SEPARAÇÃO ENTRE INTERFACE, PROMESSA E NÃO TESTADO
+=====================================================
+
+Funcionalidades efetivamente observadas na interface
+-----------------------------------------------------
+- Navegação e rotas acima.
+- Renderização de cadastros, filtros, abas, tabelas, cards, estados vazios e validação de contrato em branco.
+- Modais de lead, proprietário, inquilino, despesa, vistoriador, vistoria e recuperação de senha.
+- Campos e opções de criação, sem salvar.
+- Listagem de modelos de contrato e abertura de prévia somente leitura.
+- Dashboards com métricas zeradas e gráficos vazios.
+- Estrutura visual de integração bancária, relatórios, fiscal, repasse, vitrine, QR e analytics.
+
+Promessas/mensagens que não devem ser tratadas como prova
+----------------------------------------------------------
+- Cobrança automática, baixa automática, boletos/Pix, notificações, reajuste automático, assinatura eletrônica, portal do inquilino, aplicação de multa/juros, integração com parceiros, criptografia e métricas comerciais.
+- Números de clientes, imóveis, redução de inadimplência, prazos “em dois minutos”, validade jurídica e economia fiscal.
+- Roadmap e notas de novidades.
+- Conteúdo dos Termos/Privacidade sobre controles técnicos e compartilhamentos.
+
+Não testado por segurança/escopo
+--------------------------------
+- Login Google e autenticação Google.
+- Cadastro real, confirmação de e-mail, recuperação de senha e alteração de senha.
+- Cadastro de imóvel, proprietário, inquilino, lead, contrato, vistoriador e vistoria.
+- Avanço completo dos fluxos com dados reais.
+- Geração de cobrança, boleto, Pix, baixa, recibo, aviso de atraso e aplicação de juros/multa.
+- Conexão Mercado Pago, Inter ou Cora; nenhuma credencial foi informada.
+- Assinatura eletrônica ou validade jurídica de documento.
+- Geração/download real de PDF, CSV, Excel, placa, QR Code ou laudo.
+- Envio a contador, e-mail, WhatsApp ou suporte.
+- Upgrade, cancelamento, cobrança de assinatura ou portal externo de pagamentos.
+- Upload, anexos e retenção de arquivos.
+- Cálculos fiscais, ganho de capital, holding, rentabilidade e calculadoras públicas com valores de produção.
+- Vitrine publicada, captação de lead, analytics, geocodificação e conversão de contrato.
+- Portal autenticado do inquilino, pois não havia credencial autorizada de inquilino.
+
+
+9. OBSERVAÇÕES DE REENGENHARIA / PONTOS PARA TESTE POSTERIOR
+==============================================================
+
+1. A aplicação depende de dados encadeados: imóvel → inquilino/proprietário → contrato → cobrança → recebimento → repasse/relatório. Um teste end-to-end precisará de dados sintéticos autorizados e ambiente seguro.
+2. Há muitas ações com potencial externo ou financeiro. Elas devem ser testadas em uma conta/ambiente especificamente autorizado, nunca na conta usada apenas para inventário.
+3. O contador do período de teste e as datas exibidas não coincidiram exatamente com a data do sistema do usuário; registrar timezone e fonte da data em próximos testes.
+4. A contagem de Modelos apareceu inicialmente em carregamento como zero e depois como dois modelos do sistema; a coleta deve esperar o carregamento completo antes de registrar números.
+5. O checklist do Dashboard mudou de 0/5 para 1/5 durante a inspeção, aparentemente porque uma tela de lançamentos foi visitada. Isso pode ser um efeito colateral de telemetria/onboarding e merece confirmação.
+6. A Vitrine Digital mostrou “Sua vitrine está desativada” e a URL pública retornou “Vitrine indisponível”; a aba de configurações também exibe controles/texto de publicação. Não foi alterado o estado para resolver a divergência.
+7. A página pública de planos mostrou pelo menos um valor dinâmico inconsistente com o card do plano. Recomenda-se testar slider mensal/anual sem concluir pagamento.
+8. Há funcionalidades anunciadas em material público que não aparecem em todos os estados vazios ou ficam bloqueadas sem dados/plano: placas, módulo fiscal, modelos, assinatura, relatórios, integrações e analytics.
+9. O preview de modelo de contrato inclui texto de exemplo e advertência jurídica. Antes de uso real, deve haver revisão jurídica e teste de preenchimento de tags/partes.
+10. A política pública cita ASAAS, enquanto a tela financeira exibe Mercado Pago, Inter e Cora; a relação operacional entre essas referências deve ser esclarecida em documentação técnica.
+
+
+10. CONCLUSÃO
+==============
+
+O AluggaPro é apresentado como uma plataforma SaaS de gestão de imóveis com um núcleo operacional composto por cadastros, contratos, cobrança/recebimentos, financeiro/fiscal, repasses e relatórios, complementado por pré-locação (CRM/Vitrine), vistorias, portal do inquilino e serviços parceiros.
+
+Na conta inspecionada, a maior parte dos módulos estava em estado inicial e vazio. Isso permitiu observar a arquitetura de navegação, campos, filtros, mensagens, defaults, validações e dependências sem modificar registros. A interface é rica em fluxos de criação e mensagens de automação, mas a inspeção não comprovou os efeitos externos/financeiros anunciados.
+
+O inventário acima separa explicitamente o que foi visto no HTML/interface do que é apenas promessa de marketing ou permanece não testado. Qualquer etapa seguinte de validação deve usar autorização explícita, dados sintéticos ou conta de homologação, mantendo as integrações bancárias, pagamentos, documentos e comunicações externas fora da conta de inventário.
+
+Fim do relatório.
