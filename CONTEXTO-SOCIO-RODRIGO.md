@@ -45,6 +45,7 @@ Arquivos de apoio na raiz do Drive:
 | Arquivo | id |
 |---|---|
 | `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
+| `ENGENHARIA-REVERSA-ALUGGAPRO.md` (mapa do produto no ar) | `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb` |
 | `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
 | `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
@@ -182,6 +183,12 @@ cor de ação principal.
 12. **Windows:** caminho com espaço (`C:\Users\Digo Nego\...`) precisa de aspas no
     PowerShell, senão o `cd` quebra. E "Extrair Tudo" do Windows cria uma subpasta com o
     nome do zip — sempre confira com `Test-Path`.
+13. **Não presuma que a rede está bloqueada — teste antes de descartar trabalho.** Ficou
+    registrado aqui que "não é possível acessar sites externos", e por isso a engenharia
+    reversa do AluggaPro foi marcada como bloqueada e adiada por várias rodadas. Quando
+    finalmente testei, o acesso funcionou normalmente e o levantamento inteiro foi feito
+    em uma rodada. Um `fetch_page` custa segundos; uma premissa errada custou dias.
+    Regra: **antes de dizer "não dá", tentar.**
 
 ---
 
@@ -227,10 +234,13 @@ cor de ação principal.
 
 - [x] Painel da engrenagem abre por cima dos cards — **feito e confirmado em tela**.
 - [x] Commit + push do trabalho na branch da sessão (`81af208`).
+- [x] **Engenharia reversa do AluggaPro** — **feita**, ver
+  `ENGENHARIA-REVERSA-ALUGGAPRO.md` (id `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb`).
+  Mapeadas as 3 superfícies, os módulos, as 12 calculadoras públicas e o vocabulário
+  do domínio, tudo a partir das páginas públicas, **sem login**.
+- [ ] **Fechar a árvore de telas do app autenticado** com 6–10 screenshots (um por
+      módulo do menu + dashboard + portal do inquilino). É o que ainda falta.
 - [ ] **Levar o commit para a `main`** — depende de autorização do Rodrigo.
-- [ ] **Engenharia reversa do Aluga Pro** (produto já no ar) a partir de prints ou exports
-      "Salvar como"/PDF — **bloqueado** até o Rodrigo mandar o material. Não é possível
-      acessar sites externos do ambiente atual, e não aceitamos credenciais em chat.
 
 ---
 
