@@ -1,0 +1,244 @@
+/*
+ * ProductTour — moldura que mostra uma tela real do app, com contador de
+ * passo e narração que avança sozinha.
+ *
+ * REGRA DA CASA: só tokens de `design-system/tokens`. Nada de cor, raio,
+ * sombra, espaçamento ou duração fora da escala. A única exceção é a
+ * altura da janela do app (`--tour-h`), que é dimensão de viewport e não
+ * decisão de design — não existe token de altura, e inventar um seria
+ * pior que declarar o valor aqui.
+ */
+
+.tour {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+}
+
+/* ---------- barra: etiqueta da tela + contador ---------- */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-subtle);
+}
+
+.barLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-snug);
+}
+
+.barCount {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- moldura do aparelho ---------- */
+
+.device {
+  position: relative;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-device);
+  padding: var(--space-2);
+  overflow: hidden;
+}
+
+.screen {
+  position: relative;
+  /*
+   * Altura da janela do app. Não existe token de altura no design system —
+   * há token de espaço, de raio, de sombra, de duração, mas não de
+   * viewport. Declarar o valor aqui é honesto; inventar um token de altura
+   * para um caso de marketing seria poluir a escala.
+   */
+  height: min(58vh, 26rem);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  overflow: hidden;
+  animation: tourIn var(--dur-slow) var(--ease-out);
+}
+
+.screen[data-reduced] {
+  animation: none;
+}
+
+/*
+ * Véu no rodapé da janela. Sem ele o corte parece acidente; com ele
+ * parece que a tela continua além da moldura, que é a verdade.
+ */
+.device::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--space-9);
+  background: linear-gradient(to top, var(--surface-card), transparent);
+  pointer-events: none;
+}
+
+/* ---------- cursor de demonstração ---------- */
+
+.cursor {
+  position: absolute;
+  width: var(--space-5);
+  height: var(--space-5);
+  margin: calc(var(--space-5) / -2) 0 0 calc(var(--space-5) / -2);
+  border-radius: var(--radius-round);
+  background: var(--brand);
+  box-shadow: 0 0 0 var(--space-1) var(--brand-soft);
+  pointer-events: none;
+  animation: cursorPulse 2s var(--ease-in-out) infinite;
+}
+
+/* ---------- rodapé: narração + navegação ---------- */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-1) 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 16rem;
+  flex: 1 1 18rem;
+}
+
+.screenName {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--brand);
+  letter-spacing: var(--tracking-snug);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  line-height: var(--leading-snug);
+}
+
+.detail {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+  max-width: 46ch;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Alvo de 48px — o token já sobe para 56px no modo acessibilidade. */
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  padding: 0;
+  border: var(--border-default);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.navBtn:hover {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+}
+
+.navBtn:active {
+  transform: scale(var(--press-scale));
+}
+
+.navBtn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--space-0-5);
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dot,
+.dotOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--control-h-md);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* O desenho é pequeno; o alvo de toque é o botão inteiro. */
+.dot::after,
+.dotOn::after {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--surface-track);
+  transition: background var(--dur-fast) var(--ease-out), width var(--dur-fast) var(--ease-out);
+}
+
+.dotOn::after {
+  width: var(--space-5);
+  background: var(--brand);
+}
+
+.dot:focus-visible,
+.dotOn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: calc(var(--space-1) * -1);
+  border-radius: var(--radius-pill);
+}
+
+@keyframes tourIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cursorPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.72);
+    opacity: 0.75;
+  }
+}

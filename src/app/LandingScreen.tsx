@@ -1,8 +1,25 @@
 'use client';
 
-import { Badge, Button, HowItWorks, PricingNote, PricingTable, Wordmark, type PlanSpec } from '@design-system';
+import {
+  Badge,
+  Button,
+  HowItWorks,
+  PricingNote,
+  PricingTable,
+  ProductTour,
+  Wordmark,
+  type PlanSpec,
+  type TourStep,
+} from '@design-system';
 import { SimpleModeScreen } from '../../design-system/templates/admin/SimpleModeScreen';
+import { PropertiesScreen } from '../../design-system/templates/admin/PropertiesScreen';
+import { TenantsScreen } from '../../design-system/templates/admin/TenantsScreen';
+import { ContractsScreen } from '../../design-system/templates/admin/ContractsScreen';
+import { ChargesScreen } from '../../design-system/templates/admin/ChargesScreen';
+import { FinanceScreen } from '../../design-system/templates/admin/FinanceScreen';
+import { ExpensesScreen } from '../../design-system/templates/admin/ExpensesScreen';
 import type { ToastInput } from '../../design-system/templates/admin/AdminApp';
+import type { ModuleId } from '../../design-system/templates/admin/Shell';
 import s from './page.module.css';
 
 /**
@@ -58,6 +75,134 @@ const STEPS = [
 ];
 
 const noop = () => {};
+const noopToast = noop as unknown as (t: ToastInput) => void;
+const noopGo = noop as unknown as (m: ModuleId) => void;
+
+/**
+ * Os três tours mostram as telas de verdade do app, na ordem em que a
+ * pessoa usa. Cada passo renderiza a tela real dentro da moldura — não um
+ * desenho dela, não um print, não uma maquete.
+ *
+ * HONESTIDADE, e isso está escrito de propósito: dois passos daqui
+ * descrevem automação que **ainda não existe no código**.
+ *
+ *   · A创建criação do pagamento no Mercado Pago, com boleto, é a tarefa 11
+ *     do Segundo Cérebro — o tutorial do OAuth. A tela de Cobranças existe;
+ *     a geração do boleto, não.
+ *   · A régua de lembretes (3 dias antes, no dia, 3 dias depois) é a
+ *     tarefa 9. `PRODUCT.md` promete as duas, então a landing pode falar
+ *     delas — mas quem ler estes passos como "já está pronto" está lendo
+ *     errado. Estão marcados com ⚠️ nos títulos.
+ *
+ * Fora isso, tudo o que os tours mostram está construído e validado: as
+ * telas de Imóveis, Inquilinos, Contratos, Cobranças, Recebimentos e
+ * Despesas são as da tarefa 5, commitadas.
+ */
+const TOURS: Array<{ label: string; steps: TourStep[] }> = [
+  {
+    label: 'Contratos',
+    steps: [
+      {
+        screen: 'Imóveis',
+        title: 'Cadastre o imóvel e as unidades',
+        detail: 'Uma vez só. Endereço, unidades e quanto cada uma rende.',
+        cursor: { x: 34, y: 30 },
+        children: <PropertiesScreen bp="d" toast={noopToast} go={noopGo} />,
+      },
+      {
+        screen: 'Inquilinos',
+        title: 'Quem mora em cada unidade',
+        detail:
+          'Com CPF ou CNPJ. É o que separa o Imposto de Renda por titular depois.',
+        cursor: { x: 26, y: 44 },
+        children: <TenantsScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Contratos',
+        title: 'Valor, vencimento e reajuste',
+        detail:
+          'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário. É o que basta para cobrar.',
+        cursor: { x: 62, y: 34 },
+        children: <ContractsScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Cobranças',
+        title: 'A primeira cobrança já existe',
+        detail: 'Gerada a partir do contrato, no mês e no dia certos.',
+        cursor: { x: 44, y: 52 },
+        children: <ChargesScreen bp="d" toast={noopToast} />,
+      },
+    ],
+  },
+  {
+    label: 'Cobranças',
+    steps: [
+      {
+        screen: 'Cobranças',
+        title: 'A cobrança do mês já está lá',
+        detail: 'Gerada a partir do contrato. Você não cria nada.',
+        cursor: { x: 30, y: 36 },
+        children: <ChargesScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Cobranças',
+        title: '⚠️ Boleto e Pix prontos',
+        detail:
+          'O app cria o pagamento no Mercado Pago e o inquilino paga por Pix, boleto ou saldo.',
+        cursor: { x: 70, y: 40 },
+        children: <ChargesScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Recebimentos',
+        title: '⚠️ O app lembra antes de vencer',
+        detail:
+          'Lembrete no WhatsApp, do jeito que a pessoa lê. Você pausa quando quiser.',
+        cursor: { x: 82, y: 22 },
+        children: <FinanceScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Cobranças',
+        title: 'Pagou, deu baixa',
+        detail: 'O pagamento cai e a cobrança fecha. Sem planilha.',
+        cursor: { x: 52, y: 60 },
+        children: <ChargesScreen bp="d" toast={noopToast} />,
+      },
+    ],
+  },
+  {
+    label: 'Recebimentos',
+    steps: [
+      {
+        screen: 'Recebimentos',
+        title: 'Pagamento identificado',
+        detail: 'Mercado Pago, WhatsApp ou manual — cada recebimento guarda a origem.',
+        cursor: { x: 24, y: 30 },
+        children: <FinanceScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Cobranças',
+        title: 'Baixa com responsável',
+        detail: 'A cobrança guarda quem deu a baixa e quando. Automática quando o pagamento cai.',
+        cursor: { x: 60, y: 48 },
+        children: <ChargesScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Recebimentos',
+        title: 'Recibo na hora',
+        detail: 'A confirmação do pagamento sai na hora, com o valor e a unidade.',
+        cursor: { x: 40, y: 56 },
+        children: <FinanceScreen bp="d" toast={noopToast} />,
+      },
+      {
+        screen: 'Despesas',
+        title: 'Quanto cada imóvel rende',
+        detail: 'Despesas por imóvel e por titular — o Imposto de Renda sai separado.',
+        cursor: { x: 56, y: 38 },
+        children: <ExpensesScreen bp="d" toast={noopToast} />,
+      },
+    ],
+  },
+];
 
 export function LandingScreen() {
   return (
@@ -99,6 +244,21 @@ export function LandingScreen() {
 
         {/* ---------------- Como funciona ---------------- */}
         <HowItWorks steps={STEPS} lead="Três passos, e o resto é automático." />
+
+        {/* ------------- Como funciona, na prática ------------- */}
+        <section className={s.tours} id="como-funciona">
+          <div className={s.toursHead}>
+            <h2 className={s.sectionTitle}>Como funciona, na prática</h2>
+            <p className={s.sectionLead}>
+              Três tours com as telas de verdade do app, na ordem em que você usa. Passa sozinho;
+              se você encostar o mouse, ele espera. Os passos marcados com ⚠️ são promessa do
+              PRODUCT.md que ainda não está construída — estão ditos aqui, não escondidos.
+            </p>
+          </div>
+          {TOURS.map((t) => (
+            <ProductTour key={t.label} label={t.label} steps={t.steps} />
+          ))}
+        </section>
 
         {/* ---------------- Modo simples ---------------- */}
         <section className={s.simple} id="modo-simples">

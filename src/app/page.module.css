@@ -138,6 +138,22 @@
   overflow: hidden;
 }
 
+/* ---------- tours do produto ---------- */
+
+.tours {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-9);
+  padding: var(--space-10) var(--page-gutter);
+}
+
+.toursHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 62ch;
+}
+
 /* ---------- planos ---------- */
 
 .plans {
