@@ -14,9 +14,9 @@
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
 >
-> **Estado em 29/10/2026: 5 tarefas feitas (1, 3, 4, 5 + a 2 depende de consulta externa).**
-> Sprint 1 está com 4 das 6 tarefas fechadas; a 2 (pesquisa de nome/INPI) é do Rodrigo e
-> depende de consulta externa; a 6 segue sem título.
+> **Estado em 29/10/2026: 6 das 15 tarefas feitas (1, 3, 4, 5, 7 + a 2 depende de consulta
+> externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo) e a 6
+> (título desconhecido). Sprint 2 começou: a 7 (landing) está pronta, falta publicar.
 
 ---
 
@@ -255,6 +255,33 @@ meu socio"*. Ou seja: o trabalho de **tirar o genérico** e deixar funcional é 
 (79/119/229/299). São produtos distintos — a tela de planos do template precisa ser
 **refeita**, não ajustada.
 
+**✅ TAREFA FEITA** — commit `0c1b092`. Landing em `/`, montada só com componentes e
+tokens do design system.
+
+| Seção pedida | Entregue |
+|---|---|
+| Promessa | "Cobre, receba e saiba quanto cada imóvel rende." — derivada do problema declarado em `PRODUCT.md` |
+| Como funciona (3 passos) | componente novo `HowItWorks`: Cadastre → O app cobra → Você acompanha |
+| Modo simples | **a tela de verdade** (`SimpleModeScreen`) embedada, não um desenho dela |
+| Planos R$ 59/99/209/269 | `PricingTable`, o mesmo componente da tela de planos do app |
+| Botão "Começar teste grátis" | leva a `/design-system/admin` — **não existe cadastro ainda** |
+
+**Duas ausências deliberadas, escritas no código:**
+
+1. **Sem prova social.** "+300 proprietários", "+1.200 imóveis" e "32% menos
+   inadimplência" são números do **AluggaPro**, lidos na engenharia reversa. O Aluga não
+   lançou — não tem número para contar, e número emprestado é mentira.
+2. **Sem comparação com concorrente.** Os termos do AluggaPro proíbem copiar interface,
+   código e design; comparar preço não é o que a tarefa pede.
+
+**O "pronto quando" NÃO foi fechado:** a tarefa depende de *publicar no VPS*, e o botão
+precisa chegar a um **cadastro que ainda não existe**. Hoje o CTA leva ao login do
+template. Publicar e criar cadastro são do Richard.
+
+**Componente novo do design system:** `HowItWorks` (marketing). Três passos, e não cinco,
+de propósito — o onboarding tem cinco porque é configuração de conta; a landing precisa do
+arco do produto.
+
 ### 8. Tutorial 'Conectar WhatsApp' — 20/11 · 3h · Normal
 
 > Para: Rodrigo (Marca). Sprint 2. O que fazer: Passo a passo com imagens para ler o QR
@@ -388,7 +415,7 @@ solu — ela é prova de que o design system se sustenta sozinho.
 | **Tutorial com imagens, para pessoa idosa** (WhatsApp e Mercado Pago) | não existe — tarefas 8 e 11 |
 | **Mensagens por momento** — D-3 / D0 / D+3, com confirmação ao inquilino e "Recebeu?" ao proprietário | não existe — tarefa 9 |
 | **Fluxo de retorno de OAuth** (voltou do Mercado Pago) | não existe |
-| **Landing page** com só componentes e tokens | não existe — tarefa 7 |
+| **Landing page** com só componentes e tokens | **pronta** (`0c1b092`), falta publicar no VPS — tarefa 7 |
 | **Planos R$ 59/99/209/269 validados** | tela pronta, preços ainda hipótese — tarefa 14 |
 
 **Gap que existia e foi fechado na tarefa 5:**
@@ -433,8 +460,16 @@ for usado como base da v1, ele precisa **encolher**, não crescer.
   no produto. Não é tarefa do kanban, mas é a próxima tarefa grande e a única tela do painel
   que ainda mente sobre o produto.
 
-**Sprint 2 (20/11) — nada iniciado:** landing (7), tutorial WhatsApp (8), mensagens (9),
-linguagem simples (10), tutorial Mercado Pago (11).
+**Sprint 2 (20/11) — iniciada:**
+
+- **Landing (7) — FEITA** (`0c1b092`). Falta publicar no VPS, que é do Richard.
+- **Tutorial WhatsApp (8), mensagens (9), linguagem simples (10), tutorial Mercado Pago
+  (11) — nada iniciado.**
+
+A landing só pôde ser feita por causa da restrição *"Só componentes e tokens do design
+system"*: ela é a prova de que o design system se sustenta sozinho, sem CSS de página. Foi
+por isso que ela nasceu **depois** das 7 telas — as telas é que criaram os componentes que
+a landing reusa (`PricingTable`, `HowItWorks`, `SimpleModeScreen`).
 
 **Ressalva que o Rodrigo registrou em 29/10/2026:** *"provavelmente quem vai deixar
 funcional sem ser generico é meu socio"*. Ou seja, a **parte funcional** — banco, job de

@@ -210,6 +210,36 @@ Cobranças · Inquilinos · Contratos · Despesas. ("Financeiro" virou **Recebim
   produto: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
   "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
 
+### 4.8 Landing page em `/`
+
+Commit `0c1b092`. Tarefa 7 do Segundo Cérebro e R10 da spec. **A restrição que define o
+commit é a que a própria tarefa põe: "Só componentes e tokens do design system."**
+
+- `src/app/LandingScreen.tsx` + `src/app/page.module.css` — a landing.
+- `components/marketing/HowItWorks.tsx` — **componente novo**: "como funciona (3 passos)".
+  Três, e não cinco, de propósito — o onboarding tem cinco porque é configuração de conta;
+  a landing precisa do arco do produto (cadastrar → cobrar → acompanhar).
+- A seção do Modo simples renderiza a **tela de verdade** (`SimpleModeScreen`), não um
+  desenho dela. Se a tela muda no app, a landing muda junto.
+- Os planos usam o mesmo `PricingTable` da tela de planos do app.
+
+**Duas ausências deliberadas:**
+
+1. **Sem prova social.** "+300 proprietários", "+1.200 imóveis" e "32% menos
+   inadimplência" são números do **AluggaPro**. O Aluga não lançou — não tem número para
+   contar, e número emprestado é mentira.
+2. **Sem comparação com concorrente.** `PRODUCT.md` diz que os termos do AluggaPro
+   proíbem copiar interface, código e design.
+
+**O "pronto quando" da tarefa NÃO foi fechado:** ela depende de publicar no VPS, e o botão
+precisa chegar a um **cadastro que ainda não existe**. O CTA hoje leva a
+`/design-system/admin`, que é o login do template. Publicar e criar cadastro são do Richard.
+
+**Validação:** `check-tokens` 208 OK · validador de tokens do CSS (nenhum inválido, 177
+tokens no CSS servido) · `tsc` limpo · render de `/` em HTTP 200 sem 500 com **44/44**
+elementos conferidos, inclusive os botões "Recebi" e "Lembrar no WhatsApp" da tela embedada
+e os quatro preços.
+
 ---
 
 ## 5. Armadilhas conhecidas (já pagamos por elas)
@@ -387,6 +417,9 @@ git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
 - [ ] **Limpar o Painel (dashboard).** Única tela do painel que ainda mostra o template
       genérico: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
       "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
+- [ ] **Publicar no VPS e criar o cadastro** — a landing (`0c1b092`) está pronta, mas o
+      "pronto quando" da tarefa 7 depende de subir no subdomínio e de existir uma tela de
+      cadastro para o botão "Começar teste grátis" chegar. Ambos são do Richard.
 - [ ] **Revisar as 7 telas com o Rodrigo.** Roteiro em `ROTEIRO-REVISAO-TELAS.md`. Faltam
       testar com clique: diálogos de cadastro, CEP (Imóveis), limite do plano e download do
       CSV (Despesas).
@@ -423,6 +456,21 @@ assumir:
 
 A tarefa 1 era dependência da 5. Com as duas fechadas, **a Sprint 1 está praticamente
 fechada** — falta só a 2 (nome) e a 6 (título desconhecido).
+
+**Sprint 2 — iniciada:**
+
+| # | Tarefa | Estado |
+|---|---|---|
+| 7 | Landing page 'Aluga' na página inicial | **FEITA** (`0c1b092`) — ver seção 4.8. Falta publicar no VPS e criar o cadastro, ambos do Richard |
+| 8 | Tutorial 'Conectar WhatsApp' | em aberto |
+| 9 | Mensagens (D-3/D0/D+3, confirmação, "Recebeu?") | em aberto |
+| 10 | Textos do app em linguagem simples | em aberto |
+| 11 | Tutorial 'Conectar Mercado Pago' | em aberto |
+
+A landing só pôde ser feita **depois** das 7 telas, e não antes: a restrição *"Só componentes
+e tokens do design system"* faz dela a prova de que o design system se sustenta sozinho, e
+foram as telas que criaram os componentes que ela reusa (`PricingTable`, `HowItWorks`,
+`SimpleModeScreen`).
 
 **Decisões de produto que o backlog revela:**
 
@@ -496,9 +544,13 @@ design-system/
     forms/MaskedInput.tsx     ← máscaras cpf / cnpj / phone / cep
     data/StepChecklist.tsx    ← checklist de 5 passos do onboarding
     marketing/PlanCard.tsx    PricingTable.tsx
-src/app/design-system/
-    page.tsx  Showcase.tsx  Showcase.module.css
-    admin/page.tsx            ← renderiza <AdminApp />
+  components — novos na tarefa 7 (landing):
+    marketing/HowItWorks.tsx  ← "como funciona (3 passos)" da landing
+src/app/
+    page.tsx  LandingScreen.tsx  page.module.css   ← landing em "/" (só tokens)
+    design-system/
+      page.tsx  Showcase.tsx  Showcase.module.css
+      admin/page.tsx        ← renderiza <AdminApp />
 ```
 
 **Rotas temporárias de validação:** quando uma tela nova precisa ser validada em tela, eu
