@@ -8,12 +8,11 @@
 >
 > **Convenção de confiança:**
 > - ✅ **confirmado** — li o texto integral na imagem
-> - ⚠️ **cortado** — o título ou a observação apareceu cortada; recontei pelo padrão das
->   outras tarefas e está marcado
+> - ⚠️ **inferido** — o título não apareceu nas imagens; deduzi da observação
 >
 > O quadro declara **15 tarefas** e **~58h** na coluna `A fazer`. Consegui identificar
-> **13 delas por completo**; 2 ficaram com título cortado (ver seção 5). Dessas 13,
-> **12 têm a observação completa** — as 2 que faltavam chegaram por escrito depois.
+> **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
+> **todas têm a observação completa**.
 
 ---
 
@@ -35,7 +34,7 @@
 `Quem faz` (select) · `Repetir` (`Não repete`) · `Etapa` (select) · `Observação` (textarea) ·
 `Cancelar` · `Salvar`.
 
-**Todas as 13 tarefas identificadas têm `Quem faz: Rodrigo` e `Etapa: A fazer`.**
+**Todas as 14 tarefas identificadas têm `Quem faz: Rodrigo` e `Etapa: A fazer`.**
 
 ---
 
@@ -58,9 +57,9 @@
 |---|---|---|---|---|
 | 7 | Aluga · **Landing page 'Aluga' na página inicial** | 🔴 Alta | 8h | ✅ |
 | 8 | Aluga · **Tutorial 'Conectar WhatsApp'** | Normal | 3h | ✅ |
-| 9 | Aluga · **Mensagens** | Normal | 2h | ⚠️ título só |
+| 9 | Aluga · **Mensagens** | Normal | 2h | ✅ |
 | 10 | Aluga · **Textos do app em linguagem simples** | Normal | 4h | ✅ |
-| 11 | Aluga · **Tutorial '…'** (segundo tutorial de 3h em 20/11) | Normal | 3h | ⚠️ título cortado |
+| 11 | Aluga · **Tutorial 'Conectar Mercado Pago'** *(título inferido da observação)* | Normal | 3h | ⚠️ título |
 
 ### Sprint 3 — prazo 04/12/2026
 
@@ -76,9 +75,9 @@
 |---|---|---|---|---|
 | 15 | Aluga · **Medir o sucesso da v1** | 🔴 Alta | 2h | ✅ |
 
-**Horas identificadas:** 3+4+4+3+8+4 +8+3+2+4+3 +6+6+2 +2 = **62h**, contra **~58h**
-declarados no quadro. A diferença de 4h provavelmente está nas duas tarefas de título
-cortado.
+**Horas identificadas:** Sprint 1 = 26h · Sprint 2 = 20h · Sprint 3 = 14h · Validação =
+2h → **62h** no total, contra **~58h** declarados no quadro. A diferença de 4h pode ser
+arredondamento do "~58h" ou a tarefa 6 ter tempo diferente do que li no card.
 
 ---
 
@@ -88,7 +87,8 @@ cortado.
 
 > Para: Rodrigo (Marca). Sprint 1. O que fazer: Criar laranja mais escuro para botões e
 > textos que passe contraste AA, subir texto base para 16px, alvos de toque de 48px.
-> Pronto quando: `npm run check` passe e a vitrine/design-system mostra o novo laranja.
+> **Mudar primeiro o `DESIGN.md` e depois `design-system/tokens`; rodar `npm run check`.**
+> Pronto quando: `npm run check` passa e a vitrine `/design-system` mostra o novo laranja.
 > Ref.: `docs/specs/v1.md`
 
 **🔴 ESTA TAREFA JÁ ESTÁ FEITA.** Os três critérios dela são exatamente o que foi entregue
@@ -108,12 +108,13 @@ ativada por `data-a11y="on"`) e o menu da engrenagem no template do painel.
 ### 2. Pesquisa de nome: shortlist e consulta ao INPI — 06/11 · 4h · Normal
 
 > Para: Rodrigo (Marca). Sprint 1. O que fazer: Fechar 3 finalistas (direções preferidas:
-> estilo Old Parr / Mustang / nome da V0) e consultar o INPI nas classes 36 e 42.
-> Registrar em `PRODUCT.md` (em aberto). Pronto quando: temos 1 a 3 nomes sem conflito no
+> estilo Old Parr / Mustang / nome da Vó) e consultar o INPI nas classes 36 e 42.
+> Registrar em `PRODUCT.md` (Em aberto). Pronto quando: temos 1 a 3 nomes sem conflito no
 > INPI e com domínio livre. Ref.: `docs/specs/v1.md`
 
 **O nome do produto ainda não está fechado.** "Aluga" é provisório. Direções de marca:
-estilo **Old Parr**, **Mustang**, ou o nome da **V0**. Registro de marca nas classes
+estilo **Old Parr**, **Mustang**, ou o nome da **Vó/V0** (ver nota de leitura, seção 4).
+Registro de marca nas classes
 **36** (financeiro/seguros) e **42** (software).
 
 ### 3. Desenhar o onboarding — 06/11 · 4h · Normal
@@ -153,12 +154,11 @@ favicon. O design system ainda não tem conjunto de ícones de app.
 
 ### 5. Desenhar as telas da v1 a partir dos templates — 06/11 · 8h · Normal
 
-> Para: Rodrigo (Marca). Sprint 1. O que fazer: Modo simples ('Este mês'), cards por
-> unidade, Recebi/Lembrar, letra grande), cadastros, cobranças, painel. Partir do
-> `design-system/templates/admin`. ⚠️ *trecho do meio cortado entre "Partir do design-" e
-> "system/templates/admin. Ref.:"* — reconstruído pelo padrão das outras tarefas:
-> *"Pronto quando: telas aprovadas pelo Richard para desenvolver na sprint 2 e 3. Depende
-> de: Ajustar tokens de acessibilidade. Ref.: `docs/specs/v1.md`"*
+> Para: Rodrigo (Marca). Sprint 1. O que fazer: Modo simples ('Este mês', cards por
+> unidade, Recebi/Lembrar, letra grande), cadastros, cobranças, painel. Partir de
+> `design-system/templates/admin`. Pronto quando: telas aprovadas pelo Richard para
+> desenvolver na sprint 2 e 3. Depende de: Ajustar tokens de acessibilidade. Ref.:
+> `docs/specs/v1.md`
 
 **Escopo da v1, em 4 peças:** Modo simples (`Este mês`) · cards por unidade com ação
 `Recebi/Lembrar` · cadastros e cobranças · painel. **Depende da tarefa 1** (tokens) — que
@@ -171,8 +171,9 @@ Note: **Unidade**, não Contrato. **Cobrança/Recebimento**, não Financeiro.
 
 > Para: Rodrigo (Marca). Sprint 2. O que fazer: Promessa, como funciona (3 passos), Modo
 > simples, planos (R$ 59/99/209/269), botão 'Começar teste grátis' levando ao cadastro.
-> Pronto quando: landing no ar no subdomínio e o botão chega ao cadastro. Depende de:
-> Publicar no VPS. Ref.: `docs/specs/v1.md`
+> **Só componentes e tokens do design system.** Pronto quando: landing no ar no
+> subdomínio e o botão chega ao cadastro. Depende de: Publicar no VPS. Ref.:
+> `docs/specs/v1.md`
 
 **Preços do Aluga: R$ 59 / 99 / 209 / 269.** Diferente da tabela do AluggaPro
 (79/119/229/299). São produtos distintos — a tela de planos do template precisa ser
@@ -188,12 +189,42 @@ Note: **Unidade**, não Contrato. **Cobrança/Recebimento**, não Financeiro.
 tradicional. Isso é a justificativa de produto do trabalho de acessibilidade: letra
 grande, alvo de toque grande, passo a passo com imagem, sem jargão.
 
+### 9. Mensagens — 20/11 · 2h · Normal
+
+> Para: Rodrigo (Marca). Sprint 2. O que fazer: 3 variações para D-3, D0, D+3, confirmação
+> de pagamento ao inquilino e o 'Recebeu?' ao proprietário, no tom da marca. Pronto quando:
+> textos entregues para o Richard colocar no fluxo. Ref.: `docs/specs/v1.md`
+
+**Esta é a régua de cobrança do Aluga, e ela é curta e humana.** Três toques —
+**D-3** (antes), **D0** (no dia) e **D+3** (depois) — mais duas confirmações: a de
+pagamento, para o inquilino, e o **"Recebeu?"**, para o proprietário. Não é a régua de
+cobrança do AluggaPro, que é jurídica e automática. Aqui é **conversa**, no tom da marca.
+
+Duas consequências para o design system:
+- O componente que falta não é "notificação", é **variação de mensagem por momento** —
+  D-3/D0/D+3 são três textos do mesmo evento, escolhidos por data.
+- O **"Recebeu?"** inverte o sentido do fluxo: é o produto perguntando ao proprietário,
+  não informando. É um padrão de UX que o template não tem.
+
 ### 10. Textos do app em linguagem simples — 20/11 · 4h · Normal
 
 > Para: Rodrigo (Marca). Sprint 2. O que fazer: Revisar todos os textos das telas: frases
 > curtas, sem jargão, 'Proprietário/Imóvel/Unidade/Cobrança/Recebimento'. Pronto quando:
 > planilha de textos aprovada e aplicada. Depende de: Desenhar as telas. Ref.:
 > `docs/specs/v1.md`
+
+### 11. Tutorial 'Conectar Mercado Pago' — 20/11 · 3h · Normal
+
+> Para: Rodrigo (Marca). Sprint 2. O que fazer: Passo a passo com imagens do OAuth do
+> Mercado Pago. Pronto quando: idem. Ref.: `docs/specs/v1.md`
+
+*(Título inferido — a observação é literal, mas o título do card estava cortado nas
+imagens. "Pronto quando: idem" aponta para o mesmo critério do tutorial de WhatsApp:
+alguém de fora consegue conectar sozinho.)*
+
+**Mercado Pago entra por OAuth**, não por credencial manual. Isso importa: o fluxo de
+conexão é um redirecionamento com tela de consentimento, e o design system precisa cobrir
+o estado "voltou do provedor" — que é onde costuma quebrar.
 
 ### 12. Teste de uso com os 5 fundadores — 04/12 · 6h · Alta
 
@@ -231,33 +262,39 @@ planilha), disposição a pagar (3 de 5 fundadores) e conclusão do onboarding.
 
 ## 4. Estado das observações
 
-Das 13 tarefas identificadas, **12 têm a observação completa**. A exceção é a tarefa 5
-("Desenhar as telas da v1"), que ainda tem um trecho do meio não lido — ver lacuna 5,
-seção 5.
+**Todas as 14 tarefas identificadas têm a observação completa.** Nenhuma ficou cortada.
 
-**Nota de leitura:** onde o texto original aparece como *"Vó"*, li **V0** (versão zero) —
-é o que faz sentido no contexto, que fala em *"seguir para a v2"* na mesma frase.
+Onde minha leitura de tela estava incompleta, o Rodrigo passou o texto por escrito
+(27/10/2026) e eu conferi: a reconstrução que eu tinha feito da tarefa 5 ("Desenhar as
+telas da v1") estava **correta no conteúdo**, com dois detalhes de forma que ele corrigiu
+— "Partir **de**" (não "Partir do") e a observação real não tinha o trecho duplicado que
+eu suspeitava.
+
+**Nota de leitura — "Vó":** onde o texto original aparece como *"Vó"*, mantive **Vó**
+literalmente, mas a interpretação é **V0** (versão zero) — a mesma frase fala em *"seguir
+para a v2"*, e o produto tem versões V0/V1/V2. **A confirmar com o Rodrigo.**
 
 ---
 
 ## 5. Lacunas do inventário
 
-1. **Duas tarefas sem título** — uma de 4h em 06/11 (Sprint 1) e uma de 3h em 20/11
-   (Sprint 2, segundo "Tutorial"). O quadro diz 15 tarefas; fechei 13.
-2. **Card "Aluga · Criar projeto Supabase em São Paulo e e-ligar…"** — apareceu no canto
-   da tela, título cortado. Provavelmente está na coluna `Aguardando`.
-3. **Coluna `Aguardando`** não foi aberta em nenhuma das 3 levas.
-4. **Tarefa 9 "Mensagens"** (20/11 · 2h) — só o título, sem observação.
-5. **Tarefa 5 "Desenhar as telas da v1"** — a observação tem um trecho do meio ainda
-   não lido, entre *"Partir do design-"* e *"system/templates/admin. Ref.:"*.
+1. **Título da tarefa 6** — card de 4h em 06/11 (Sprint 1). A observação não foi passada.
+   É a única tarefa das 15 que ainda não tenho.
+2. **Título da tarefa 11** — inferido como *"Tutorial 'Conectar Mercado Pago'"* a partir
+   da observação (passo a passo do OAuth do Mercado Pago). A observação é literal; só o
+   título é inferido.
+3. **Coluna `Aguardando`** não foi aberta em nenhuma das 3 levas. Tem um card
+   *"Aluga · Criar projeto Supabase em São Paulo e e-ligar…"* cortado no canto da tela.
 
-**Resolvidas nesta rodada** (Rodrigo passou o texto por escrito, 27/10/2026):
-observações das tarefas **13** (Ajustes visuais pós-testes) e **15** (Medir o sucesso
-da v1). A 14 (Validar preços) já estava completa.
+**Total: 14 de 15 tarefas identificadas. Faltam 2 títulos e 1 coluna.**
 
 ---
 
 ## 6. O que isso significa para o design system
+
+**Restrição de escopo que vale para o projeto inteiro:** a tarefa 7 (Landing) diz
+*"Só componentes e tokens do design system"*. Ou seja, a landing **não pode** ter CSS
+solu — ela é prova de que o design system se sustenta sozinho.
 
 **Já entregue e que bate com o backlog:**
 
@@ -277,7 +314,9 @@ da v1). A 14 (Validar preços) já estava completa.
 | **Ícone de PWA** (vários tamanhos) + favicon | não existe |
 | **Vocabulário** `Proprietário/Imóvel/Unidade/Cobrança/Recebimento` | o template usa `Imóveis/Manutenção/Financeiro` |
 | **Planos R$ 59/99/209/269** | o template não tem tela de planos |
-| **Tutorial com imagens, para pessoa idosa** | não existe |
+| **Tutorial com imagens, para pessoa idosa** (WhatsApp e Mercado Pago) | não existe |
+| **Mensagens por momento** — D-3 / D0 / D+3, com confirmação ao inquilino e "Recebeu?" ao proprietário | não existe |
+| **Fluxo de retorno de OAuth** (voltou do Mercado Pago) | não existe |
 | **Wordmark 'Aluga'** | não existe |
 
 **Conflito de nomenclatura a resolver:** o menu que levantei no AluggaPro
@@ -291,8 +330,7 @@ for usado como base da v1, ele precisa **encolher**, não crescer.
 ## 7. Roteiro sugerido (a confirmar com o Rodrigo)
 
 1. **Marcar a tarefa 1 como pronta** — destrava a 5, que é a maior da Sprint 1 (8h).
-2. **Fechar as lacunas que sobraram** (2 títulos, a observação da 5 e da 9, e a coluna
-   `Aguardando`) antes de planejar a Sprint 2.
+2. **Fechar as 2 últimas lacunas** — título da 6 e da 11, e abrir a coluna `Aguardando`.
 3. **Decidir o destino do template:** encolher para o vocabulário da v1
    (`Unidade`, `Cobrança/Recebimento`, modo simples) ou manter o template como está e
    construir a v1 em cima só do que serve.
