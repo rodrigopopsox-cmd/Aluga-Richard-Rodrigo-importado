@@ -1,22 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardHeader, SegmentedControl, StepChecklist, type Step } from '../../components';
-import type { ToastInput } from './AdminApp';
+import { Badge, Card, CardHeader, StepChecklist, type Step } from '../../components';
 import type { Breakpoint } from './useBreakpoint';
 import s from './Screens.module.css';
 
 /**
  * Primeiros passos — onboarding.
  *
- * Conteúdo literal da tarefa 3 do backlog (Sprint 1):
- *   Pergunta 'Como prefere ver?' (Simples marcado)
- * + checklist de 5 passos (imóvel, inquilino e contrato, ver a primeira cobrança,
- *   conectar WhatsApp, conectar Mercado Pago)
- * + 'Como funciona' de cada tela.
+ * Conteúdo da tarefa 3 do backlog (Sprint 1):
+ *   checklist de 5 passos (imóvel, inquilino e contrato, ver a primeira cobrança,
+ *   conectar WhatsApp, conectar Mercado Pago) + "Como funciona" de cada tela.
  *
  * ORDEM DOS PASSOS é a do backlog — não reordenei por gosto.
- * O estado é local (demo): ligar no banco quando as telas de cadastro existirem.
+ *
+ * Não é um item de menu: enquanto os 5 passos não estão concluídos, esta tela
+ * aparece no lugar do painel (ver AdminApp). Some sozinha no 5/5.
+ *
+ * O estado (`done`) vem de fora e é persistido. Aqui é só demonstração: no app
+ * real cada passo se marca sozinho quando a ação acontece (imóvel cadastrado,
+ * contrato criado, Mercado Pago conectado).
  */
 const STEPS: Step[] = [
   {
@@ -51,7 +53,7 @@ const STEPS: Step[] = [
   },
 ];
 
-/** "Como funciona" — uma linha por tela, no vocabulário da v1. */
+/** "Como funciona" — uma linha por termo, no vocabulário da v1. */
 const HOW: Array<[string, string]> = [
   ['Imóvel', 'Cada imóvel tem uma ou mais unidades — kitnet, loja, sala. É a unidade que gera aluguel.'],
   ['Unidade', 'O que é alugado de fato. O preço, o inquilino e o contrato ficham na unidade.'],
@@ -60,77 +62,56 @@ const HOW: Array<[string, string]> = [
   ['Proprietário', 'Quem recebe. Pode ser você ou outro titular da mesma conta.'],
 ];
 
-export function OnboardingScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastInput) => void }) {
-  const [view, setView] = useState<'simples' | 'completo'>('simples');
-  const [done, setDone] = useState<string[]>([]);
+export interface OnboardingScreenProps {
+  bp: Breakpoint;
+  /** Ids dos passos já concluídos. */
+  done: string[];
+  /** Marca ou desmarca um passo. */
+  toggle: (id: string) => void;
+}
+
+export function OnboardingScreen({ bp, done, toggle }: OnboardingScreenProps) {
   const mobile = bp === 'm';
-
-  const toggle = (id: string) => {
-    setDone((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-    toast({
-      tone: 'success',
-      title: done.includes(id) ? 'Passo desmarcado' : 'Passo concluído',
-      message: 'No app real, o estado vem do banco — aqui é só demonstração.',
-    });
-  };
-
+  const pad = mobile ? 'var(--space-4-5)' : 'var(--card-padding)';
   const allDone = done.length === STEPS.length;
 
   return (
     <div className={s.stack}>
-      <Card padding={mobile ? 'var(--space-4-5)' : 'var(--card-padding)'}>
-        <CardHeader
-          title="Como prefere ver?"
-          subtitle="Você pode mudar quando quiser, em Configurações"
-        />
-        <div className={s.mt4}>
-          <SegmentedControl
-            options={[
-              { value: 'simples', label: 'Simples' },
-              { value: 'completo', label: 'Completo' },
-            ]}
-            value={view}
-            onChange={(v) => setView(v as 'simples' | 'completo')}
-          />
-        </div>
-        <p className={s.caption}>
-          <strong>Simples</strong> mostra só o que importa neste mês: o que entrou, o que
-          falta e o que fazer agora. <strong>Completo</strong> mostra todos os períodos,
-          relatórios e filtros.
-        </p>
-      </Card>
-
-      <Card padding={mobile ? 'var(--space-4-5)' : 'var(--card-padding)'}>
+      <Card padding={pad}>
         <StepChecklist
           title="Primeiros passos"
           subtitle="Cinco passos para o app começar a trabalhar por você"
-          steps={STEPS.map((st) => ({
-            ...st,
-            done: done.includes(st.id),
-            onAction: () => toggle(st.id),
-            actionLabel: done.includes(st.id) ? 'Concluído' : st.actionLabel,
-          }))}
+          steps={STEPS.map((st) => {
+            const isDone = done.includes(st.id);
+            return {
+              ...st,
+              done: isDone,
+              onAction: () => toggle(st.id),
+              actionLabel: isDone ? 'Concluído' : st.actionLabel,
+            };
+          })}
         />
         {allDone && (
           <p className={[s.caption, s.positive].join(' ')}>
-            Tudo pronto. A partir daqui o app cobra, avisa e dá baixa sozinho.
+            Tudo pronto. A partir daqui o app cobra, avisa e dá baixa sozinho — esta tela não
+            aparece mais.
           </p>
         )}
       </Card>
 
-      <Card padding={mobile ? 'var(--space-4-5)' : 'var(--card-padding)'}>
+      <Card padding={pad}>
         <CardHeader
           title="Como funciona"
           subtitle="Cinco palavras que o app usa — e o que cada uma quer dizer"
         />
-        <dl className={s.rules}>
+        <div className={s.glossary}>
           {HOW.map(([term, meaning]) => (
-            <div key={term} className={s.rule}>
-              <dt>{term}</dt>
-              <dd>{meaning}</dd>
+            <div key={term} className={s.glossaryItem}>
+              <Badge tone="soft">{term}</Badge>
+              <p className={s.glossaryText}>{meaning}</p>
             </div>
           ))}
-        </dl>
+        </div>
       </Card>
     </div>
   );

@@ -15,17 +15,25 @@ export interface DashboardScreenProps {
   tasks: Task[];
   onAddTask: () => void;
   go: (m: ModuleId) => void;
+  /**
+   * Modo de exibição vindo de Configurações.
+   * `simple` = essencial (unidades, receita do mês, próximo vencimento).
+   * `full`   = todos os cards.
+   */
+  simple: boolean;
 }
 
 /** Painel · Visão geral — KPI tiles, property photo card, maintenance, next due date, insights, finance health, revenue. */
-export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenProps) {
+export function DashboardScreen({ bp, tasks, onAddTask, go, simple }: DashboardScreenProps) {
   const cols = bp === 'd' ? 4 : 2;
+  // No modo simples o painel fica em 2 colunas — os cards essenciais não precisam de 4.
+  const gridCols = simple ? 2 : cols;
   const mobile = bp === 'm';
   const span = (n: number): CSSProperties => ({ gridColumn: `span ${Math.min(n, cols)}` });
   const full: CSSProperties = mobile ? { gridColumn: 'span 2' } : {};
 
   return (
-    <div className={s.grid} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+    <div className={s.grid} style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}>
       <StatCard
         title="Total de"
         subtitle="Unidades"
@@ -37,10 +45,13 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
           </Chip>
         }
       />
-      <StatCard title="Visitas" subtitle="Hoje" value="56" image={buildingGlass.src} action={<Chip variant="glass" icon="users">Agenda</Chip>} />
-      <StatCard title="Novos" subtitle="Contratos" value="32" delta="+12" deltaLabel="esta semana" style={full} />
+      {!simple && (
+        <StatCard title="Visitas" subtitle="Hoje" value="56" image={buildingGlass.src} action={<Chip variant="glass" icon="users">Agenda</Chip>} />
+      )}
+      {!simple && <StatCard title="Novos" subtitle="Contratos" value="32" delta="+12" deltaLabel="esta semana" style={full} />}
 
-      <Card padding={0} className={s.photoCard} style={{ ...full, ...(bp === 'd' ? { gridRow: 'span 2' } : { minHeight: 320 }) }}>
+      {!simple && (
+        <Card padding={0} className={s.photoCard} style={{ ...full, ...(bp === 'd' ? { gridRow: 'span 2' } : { minHeight: 320 }) }}>
         <div className={s.photoCardHead}>
           <CardHeader title="Ed. Aurora," subtitle="São Paulo · SP-04" action={<IconButton icon="maximize-2" label="Abrir imóvel" size={36} onClick={() => go('props')} />} />
         </div>
@@ -58,11 +69,14 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
           </div>
         </div>
       </Card>
+      )}
 
-      <Card style={span(2)}>
-        <CardHeader
-          title="Manutenção"
-          subtitle="Atividade"
+
+      {!simple && (
+        <Card style={span(2)}>
+          <CardHeader
+            title="Manutenção"
+            subtitle="Atividade"
           action={
             <Button variant="dark" size="sm" icon="plus" onClick={onAddTask}>
               Adicionar tarefa
@@ -76,6 +90,7 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
           ))}
         </div>
       </Card>
+      )}
 
       <Card tone="dark" className={s.between} style={{ ...full, minHeight: 220 }}>
         <CardHeader inverse title="Próximo" subtitle="vencimento" action={<IconButton icon="maximize-2" label="Financeiro" variant="inverse" size={36} onClick={() => go('fin')} />} />
@@ -88,8 +103,9 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
         </div>
       </Card>
 
-      <Card style={span(2)}>
-        <CardHeader title="Insights" subtitle="Assistente IA" action={<IconButton icon="lightbulb" label="Insights" size={36} />} />
+      {!simple && (
+        <Card style={span(2)}>
+          <CardHeader title="Insights" subtitle="Assistente IA" action={<IconButton icon="lightbulb" label="Insights" size={36} />} />
         <div className={s.analysing}>
           sistema analisando <span className={s.brandDot}>•</span>
         </div>
@@ -108,9 +124,11 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
           </span>
         </div>
       </Card>
+      )}
 
-      <Card className={s.between} style={{ ...full, gap: 'var(--card-gap)' }}>
-        <CardHeader title="Saúde" subtitle="Financeira" action={<IconButton icon="maximize-2" label="Financeiro" size={36} onClick={() => go('fin')} />} />
+      {!simple && (
+        <Card className={s.between} style={{ ...full, gap: 'var(--card-gap)' }}>
+          <CardHeader title="Saúde" subtitle="Financeira" action={<IconButton icon="maximize-2" label="Financeiro" size={36} onClick={() => go('fin')} />} />
         <div className={s.healthHead}>
           <span className={s.healthWord}>Ótima</span>
           <span className={s.healthPct}>96%</span>
@@ -133,6 +151,7 @@ export function DashboardScreen({ bp, tasks, onAddTask, go }: DashboardScreenPro
           ))}
         </div>
       </Card>
+      )}
 
       <Card className={s.between} style={{ ...full, gap: 'var(--space-3-5)' }}>
         <CardHeader title="Receita" subtitle="Mensal" />

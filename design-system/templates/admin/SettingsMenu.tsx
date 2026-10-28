@@ -16,7 +16,7 @@ export interface SettingsMenuProps {
  * camada de acessibilidade opt-in + tema. Fecha ao clicar fora ou apertar Esc.
  */
 export function SettingsMenu({ settings, align = 'rail' }: SettingsMenuProps) {
-  const { a11y, setA11y, theme, setTheme } = settings;
+  const { a11y, setA11y, theme, setTheme, view, setView } = settings;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -50,6 +50,25 @@ export function SettingsMenu({ settings, align = 'rail' }: SettingsMenuProps) {
           <div className={styles.block}>
             <Switch checked={a11y} onChange={setA11y} label="Acessibilidade" name="a11y" />
             <span className={styles.hint}>Deixa o texto e os botões maiores.</span>
+          </div>
+
+          <div className={styles.block}>
+            <span className={styles.label}>Como prefere ver?</span>
+            <SegmentedControl
+              size="sm"
+              label="Como prefere ver?"
+              options={[
+                { value: 'simple', label: 'Simples' },
+                { value: 'full', label: 'Completo' },
+              ]}
+              value={view}
+              onChange={(v) => setView(v as 'simple' | 'full')}
+            />
+            <span className={styles.hint}>
+              Simples mostra o essencial: suas unidades, quanto entrou no mês e o que vence
+              agora. Completo mostra tudo — ocupação, visitas, manutenção, insights e saúde
+              financeira.
+            </span>
           </div>
 
           <div className={styles.block}>

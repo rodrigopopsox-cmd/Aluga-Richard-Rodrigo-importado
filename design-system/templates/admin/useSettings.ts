@@ -4,16 +4,26 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type Theme = 'light' | 'dark';
 
+/**
+ * Como o painel é mostrado.
+ * `simple` = o essencial (unidades, quanto entrou, o que vence agora, primeiros passos).
+ * `full`   = tudo (ocupação, visitas, manutenção, insights, saúde financeira).
+ */
+export type ViewMode = 'simple' | 'full';
+
 export interface AppSettings {
   /** Camada de acessibilidade opt-in: tipografia ampliada + alvos de toque de 56px. */
   a11y: boolean;
   setA11y: (v: boolean) => void;
   theme: Theme;
   setTheme: (v: Theme) => void;
+  view: ViewMode;
+  setView: (v: ViewMode) => void;
 }
 
 const A11Y_KEY = 'aluga_a11y';
 const THEME_KEY = 'aluga_theme';
+const VIEW_KEY = 'aluga_view';
 
 const read = (key: string): string | null => {
   try {
@@ -35,6 +45,9 @@ const write = (key: string, value: string | null): void => {
 const themeFrom = (value: string | null): Theme | null =>
   value === 'dark' || value === 'light' ? value : null;
 
+const viewFrom = (value: string | null): ViewMode | null =>
+  value === 'simple' || value === 'full' ? value : null;
+
 /**
  * Configurações de exibição do app: tema + camada de acessibilidade.
  *
@@ -48,6 +61,7 @@ const themeFrom = (value: string | null): Theme | null =>
 export function useSettings(): AppSettings {
   const [a11y, setA11yState] = useState(false);
   const [theme, setThemeState] = useState<Theme>('light');
+  const [view, setViewState] = useState<ViewMode>('simple');
 
   // Hidrata do storage/URL somente no cliente (evita divergência de hidratação).
   useEffect(() => {
@@ -55,6 +69,7 @@ export function useSettings(): AppSettings {
     const urlA11y = params.get('a11y');
     setA11yState(urlA11y ? urlA11y === 'on' : read(A11Y_KEY) === 'on');
     setThemeState(themeFrom(params.get('theme')) ?? themeFrom(read(THEME_KEY)) ?? 'light');
+    setViewState(viewFrom(params.get('view')) ?? viewFrom(read(VIEW_KEY)) ?? 'simple');
   }, []);
 
   useEffect(() => {
@@ -71,8 +86,13 @@ export function useSettings(): AppSettings {
     write(THEME_KEY, theme === 'dark' ? 'dark' : null);
   }, [theme]);
 
+  useEffect(() => {
+    write(VIEW_KEY, view === 'full' ? 'full' : null);
+  }, [view]);
+
   const setA11y = useCallback((v: boolean) => setA11yState(v), []);
   const setTheme = useCallback((v: Theme) => setThemeState(v), []);
+  const setView = useCallback((v: ViewMode) => setViewState(v), []);
 
-  return { a11y, setA11y, theme, setTheme };
+  return { a11y, setA11y, theme, setTheme, view, setView };
 }

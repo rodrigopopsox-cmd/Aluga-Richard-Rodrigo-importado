@@ -31,6 +31,18 @@ export function AdminApp() {
   const [draft, setDraft] = useState({ title: '', where: properties[0], urgent: false });
   const [toasts, setToasts] = useState<Array<ToastInput & { id: number }>>([]);
   const settings = useSettings();
+  // Passos do onboarding concluídos (ids separados por vírgula). Persistido para a
+  // tela não voltar a cada reload — no app real isso vem do banco.
+  const [onbRaw, setOnbRaw] = useStoredState<string>('aluga_onboarding', '');
+  const onbDone = onbRaw ? onbRaw.split(',').filter(Boolean) : [];
+  const onbComplete = onbRaw.split(',').filter(Boolean).length >= 5;
+  const toggleOnb = useCallback(
+    (id: string) => {
+      const next = onbDone.includes(id) ? onbDone.filter((x) => x !== id) : [...onbDone, id];
+      setOnbRaw(next.join(','));
+    },
+    [onbDone, onbRaw, setOnbRaw],
+  );
 
   const goTo = (m: ModuleId) => {
     setModule(m);
@@ -73,6 +85,8 @@ export function AdminApp() {
       <Shell module={module} setModule={goTo} view={view} setView={setView} onLogout={logout} settings={settings}>
         {(bp) => {
           if (module === 'dash') {
+            // Enquanto os 5 passos não estão feitos, o painel É o onboarding.
+            if (!onbComplete) return <OnboardingScreen bp={bp} done={onbDone} toggle={toggleOnb} />;
             return (
               <>
                 {bp === 'm' && (
@@ -89,7 +103,7 @@ export function AdminApp() {
                 {view === 'analytics' ? (
                   <AnalyticsScreen bp={bp} />
                 ) : (
-                  <DashboardScreen bp={bp} tasks={tasks} onAddTask={() => setAdding(true)} go={goTo} />
+                  <DashboardScreen bp={bp} tasks={tasks} onAddTask={() => setAdding(true)} go={goTo} simple={settings.view === 'simple'} />
                 )}
               </>
             );
@@ -97,7 +111,6 @@ export function AdminApp() {
           if (module === 'props') return <PropertiesScreen bp={bp} toast={toast} />;
           if (module === 'maint') return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={() => setAdding(true)} toast={toast} />;
           if (module === 'plans') return <PlansScreen bp={bp} toast={toast} />;
-          if (module === 'start') return <OnboardingScreen bp={bp} toast={toast} />;
           return <FinanceScreen bp={bp} toast={toast} />;
         }}
       </Shell>

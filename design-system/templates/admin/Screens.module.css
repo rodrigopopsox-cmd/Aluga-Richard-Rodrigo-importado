@@ -538,6 +538,35 @@
 }
 
 /* Planos — lista de regras de cobrança (label à esquerda, valor à direita). */
+/* Glossario "Como funciona" — termo como etiqueta, explicacao em texto corrido.
+   Sem negrito: o peso vem do Badge, nao da fonte. */
+.glossary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4) var(--space-6);
+  margin: var(--space-5) 0 0;
+}
+
+.glossaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.glossaryText {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-body);
+}
+
+@media (min-width: 640px) {
+  .glossary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .rules {
   display: grid;
   grid-template-columns: 1fr;
