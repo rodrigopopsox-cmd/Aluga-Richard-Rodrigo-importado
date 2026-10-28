@@ -4,7 +4,7 @@
 > projeto sem perguntar nada: o que já está pronto, o que foi corrigido, como rodar e
 > quais são as regras inegociáveis.
 >
-> Última atualização: 2026-10-27.
+> Última atualização: 2026-10-29.
 
 ---
 
@@ -15,7 +15,7 @@ Site do **Aluga** (gestão de aluguéis para o mercado brasileiro), composto de 
 | Frente | O que é | Onde vive |
 |---|---|---|
 | **Vitrine do Design System** | Página `/design-system` que exibe todos os componentes, tokens e telas de exemplo | `src/app/design-system/` |
-| **Template do painel admin** | Telas reais do produto (Painel, Imóveis, Manutenção, Financeiro, Login) montadas só com componentes do design system | `design-system/templates/admin/` |
+| **Template do painel admin** | Telas reais do produto, montadas só com componentes do design system. **7 telas da v1 já desenhadas** (ver seção 4.7) | `design-system/templates/admin/` |
 
 O design system é a **fonte da verdade visual**: nada de CSS solto, nada de cor/tamanho
 inventado fora dos tokens.
@@ -142,6 +142,74 @@ cor de ação principal.
 **Status:** corrigido, aplicado no Drive, no commit e **confirmado pelo Rodrigo em tela**
 (engrenagem no rail, painel por cima dos cards, tema claro/escuro funcionando).
 
+### 4.5 Tela de planos com os preços do Aluga
+
+Commit `c0025c8`. **Aprovada pelo Rodrigo em 28/10/2026 sem ressalva** — *"os planos eu
+gostei"*. Não mexer.
+
+- `components/marketing/PlanCard.tsx` + `PricingTable.tsx` — componentes novos.
+- Preços **de `PRODUCT.md`**, não do AluggaPro: Essencial R$ 59 · Família R$ 99 ·
+  Patrimônio R$ 209 · Investidor R$ 269.
+- O que `PRODUCT.md` **não** define ficou vazio de propósito: plano destacado, lista de
+  recursos por plano. Quando o Rodrigo fechar isso com os fundadores (tarefa 14), é só
+  preencher `badge`/`highlighted`/`features`.
+
+### 4.6 Onboarding como estado de entrada
+
+Commits `50bbffc` + `d4eae79`. **Duas correções do Rodrigo aplicadas:**
+
+1. *"eu quero manter todas as funçoes do antigo painel"* → **Completo passou a ser o padrão**
+   (commit `02578c2`), não Simples.
+2. *"o primeiros passos deve ser atribuido na hora de entrada do usuario... nao como uma
+   opçao do nosso menu"* → o onboarding aparece **no lugar do painel** enquanto os 5 passos
+   não fecham; não é item de menu.
+
+- `components/data/StepChecklist.tsx` — componente novo do design system.
+- `useSettings.ts` ganhou `ViewMode` (`aluga_view`), lido também de `?view=` na URL.
+- A preferência de exibição mora em **Configurações** (menu da engrenagem), não num toggle
+  solto na tela.
+
+### 4.7 As 7 telas da v1 — tarefa 5 do Segundo Cérebro, FECHADA
+
+Commits `f997f43` `528b6cc` `f4924d9` `c56e6c7` `59c7959` `50ebd2f` `8b1c812` `b993638`
+`ee8b8d4`. Todas com `check-tokens` 208 OK, `tsc` limpo e render validado em rota
+temporária (HTTP 200 sem 500), removida depois.
+
+| # | Tela | Requisito da spec | O que entrega |
+|---|---|---|---|
+| 1 | **Este mês** (Modo simples) | R7 | cabeçalho com mês e navegação · "R$ recebidos de R$ esperados" · um card por unidade com status **em palavras** · botões **Recebi** e **Lembrar no WhatsApp** |
+| 2 | **Cobranças** | R3 | 5 estados em palavras · recebimento manual com valor/data/origem · **recebimento parcial deixa em aberto e mostra o saldo** · desfazer com registro de quem e quando |
+| 3 | **Recebimentos** | R7 | 4 cards (Recebido/Despesas/Resultado/Ocupação) · SegmentedControl Mês/Trimestre/Ano · fluxo de caixa · **"Precisa de atenção"** com Switch "Lembretes no WhatsApp" |
+| 4 | **Inquilinos** | R2 | nome, CPF/CNPJ, **WhatsApp obrigatório**, e-mail opcional · unidades como badges · "sem unidade" como estado real |
+| 5 | **Contratos** | R2 | unidade, inquilino, valor, dia de vencimento (1–31), início, fim opcional, índice de reajuste (IGP-M/IPCA/% fixo/nenhum) e mês de aniversário · **Encerrar** derivado do campo `fim` |
+| 6 | **Imóveis e Unidades** | R2 | apelido, tipo, endereço com CEP, titulares com % somando 100 · unidade alugada/vaga · **a tabela lista unidades**, imóvel como contexto (regra "imóvel de uma unidade só") · **limite do plano** com tela "Seu plano permite N unidades" |
+| 7 | **Despesas** | R8 | categoria (IPTU/condomínio/manutenção/taxa/outro), valor, data, quem pagou · **informe de rendimentos por titular** mês a mês aplicando a % · separado por inquilino PF/PJ · **extrato CSV** |
+
+**Componentes novos do design system que saíram da tarefa 5:**
+
+| Componente | Para quê |
+|---|---|
+| `MaskedInput` (`components/forms/`) | máscaras de CPF, CNPJ, telefone e CEP. Formata mas **não valida dígito verificador** — decisão explícita: validação é regra de formulário |
+| `StepChecklist` (`components/data/`) | o checklist de 5 passos do onboarding |
+| `PlanCard` / `PricingTable` (`components/marketing/`) | a tela de planos |
+
+**Ícones novos no registro:** `chevron-left`, `chevron-right`, `file-signature`, `receipt`.
+
+**Menu do rail depois da tarefa 5:** Painel · Imóveis · Manutenção · Recebimentos · Planos ·
+Cobranças · Inquilinos · Contratos · Despesas. ("Financeiro" virou **Recebimentos**.)
+
+**Ressalvas honestas — o que NÃO foi validado:**
+
+- Os **diálogos de cadastro** das telas 4, 5, 6 e 7 não foram testados com clique. A
+  validação é SSR: prova que compila e que a lista renderiza certa. Roteiro de teste em
+  `ROTEIRO-REVISAO-TELAS.md`.
+- A **consulta de CEP** (Imóveis) não foi testada: ViaCEP dá timeout no sandbox. No
+  navegador do Rodrigo deve funcionar, mas não foi visto funcionando.
+- A **validação de dígito verificador de CPF/CNPJ não existe** em lugar nenhum do app.
+- O **Painel** (dashboard) ainda mostra cards do template genérico que não existem no
+  produto: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
+  "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
+
 ---
 
 ## 5. Armadilhas conhecidas (já pagamos por elas)
@@ -191,6 +259,48 @@ cor de ação principal.
     finalmente testei, o acesso funcionou normalmente e o levantamento inteiro foi feito
     em uma rodada. Um `fetch_page` custa segundos; uma premissa errada custou dias.
     Regra: **antes de dizer "não dá", tentar.**
+14. **NUNCA use `var(--border)` — esse token não existe.** O certo é **`--border-subtle`**
+    (ou `--border-default` / `--border-strong`). Errei isso na tela de Despesas e só peguei
+    porque rodei o validador. **Outros tokens que já usei por engano e não existem:**
+    `--text-primary`, `--tracking-wide`, `--space-12`, `--shadow-sm`, `--font-mono` (não há
+    fonte mono no design system). → **Sempre** rodar o validador que cruza os `var(--…)` do
+    CSS com os tokens definidos antes de commitar:
+
+    ```python
+    import io, re, glob
+    defined = set()
+    for f in glob.glob('design-system/tokens/*.css'):
+        defined |= set(re.findall(r'^\s*(--[a-z0-9-]+)\s*:', io.open(f, encoding='utf-8').read(), re.M))
+    css = io.open('design-system/templates/admin/Screens.module.css', encoding='utf-8').read()
+    used = set(re.findall(r'var\((--[a-z0-9-]+)\)', css))
+    print('invalidos:', sorted(used - defined))
+    ```
+
+15. **`rm -rf .next` com o servidor rodando faz o Turbopack entrar em pânico** e reiniciar.
+    Não quebra — ele se recupera e serve 200 —, mas suja o log e pode mascarar um erro real
+    de runtime. → Pare o servidor antes, ou ignore o pânico sabendo o que é.
+16. **`.next` guarda rotas de validação já removidas.** O `tsc` passa a acusar
+    `Cannot find module '.../valN/page.js'` — erro fantasma, o arquivo não existe mais.
+    Aconteceu 2 vezes. → **`rm -rf .next` antes de rodar o `tsc`.**
+17. **`python3` com `str.replace` sem acentos apaga os acentos do texto de interface.**
+    Aconteceu no commit `528b6cc`: `label="Mes anterior"` entrou sem acento e teve que ser
+    restaurado. → Ao gerar TSX por script, mantenha os acentos do português no bloco novo e
+    confira com `grep` depois.
+18. **Falso negativo na validação de HTML.** O React insere `<!-- -->` entre interpolações
+    JSX, então `vence {dueLabel(c)}` vira `vence <!-- -->dia 5` no HTML servido. Procurar a
+    string colada dá FALTA sem haver falha nenhuma. → Normalizar com
+    `re.sub(r'<!--\s*-->', '', html)` **antes** de conferir. Aconteceu 3 vezes.
+19. **`cd <dir> && <cmd>` falha repetidamente com `exit_code: null`** (4×, sempre no
+    `npx tsc`). → Passe o diretório no parâmetro `cwd` da ferramenta em vez de encadear `cd`.
+20. **Erro de TypeScript apontando linha sem string nenhuma** = aspa desequilibrada em
+    outro lugar. Aconteceu no `SimpleModeScreen.tsx`: o `tsc` apontava "Unterminated string
+    literal" na linha 129, que não tinha string. → **Contar aspas/backticks do arquivo antes
+    de procurar.** Contando deu 27 (ímpar) e achei em 30 segundos.
+21. **Calcular o esperado à mão antes de declarar FALTA na validação.** Em Cobranças, 4
+    "FALTA" que eu ia commitar como bug eram dados meus errados: `R$ 3.200` estava errado
+    (recebido = 1200+1000+400 = **R$ 2.600**), `Sala 2` é de 11/2026 e não aparece em
+    10/2026, e "Registrar recebimento" só renderiza com o diálogo aberto. → A validação
+    automática só é útil se o valor esperado estiver certo.
 
 ---
 
@@ -220,10 +330,36 @@ cor de ação principal.
 ## 7. Git — estado
 
 - Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
-- Commit do trabalho: **`81af208`** — *feat(design-system): acessibilidade e tema como
-  configuracao no template do painel* — já pushed para o `origin`.
-- O `main` do repo (`33f6853`) **ainda não tem** esse trabalho. Para levar pra `main` é
+- **Último commit pushed: `ee8b8d4`** — *feat(design-system): tela de Despesas e informe de
+  IR (R8)*.
+- O `main` do repo (`33f6853`) **não tem** nada desse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
+
+**Comandos para o Rodrigo pegar qualquer entrega:**
+
+```powershell
+cd "C:\Users\Digo Nego\Documents\Aluga-Richard-Rodrigo-importado"
+git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
+```
+
+**Linha do tempo dos commits** (todos pushed na branch da sessão):
+
+| Commit | O que |
+|---|---|
+| `2564d06` `c48fdcb` `dd9db6e` `33ed4bd` | tokens de acessibilidade + docs sincronizados com o Drive |
+| `81af208` | acessibilidade e tema como configuração no template |
+| `c0025c8` | tela de planos (R$ 59/99/209/269) |
+| `50bbffc` `d4eae79` | onboarding como estado de entrada |
+| `e982dab` | identidade provisória + ícones PWA |
+| `02578c2` | Completo passa a ser o padrão de exibição |
+| `e7bdd27` | spec v1 atualizada |
+| `f997f43` `528b6cc` | tela "Este mês" (Modo simples) + correção de tamanhos |
+| `f4924d9` | tela de Cobranças (R3) |
+| `c56e6c7` `59c7959` | tela de Recebimentos (R7) + correção de proporções |
+| `50ebd2f` | tela de Inquilinos + componente `MaskedInput` |
+| `8b1c812` | tela de Contratos |
+| `b993638` | tela de Imóveis e Unidades |
+| `ee8b8d4` | tela de Despesas + informe de IR (R8) |
 - **Drive 100% sincronizado e verificado byte a byte** (2026-10-27): todos os arquivos
   entregues foram baixados de volta do Drive e comparados com `diff` contra o espelho
   local. Duas corrupções de push foram encontradas e corrigidas: `Showcase.tsx`
@@ -248,6 +384,18 @@ cor de ação principal.
   conexão bancária, portal do inquilino autenticado, vitrine publicada e cálculos
   fiscais com valores reais. Resolve com conta de homologação e dados sintéticos.
 - [ ] **Levar o commit para a `main`** — depende de autorização do Rodrigo.
+- [ ] **Limpar o Painel (dashboard).** Única tela do painel que ainda mostra o template
+      genérico: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
+      "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
+- [ ] **Revisar as 7 telas com o Rodrigo.** Roteiro em `ROTEIRO-REVISAO-TELAS.md`. Faltam
+      testar com clique: diálogos de cadastro, CEP (Imóveis), limite do plano e download do
+      CSV (Despesas).
+- [ ] **Validar dígito verificador de CPF/CNPJ** — não existe em lugar nenhum do app.
+      Decisão do Rodrigo pendente: se quer, e onde mora (regra de formulário, não máscara).
+- [ ] **Informe de IR em PDF** — hoje sai em tabela e CSV. Falta o formato, não a
+      informação.
+- [ ] **Sprint 2 do Segundo Cérebro** — landing (7), tutorial WhatsApp (8), mensagens (9),
+      linguagem simples (10), tutorial Mercado Pago (11). Nada iniciado.
 
 ---
 
@@ -262,11 +410,19 @@ assumir:
 
 **Sprints:** 1 → 06/11/2026 · 2 → 20/11/2026 · 3 → 04/12/2026 · Validação → 15/01/2027.
 
-**A tarefa 1 da Sprint 1 — "Ajustar tokens de acessibilidade no DESIGN.md" — JÁ ESTÁ
-PRONTA.** Os critérios de aceite dela (laranja escuro com contraste AA, texto base 16px,
-alvos de toque 48px, `npm run check` passando, vitrine mostrando o novo laranja) foram
-todos cumpridos e validados em 2026-10-27 — ver seção 4.1. Ela é dependência da tarefa
-"Desenhar as telas da v1", a maior da Sprint 1 (8h).
+**Estado da Sprint 1 em 29/10/2026 — 4 das 6 tarefas fechadas:**
+
+| # | Tarefa | Estado |
+|---|---|---|
+| 1 | Ajustar tokens de acessibilidade no DESIGN.md | **FEITA** (`2564d06`) — todos os critérios de aceite cumpridos, ver seção 4.1 |
+| 2 | Pesquisa de nome: shortlist e consulta ao INPI | **em aberto** — é do Rodrigo e depende de consulta externa. Não bloqueia nada |
+| 3 | Desenhar o onboarding | **FEITA** (`50bbffc` `d4eae79`), mas o "pronto quando: fluxo aprovado" não foi fechado |
+| 4 | Identidade provisória 'Aluga' e ícone do PWA | **FEITA** (`e982dab`) |
+| 5 | Desenhar as telas da v1 a partir dos templates | **FEITA** (`f997f43` … `ee8b8d4`) — 7 telas, ver seção 4.7. Aprovação do Richard pendente |
+| 6 | *(título cortado — card de 4h)* | **desconhecida** |
+
+A tarefa 1 era dependência da 5. Com as duas fechadas, **a Sprint 1 está praticamente
+fechada** — falta só a 2 (nome) e a 6 (título desconhecido).
 
 **Decisões de produto que o backlog revela:**
 
@@ -287,8 +443,11 @@ todos cumpridos e validados em 2026-10-27 — ver seção 4.1. Ela é dependênc
 - **Público-alvo inclui pessoa idosa** — o tutorial de WhatsApp é "pensado para pessoa
   mais velha", com imagens. É a justificativa de produto do trabalho de acessibilidade.
 
-**Consequência para o template do painel:** se ele for a base da v1, precisa **encolher**
-para esse vocabulário, não crescer. Ver a tabela de gap na seção 6 do
+**Consequência para o template do painel — JÁ APLICADA:** o template **encolheu** para o
+vocabulário da v1. As 7 telas novas usam `Proprietário/Imóvel/Unidade/Inquilino/Contrato/
+Cobrança/Recebimento`, e o "Financeiro" do rail virou **Recebimentos**. O que sobrou do
+template genérico é o **Painel** (dashboard) e **Manutenção** — e Manutenção não existe no
+produto (está fora do vocabulário da v1). Ver a tabela de gap na seção 6 do
 `SEGUNDO-CEREBRO-ATIVIDADES.md`.
 
 ---
@@ -312,10 +471,37 @@ design-system/
     Shell.module.css           ← .railColumn (onde entra o z-index: 20)
     SettingsMenu.tsx           ← engrenagem + popover (align: 'rail' | 'header')
     SettingsMenu.module.css    ← .panel / .fromRail / .fromHeader / .hint
-    useSettings.ts             ← localStorage aluga_a11y / aluga_theme
+    useSettings.ts             ← localStorage aluga_a11y / aluga_theme / aluga_view
     useBreakpoint.ts  data.ts  index.ts  README.md
-    DashboardScreen  AnalyticsScreen  PropertiesScreen  MaintenanceScreen  FinanceScreen  LoginScreen
+
+  templates/admin — telas da v1 (novas, todas validadas):
+    SimpleModeScreen.tsx      ← "Este mês" (Modo simples, R7)      + simpleModeData.ts
+    ChargesScreen.tsx         ← Cobranças (R3)                     + chargesData.ts
+    FinanceScreen.tsx         ← Recebimentos (R7)                  + receiptsData.ts
+    TenantsScreen.tsx         ← Inquilinos (R2)                    + tenantsData.ts
+    ContractsScreen.tsx       ← Contratos (R2)                     + contractsData.ts
+    PropertiesScreen.tsx      ← Imóveis e Unidades (R2)            + propertiesData.ts
+    ExpensesScreen.tsx        ← Despesas + informe IR (R8)         + expensesData.ts
+    PlansScreen.tsx           ← Planos (R$ 59/99/209/269)
+    OnboardingScreen.tsx      ← estado de entrada (5 passos)
+
+  templates/admin — ainda do template genérico (a limpar):
+    DashboardScreen.tsx       ← Painel: cards "Visitas", "Novos Contratos", "Manutenção",
+                                "Insights (Assistente IA)", "Saúde Financeira" — NÃO existem
+                                no produto. Próxima tarefa grande.
+    MaintenanceScreen.tsx     ← Manutenção não existe no vocabulário da v1
+    AnalyticsScreen.tsx  LoginScreen.tsx
+
+  components — novos na tarefa 5:
+    forms/MaskedInput.tsx     ← máscaras cpf / cnpj / phone / cep
+    data/StepChecklist.tsx    ← checklist de 5 passos do onboarding
+    marketing/PlanCard.tsx    PricingTable.tsx
 src/app/design-system/
     page.tsx  Showcase.tsx  Showcase.module.css
     admin/page.tsx            ← renderiza <AdminApp />
 ```
+
+**Rotas temporárias de validação:** quando uma tela nova precisa ser validada em tela, eu
+crio `src/app/design-system/valNN/page.tsx`, dou `curl`, confiro o HTML servido e **removo
+a rota**. `val3` a `val13` já foram todas removidas. Se você encontrar uma pasta `val*` no
+repo, é lixo — apague.

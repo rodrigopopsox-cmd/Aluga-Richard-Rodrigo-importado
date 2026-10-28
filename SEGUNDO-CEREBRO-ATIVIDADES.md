@@ -13,6 +13,10 @@
 > O quadro declara **15 tarefas** e **~58h** na coluna `A fazer`. Consegui identificar
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
+>
+> **Estado em 29/10/2026: 5 tarefas feitas (1, 3, 4, 5 + a 2 depende de consulta externa).**
+> Sprint 1 está com 4 das 6 tarefas fechadas; a 2 (pesquisa de nome/INPI) é do Rodrigo e
+> depende de consulta externa; a 6 segue sem título.
 
 ---
 
@@ -91,8 +95,8 @@ arredondamento do "~58h" ou a tarefa 6 ter tempo diferente do que li no card.
 > Pronto quando: `npm run check` passa e a vitrine `/design-system` mostra o novo laranja.
 > Ref.: `docs/specs/v1.md`
 
-**🔴 ESTA TAREFA JÁ ESTÁ FEITA.** Os três critérios dela são exatamente o que foi entregue
-e validado em 2026-10-27:
+**🔴 ESTA TAREFA JÁ ESTÁ FEITA** (validada em 27/10/2026, commit `2564d06`). Os três
+critérios dela são exatamente o que foi entregue:
 
 | Critério da tarefa | Entregue |
 |---|---|
@@ -142,6 +146,24 @@ Duas diferenças de produto, não de redação:
 importante do documento: o Aluga assume que o usuário quer o **modo simples por padrão**.
 Isso é o mesmo eixo da camada de acessibilidade — o usuário escolhe como quer ver.
 
+**✅ TAREFA FEITA** — commits `50bbffc` + `d4eae79`.
+
+| Entregue | Onde |
+|---|---|
+| Onboarding no lugar do painel enquanto os 5 passos não fecham | `OnboardingScreen.tsx` |
+| Checklist de 5 passos (componente novo do design system) | `StepChecklist.tsx` |
+| Bloco "Como prefere ver?" (Simples/Completo) | `SettingsMenu.tsx` |
+| "Como funciona" com glossário sem negrito | `OnboardingScreen.tsx` |
+
+**Duas decisões do Rodrigo que mudaram o que foi entregue:**
+1. *"eu quero manter todas as funçoes do antigo painel"* → **Completo passou a ser o
+   padrão** (commit `02578c2`), não Simples.
+2. *"o primeiros passos deve ser atribuido na hora de entrada do usuario... nao como uma
+   opçao do nosso menu"* → o onboarding é **estado de entrada**, não item de menu.
+
+O "pronto quando: fluxo aprovado" **não foi fechado** — o Rodrigo ainda não assinou o
+fluxo final.
+
 ### 4. Identidade provisória 'Aluga' e ícone do PWA — 06/11 · 3h · Normal
 
 > Para: Rodrigo (Marca). Sprint 1. O que fazer: Wordmark 'Aluga' do design system + ícone
@@ -150,6 +172,19 @@ Isso é o mesmo eixo da camada de acessibilidade — o usuário escolhe como que
 
 **O Aluga é PWA** — instalado na tela inicial do celular. Exige ícone em vários tamanhos e
 favicon. O design system ainda não tem conjunto de ícones de app.
+
+**✅ TAREFA FEITA** — commit `e982dab`, 15 arquivos, 517 inserções.
+
+| Entregue | Como |
+|---|---|
+| Ícones do app em vários tamanhos | `scripts/build-icons.mjs` com `sharp` |
+| `manifest.json` do PWA | gerado pelo mesmo script |
+| Favicon | idem |
+| Links no `<head>` | validado no HTML servido com `curl` |
+
+**Lição que ficou:** `sharp` resolve de `/tmp` com `ERR_MODULE_NOT_FOUND` e é ESM-only;
+PIL e numpy **não** estão instalados no sandbox. Ícones gerados com `sharp` a partir da
+raiz do projeto.
 
 ### 5. Desenhar as telas da v1 a partir dos templates — 06/11 · 8h · Normal
 
@@ -165,6 +200,48 @@ já está pronta.
 
 **Vocabulário da v1:** `Proprietário · Imóvel · Unidade · Cobrança · Recebimento`.
 Note: **Unidade**, não Contrato. **Cobrança/Recebimento**, não Financeiro.
+
+**✅ TAREFA FEITA** — 7 telas, 8 commits, todas validadas. O "pronto quando: telas aprovadas
+pelo Richard" **não foi fechado**: o Rodrigo revisou e montou um roteiro de teste
+(`ROTEIRO-REVISAO-TELAS.md`), mas a aprovação final é do Richard.
+
+| # | Tela | Requisito | Commits |
+|---|---|---|---|
+| 1 | Este mês (Modo simples) | R7 | `f997f43` `528b6cc` |
+| 2 | Cobranças | R3 | `f4924d9` |
+| 3 | Recebimentos | R7 | `c56e6c7` `59c7959` |
+| 4 | Inquilinos | R2 | `50ebd2f` |
+| 5 | Contratos | R2 | `8b1c812` |
+| 6 | Imóveis e Unidades | R2 | `b993638` |
+| 7 | Despesas e informe de IR | R8 | `ee8b8d4` |
+
+**Componentes novos do design system que saíram da tarefa 5:**
+
+| Componente | Para quê |
+|---|---|
+| `MaskedInput` | máscaras de CPF, CNPJ, telefone e CEP — repete em Inquilinos, Contratos e Imóveis |
+| `StepChecklist` | o checklist de 5 passos do onboarding (tarefa 3) |
+| `PlanCard` / `PricingTable` | a tela de planos com R$ 59/99/209/269 |
+
+**Ícones novos no registro:** `chevron-left`, `chevron-right`, `file-signature`, `receipt`.
+
+**O que a tarefa 5 entregou além do pedido:** a tela de planos (com os preços do Aluga, não
+os do AluggaPro) e o onboarding — que eram tarefas vizinhas e estavam no mesmo caminho.
+
+**Ressalvas honestas, registradas:**
+
+- Os **diálogos de cadastro** das 4 telas com formulário não foram testados com clique — a
+  validação é SSR (compila + lista renderiza). Está no roteiro de revisão.
+- A **consulta de CEP** (Imóveis) não foi testada: ViaCEP dá timeout no sandbox. No
+  navegador do Rodrigo deve funcionar, mas não foi visto funcionando.
+- O **Painel** (dashboard) continua com cards do template genérico que não existem no
+  produto — "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)",
+  "Saúde Financeira". **É a próxima tarefa grande.**
+
+**Decisão do Rodrigo sobre o que não fazer:** *"vamos fazer so as tarefas que temos que
+fazer nao vamos se perder, pq provavelmente quem vai deixar funcional sem ser generico é
+meu socio"*. Ou seja: o trabalho de **tirar o genérico** e deixar funcional é do Richard
+(Produto). O Rodrigo fecha o que é **desenho, texto e fluxo**.
 
 ### 7. Landing page 'Aluga' na página inicial — 20/11 · 8h · Alta
 
@@ -295,28 +372,37 @@ para a v2"*, e o produto tem versões V0/V1/V2. **A confirmar com o Rodrigo.**
 *"Só componentes e tokens do design system"*. Ou seja, a landing **não pode** ter CSS
 solu — ela é prova de que o design system se sustenta sozinho.
 
-**Já entregue e que bate com o backlog:**
+**Já entregue e que bate com o backlog** (atualizado em 29/10/2026):
 
-- Tarefa 1 (tokens de acessibilidade) — **pronta**, todos os critérios de "pronto quando"
-  cumpridos.
-- A camada opt-in de a11y e o menu da engrenagem respondem à pergunta **"Como prefere
-  ver?"** da tarefa 3.
-
-**Gap novo que o backlog cria e o template não cobre:**
-
-| Do backlog | Situação no template |
+| Do backlog | Situação |
 |---|---|
-| **Modo simples ("Este mês")** como padrão | não existe — o template abre no painel completo |
-| **Cards por unidade** com ação `Recebi / Lembrar` | não existe |
-| **Onboarding com checklist de 5 passos** (imóvel → inquilino+contrato → 1ª cobrança → WhatsApp → Mercado Pago) | não existe |
-| **Pergunta "Como prefere ver?"** na entrada | não existe |
-| **Ícone de PWA** (vários tamanhos) + favicon | não existe |
-| **Vocabulário** `Proprietário/Imóvel/Unidade/Cobrança/Recebimento` | o template usa `Imóveis/Manutenção/Financeiro` |
-| **Planos R$ 59/99/209/269** | o template não tem tela de planos |
-| **Tutorial com imagens, para pessoa idosa** (WhatsApp e Mercado Pago) | não existe |
-| **Mensagens por momento** — D-3 / D0 / D+3, com confirmação ao inquilino e "Recebeu?" ao proprietário | não existe |
+| Tarefa 1 — tokens de acessibilidade | **pronta**, todos os critérios cumpridos |
+| Tarefa 3 — onboarding + "Como prefere ver?" | **pronta** (`50bbffc` `d4eae79`) |
+| Tarefa 4 — identidade provisória + ícone PWA | **pronta** (`e982dab`) |
+| Tarefa 5 — telas da v1 | **pronta** — 7 telas (ver seção 3) |
+
+**Gap que o backlog cria e o design system AINDA não cobre** — é o que sobra:
+
+| Do backlog | Situação |
+|---|---|
+| **Tutorial com imagens, para pessoa idosa** (WhatsApp e Mercado Pago) | não existe — tarefas 8 e 11 |
+| **Mensagens por momento** — D-3 / D0 / D+3, com confirmação ao inquilino e "Recebeu?" ao proprietário | não existe — tarefa 9 |
 | **Fluxo de retorno de OAuth** (voltou do Mercado Pago) | não existe |
-| **Wordmark 'Aluga'** | não existe |
+| **Landing page** com só componentes e tokens | não existe — tarefa 7 |
+| **Planos R$ 59/99/209/269 validados** | tela pronta, preços ainda hipótese — tarefa 14 |
+
+**Gap que existia e foi fechado na tarefa 5:**
+
+| Do backlog | Como ficou |
+|---|---|
+| Modo simples ("Este mês") | existe, com Completo como padrão (decisão do Rodrigo) |
+| Cards por unidade com `Recebi / Lembrar` | existe |
+| Onboarding com checklist de 5 passos | existe |
+| Pergunta "Como prefere ver?" | existe, em Configurações |
+| Ícone de PWA + favicon | existe |
+| Vocabulário `Proprietário/Imóvel/Unidade/Cobrança/Recebimento` | aplicado nas 7 telas novas |
+| Planos R$ 59/99/209/269 | tela pronta, aprovada pelo Rodrigo |
+| Wordmark 'Aluga' | existe |
 
 **Conflito de nomenclatura a resolver:** o menu que levantei no AluggaPro
 (`Meus Imóveis`, `Contratos`, `Financeiro`, `Vistorias`…) **não é** o vocabulário da v1 do
@@ -326,17 +412,34 @@ for usado como base da v1, ele precisa **encolher**, não crescer.
 
 ---
 
-## 7. Roteiro sugerido (a confirmar com o Rodrigo)
+## 7. Roteiro — situação em 29/10/2026
 
-1. **Marcar a tarefa 1 como pronta** — destrava a 5, que é a maior da Sprint 1 (8h).
-2. **Fechar as 2 últimas lacunas** — título da 6 e da 11, e abrir a coluna `Aguardando`.
-3. **Decidir o destino do template:** encolher para o vocabulário da v1
-   (`Unidade`, `Cobrança/Recebimento`, modo simples) ou manter o template como está e
-   construir a v1 em cima só do que serve.
-4. **Refazer a tela de planos** com R$ 59/99/209/269 — a tabela atual do AluggaPro não
-   serve.
-5. **O checklist de onboarding do Aluga** é o componente de maior valor: é a primeira
-   impressão do produto e não existe no design system.
+**Feito na Sprint 1:**
+
+1. ~~Marcar a tarefa 1 como pronta~~ — **feito** (destravou a 5).
+2. ~~Decidir o destino do template~~ — **decidido: encolher para o vocabulário da v1.** As
+   7 telas novas usam `Proprietário/Imóvel/Unidade/Inquilino/Contrato/Cobrança/Recebimento`,
+   e o menu do rail foi renomeado (o "Financeiro" virou **Recebimentos**).
+3. ~~Refazer a tela de planos~~ — **feito** (`c0025c8`), com R$ 59/99/209/269. Aprovada pelo
+   Rodrigo sem ressalva.
+4. ~~Checklist de onboarding~~ — **feito** (`50bbffc` `d4eae79`).
+
+**Ainda em aberto na Sprint 1:**
+
+- **Tarefa 2 — pesquisa de nome e INPI.** É do Rodrigo e depende de consulta externa. Não
+  bloqueia nada.
+- **Tarefa 6 — título desconhecido.** Card de 4h em 06/11. A observação não foi passada.
+- **Limpeza do Painel.** O dashboard ainda mostra cards do template genérico que não existem
+  no produto. Não é tarefa do kanban, mas é a próxima tarefa grande e a única tela do painel
+  que ainda mente sobre o produto.
+
+**Sprint 2 (20/11) — nada iniciado:** landing (7), tutorial WhatsApp (8), mensagens (9),
+linguagem simples (10), tutorial Mercado Pago (11).
+
+**Ressalva que o Rodrigo registrou em 29/10/2026:** *"provavelmente quem vai deixar
+funcional sem ser generico é meu socio"*. Ou seja, a **parte funcional** — banco, job de
+cobrança, integração real — é do Richard. O Rodrigo fecha **desenho, texto e fluxo**. Evita
+gastar hora do Rodrigo no que é do Richard.
 
 ---
 
