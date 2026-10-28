@@ -853,3 +853,28 @@
   line-height: var(--leading-snug);
   color: var(--text-secondary);
 }
+
+/* ── Inquilinos (R2) ───────────────────────────────────────────────────── */
+
+.rowStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.rowActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.rowMuted {
+  color: var(--text-muted);
+}

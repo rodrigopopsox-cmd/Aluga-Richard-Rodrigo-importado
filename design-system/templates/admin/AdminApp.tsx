@@ -14,6 +14,7 @@ import { PlansScreen } from './PlansScreen';
 import { PropertiesScreen } from './PropertiesScreen';
 import { Shell, type DashView, type ModuleId } from './Shell';
 import { SimpleModeScreen } from './SimpleModeScreen';
+import { TenantsScreen } from './TenantsScreen';
 import { useSettings } from './useSettings';
 import { useStoredState } from './useStoredState';
 import styles from './AdminApp.module.css';
@@ -117,6 +118,7 @@ export function AdminApp() {
           if (module === 'maint') return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={() => setAdding(true)} toast={toast} />;
           if (module === 'plans') return <PlansScreen bp={bp} toast={toast} />;
           if (module === 'charges') return <ChargesScreen bp={bp} toast={toast} />;
+          if (module === 'tenants') return <TenantsScreen bp={bp} toast={toast} />;
           return <FinanceScreen bp={bp} toast={toast} />;
         }}
       </Shell>

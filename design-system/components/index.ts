@@ -13,6 +13,7 @@ export { Wordmark, type WordmarkProps } from './core/Wordmark';
 // forms
 export { Checkbox, type CheckboxProps } from './forms/Checkbox';
 export { Input, type InputProps } from './forms/Input';
+export { MaskedInput, type MaskedInputProps, type MaskKind } from './forms/MaskedInput';
 export { SegmentedControl, type SegmentedControlProps } from './forms/SegmentedControl';
 export { Select, type SelectOption, type SelectProps } from './forms/Select';
 export { Switch, type SwitchProps } from './forms/Switch';
