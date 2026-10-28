@@ -212,7 +212,7 @@ perguntar ao time, porque afeta a tela de planos.
 
 ## 4. Portal do inquilino
 
-Três funcionalidades, e só três — o inquilino não gerência nada, só consulta:
+Três funcionalidades, e só três — o inquilino não gerencia nada, só consulta:
 
 1. **Faturas e segunda via** — boleto e Pix do mês, sempre atualizados
 2. **Recibos e histórico** — comprovantes de tudo que já pagou
@@ -326,8 +326,8 @@ existe** no produto real (o que existe é `Vistorias` e `Parceiros`, que são co
 diferentes).
 
 > ⚠️ **Isso é um erro de escopo a corrigir:** o template foi montado com "Manutenção"
-  onde o produto tem "Recebimentos / Vistorias". O menu do template está **mais longo**
-  que o real em um item e **mais curto** em onze.
+>   onde o produto tem "Recebimentos / Vistorias". O menu do template está **mais longo**
+>   que o real em um item e **mais curto** em onze.
 
 ### 7.2 Componentes que esses módulos vão exigir
 
