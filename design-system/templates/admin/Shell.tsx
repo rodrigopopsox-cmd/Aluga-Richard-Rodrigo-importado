@@ -8,7 +8,15 @@ import { useBreakpoint, type Breakpoint } from './useBreakpoint';
 import type { AppSettings } from './useSettings';
 import styles from './Shell.module.css';
 
-export type ModuleId = 'dash' | 'props' | 'maint' | 'fin' | 'plans' | 'charges' | 'tenants';
+export type ModuleId =
+  | 'dash'
+  | 'props'
+  | 'maint'
+  | 'fin'
+  | 'plans'
+  | 'charges'
+  | 'tenants'
+  | 'contracts';
 export type DashView = 'overview' | 'analytics';
 
 export const MODULES: Array<RailItem & { id: ModuleId }> = [
@@ -19,6 +27,7 @@ export const MODULES: Array<RailItem & { id: ModuleId }> = [
   { id: 'plans', label: 'Planos', icon: 'box' },
   { id: 'charges', label: 'Cobranças', icon: 'file-text' },
   { id: 'tenants', label: 'Inquilinos', icon: 'users' },
+  { id: 'contracts', label: 'Contratos', icon: 'file-signature' },
 ];
 
 export interface ShellProps {

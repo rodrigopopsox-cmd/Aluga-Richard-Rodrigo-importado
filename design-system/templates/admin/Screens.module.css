@@ -878,3 +878,10 @@
 .rowMuted {
   color: var(--text-muted);
 }
+
+/* Formulario em duas colunas — so no desktop, onde o dialogo tem 560px. */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3-5) var(--space-4-5);
+}
