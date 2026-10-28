@@ -184,12 +184,26 @@ const brl = (v: number) => `R$ ${Math.round(v * 100).toLocaleString('pt-BR')}`;
 // ?theme=dark opens the showcase in dark mode (handy for screenshots and links).
 const noSubscribe = () => () => {};
 const urlTheme = (): Theme => (new URLSearchParams(window.location.search).get('theme') === 'dark' ? 'dark' : 'light');
+// ?a11y=on opens the showcase with the accessibility layer on (bigger type + 56px targets).
+// Falls back to the value saved by the admin template's settings menu, so both stay in sync.
+const urlA11y = (): boolean => {
+  const param = new URLSearchParams(window.location.search).get('a11y');
+  if (param) return param === 'on';
+  try {
+    return window.localStorage.getItem('aluga_a11y') === 'on';
+  } catch {
+    return false;
+  }
+};
 
 export function Showcase() {
   const router = useRouter();
   const initialTheme = useSyncExternalStore(noSubscribe, urlTheme, () => 'light' as Theme);
   const [chosenTheme, setTheme] = useState<Theme | null>(null);
   const theme = chosenTheme ?? initialTheme;
+  const initialA11y = useSyncExternalStore(noSubscribe, urlA11y, () => false);
+  const [chosenA11y, setA11y] = useState<boolean | null>(null);
+  const a11y = chosenA11y ?? initialA11y;
   const [tab, setTab] = useState('an');
   const [rail, setRail] = useState('props');
   const [range, setRange] = useState('Semana');
@@ -214,6 +228,17 @@ export function Showcase() {
     };
   }, [theme]);
 
+  // Opt-in accessibility layer: larger type scale + 56px touch targets.
+  // Purely additive — with data-a11y absent the approved design is untouched.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (a11y) root.dataset.a11y = 'on';
+    else delete root.dataset.a11y;
+    return () => {
+      delete root.dataset.a11y;
+    };
+  }, [a11y]);
+
   return (
     <div className={styles.page}>
       <header className={styles.top}>
@@ -231,6 +256,12 @@ export function Showcase() {
           value={theme}
           onChange={(v) => setTheme(v as Theme)}
         />
+        <span
+          className={styles.a11yToggle}
+          title="Acessibilidade: texto ampliado (base 18px) e alvos de toque de 56px"
+        >
+          <Switch checked={a11y} onChange={(v) => setA11y(v)} label="Acessibilidade" name="a11y" />
+        </span>
         <Button variant="dark" size="sm" iconRight="arrow-right" onClick={() => router.push('/design-system/admin')}>
           Template do painel
         </Button>

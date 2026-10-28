@@ -52,3 +52,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ── espelho de validacao / sincronizacao com o Drive ──────────────
+google_drive/
+*.zip
+*.patch
+*.log

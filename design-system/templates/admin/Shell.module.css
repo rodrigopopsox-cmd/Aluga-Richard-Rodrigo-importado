@@ -79,6 +79,10 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  /* `sticky` cria stacking context. Sem z-index explicito o popover da engrenagem
+     (e os tooltips do rail) ficam presos nesse contexto e saem atras dos cards
+     de conteudo, que vem depois no DOM. */
+  z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -155,3 +159,4 @@
   padding: 0 var(--space-7) var(--space-8) 0;
   min-width: 0;
 }
+

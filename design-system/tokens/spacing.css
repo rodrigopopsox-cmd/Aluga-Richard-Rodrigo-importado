@@ -23,9 +23,9 @@
   --page-gutter: var(--space-7);
 
   --control-h-xs: 26px;
-  --control-h-sm: 32px;
-  --control-h-md: 40px;
-  --control-h-field: 44px;
+  --control-h-sm: 48px;
+  --control-h-md: 48px;
+  --control-h-field: 48px;
   --control-h-lg: 48px;
 
   --rail-w: 72px;

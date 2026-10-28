@@ -7,3 +7,6 @@
 @import './radii.css';
 @import './effects.css';
 @import './base.css';
+/* Opt-in accessibility layer ([data-a11y="on"]): runtime adaptation, deliberately
+   outside the DESIGN.md ↔ tokens mirror, so `tokens:check` ignores it. */
+@import './a11y.css';

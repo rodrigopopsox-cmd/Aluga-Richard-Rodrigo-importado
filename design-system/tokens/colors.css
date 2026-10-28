@@ -16,6 +16,8 @@
   --orange-400: #FF6A44;
   --orange-500: #F75831;
   --orange-600: #E04A25;
+  --orange-700: #C2410C;
+  --orange-800: #9A3412;
   /* Ink */
   --ink-900: #0B1F27;
   --ink-800: #1B1B1B;
@@ -74,13 +76,14 @@
   --black-a60: rgba(0, 0, 0, 0.6);
   --orange-a16: rgba(247, 88, 49, 0.16);
   --orange-a35: rgba(247, 88, 49, 0.35);
+  --orange-800-a40: rgba(154, 52, 18, 0.4);
   --green-a16: rgba(34, 183, 34, 0.16);
   --red-a16: rgba(255, 45, 45, 0.16);
   --amber-a16: rgba(245, 165, 36, 0.16);
 
   /* ── 2. Semantic (light, default) ──────────────────────────── */
-  --brand: var(--orange-500);
-  --brand-hover: var(--orange-600);
+  --brand: var(--orange-700);
+  --brand-hover: var(--orange-800);
   --brand-soft: var(--orange-100);
   --brand-soft-fg: var(--orange-600);
   --on-brand: var(--white);
@@ -135,7 +138,7 @@
   --hatch-ink: var(--ink-a07);
   --on-glass: var(--ink-700);
 
-  --focus-ring: var(--orange-a35);
+  --focus-ring: var(--orange-800-a40);
 
   color-scheme: light;
 }

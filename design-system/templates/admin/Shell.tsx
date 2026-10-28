@@ -3,7 +3,9 @@
 import type { ReactNode } from 'react';
 import { Avatar, IconButton, Input, NavPills, SideRail, Wordmark, type RailItem } from '../../components';
 import { user } from './data';
+import { SettingsMenu } from './SettingsMenu';
 import { useBreakpoint, type Breakpoint } from './useBreakpoint';
+import type { AppSettings } from './useSettings';
 import styles from './Shell.module.css';
 
 export type ModuleId = 'dash' | 'props' | 'maint' | 'fin';
@@ -22,6 +24,7 @@ export interface ShellProps {
   view: DashView;
   setView: (v: DashView) => void;
   onLogout: () => void;
+  settings: AppSettings;
   children: (bp: Breakpoint) => ReactNode;
 }
 
@@ -29,7 +32,7 @@ export interface ShellProps {
  * App frame. Desktop/tablet: sticky icon rail + top bar (nav pills or page title, search ⌘K, chat/bell, avatar).
  * Mobile: header with icon buttons + floating bottom pill bar.
  */
-export function Shell({ module, setModule, view, setView, onLogout, children }: ShellProps) {
+export function Shell({ module, setModule, view, setView, onLogout, settings, children }: ShellProps) {
   const bp = useBreakpoint();
   const current = MODULES.find((m) => m.id === module) ?? MODULES[0];
 
@@ -44,6 +47,7 @@ export function Shell({ module, setModule, view, setView, onLogout, children }: 
           <span className={styles.spacer} />
           <IconButton icon="message-circle" label="Mensagens" dot />
           <IconButton icon="bell" label="Notificações" />
+          <SettingsMenu settings={settings} align="header" />
           <button type="button" onClick={onLogout} className={styles.avatarButton} title="Sair" aria-label="Sair">
             <Avatar name={user.name} size={40} />
           </button>
@@ -70,7 +74,12 @@ export function Shell({ module, setModule, view, setView, onLogout, children }: 
           value={module}
           onChange={(id) => setModule(id as ModuleId)}
           className={styles.rail}
-          footer={<IconButton icon="log-out" label="Sair" variant="ghost" onClick={onLogout} />}
+          footer={
+            <>
+              <SettingsMenu settings={settings} align="rail" />
+              <IconButton icon="log-out" label="Sair" variant="ghost" onClick={onLogout} />
+            </>
+          }
         />
       </div>
       <div className={styles.content}>

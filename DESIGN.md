@@ -13,6 +13,8 @@ colors:
   orange-400: "#FF6A44"
   orange-500: "#F75831"
   orange-600: "#E04A25"
+  orange-700: "#C2410C"
+  orange-800: "#9A3412"
   ink-900: "#0B1F27"
   ink-800: "#1B1B1B"
   ink-700: "#313131"
@@ -65,13 +67,14 @@ colors:
   black-a60: "rgba(0, 0, 0, 0.6)"
   orange-a16: "rgba(247, 88, 49, 0.16)"
   orange-a35: "rgba(247, 88, 49, 0.35)"
+  orange-800-a40: "rgba(154, 52, 18, 0.4)"
   green-a16: "rgba(34, 183, 34, 0.16)"
   red-a16: "rgba(255, 45, 45, 0.16)"
   amber-a16: "rgba(245, 165, 36, 0.16)"
   # ── Semantic (light theme, default) ──────────────────────
-  primary: "{colors.orange-500}"
-  brand: "{colors.orange-500}"
-  brand-hover: "{colors.orange-600}"
+  primary: "{colors.orange-700}"
+  brand: "{colors.orange-700}"
+  brand-hover: "{colors.orange-800}"
   brand-soft: "{colors.orange-100}"
   brand-soft-fg: "{colors.orange-600}"
   on-brand: "{colors.white}"
@@ -120,7 +123,7 @@ colors:
   chart-ink: "{colors.ink-700}"
   hatch-light: "{colors.white-a55}"
   hatch-ink: "{colors.ink-a07}"
-  focus-ring: "{colors.orange-a35}"
+  focus-ring: "{colors.orange-800-a40}"
   # ── Dark theme overrides (opt-in via data-theme="dark") ──
   # Same role names with a -dark suffix; roles not listed keep their light value.
   brand-soft-dark: "{colors.orange-a16}"
@@ -228,7 +231,7 @@ typography:
     lineHeight: 1.45
   body-md:
     fontFamily: Plus Jakarta Sans
-    fontSize: 14px
+    fontSize: 16px
     fontWeight: 400
     lineHeight: 1.45
   body-sm:
@@ -238,7 +241,7 @@ typography:
     lineHeight: 1.4
   label-md:
     fontFamily: Plus Jakarta Sans
-    fontSize: 12px
+    fontSize: 13px
     fontWeight: 400
     lineHeight: 1.3
   label-sm:
@@ -289,9 +292,9 @@ spacing:
   card-gap: 14px
   page-gutter: 24px
   control-h-xs: 26px
-  control-h-sm: 32px
-  control-h-md: 40px
-  control-h-field: 44px
+  control-h-sm: 48px
+  control-h-md: 48px
+  control-h-field: 48px
   control-h-lg: 48px
   rail-w: 72px
   topbar-h: 72px
@@ -299,10 +302,10 @@ components:
   button-primary:
     backgroundColor: "{colors.brand}"
     textColor: "{colors.on-brand}"
-    typography: "{typography.body-md}"
+    typography: "{typography.body-lg}"
     rounded: "{rounded.control}"
     padding: 18px
-    height: 40px
+    height: 48px
   button-primary-hover:
     backgroundColor: "{colors.brand-hover}"
   button-dark:
@@ -325,7 +328,7 @@ components:
     backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.text-body}"
   button-sm:
-    height: 32px
+    height: 48px
     padding: 14px
     typography: "{typography.label-md}"
   button-lg:
@@ -335,7 +338,7 @@ components:
   icon-button-soft:
     backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.text-secondary}"
-    size: 40px
+    size: 48px
     rounded: "{rounded.pill}"
   icon-button-soft-hover:
     backgroundColor: "{colors.surface-hover}"
@@ -395,7 +398,7 @@ components:
     backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.text-body}"
     rounded: "{rounded.control}"
-    height: 44px
+    height: 48px
     padding: 16px
     typography: "{typography.body-md}"
   input-white:
@@ -479,14 +482,14 @@ components:
     backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.text-secondary}"
     rounded: "{rounded.pill}"
-    height: 40px
+    height: 48px
   nav-pills-selected:
     backgroundColor: "{colors.brand}"
     textColor: "{colors.on-brand}"
   side-rail-item:
     backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.text-secondary}"
-    size: 44px
+    size: 48px
   side-rail-item-selected:
     backgroundColor: "{colors.brand}"
     textColor: "{colors.on-brand}"
@@ -564,7 +567,7 @@ One hot accent on cool neutrals. Use **semantic** tokens (`brand`, `surface-*`, 
 `border-*`, `success|danger|warning-*`) in code; primitives (`orange-500`, `gray-200`…)
 exist only to define them.
 
-- **Brand orange (#F75831):** reserved for the active nav item, the one primary action per view, highlighted data (one series/bar), urgent states and the brand period. Hover `#E04A25`.
+- **Brand orange — two tones:** `#C2410C` (`brand`) is the accessible action/text tone — it clears WCAG AA 4.5:1 against white, so it drives the active nav item and the one primary action per view (hover `#9A3412`). The brighter `#F75831` stays as the accent for highlighted data (one series/bar), urgent states and the brand period, where contrast on white is not required.
 - **Ink (#1B1B1B / headline #0B1F27):** dark focal cards ("Próximo vencimento"), dark pills, tooltips, body text.
 - **Cool grays (#E6E8F1 · #C6C6C8 · #878992 · #313131):** hairlines, muted text, sunken fills. Page `#F4F4F8`, cards white.
 - **Semantic:** green `#22B722` only for positive deltas/paid; red for counters/overdue; amber for "a vencer".
@@ -586,11 +589,13 @@ Treat it as a proposal to validate with real screens before shipping it to users
 - Tight negative tracking on large sizes (`-0.02em` display, `-0.03em` metrics).
 - Card titles: 18px Regular, two lines (ink + muted).
 - Metrics: dim the decimals (`R$ 23680<span style="opacity:.55">.00</span>`).
-- Scale: 11 · 12 · 13 · 14 · 16 · 18 · 22 · 28 · 36 · 48 · 64 · 72 · 96 (`--text-2xs` … `--text-display`).
+- Base size is **16px** for body and labels; the scale is 11 · 12 · 13 · 16 · 18 · 22 · 28 · 36 · 48 · 64 · 72 · 96 (`--text-2xs` … `--text-display`).
 
 ## Layout
 
-Compact-but-airy dashboards: **20px** card padding, **14px** grid gaps, **24px** page gutter.
+Compact-but-airy dashboards: **20px** card padding, **14px** grid gaps, **24px** page gutter. Interactive controls (buttons, fields, nav) keep a minimum **48px** touch target for accessibility.
+
+**Modo Acessibilidade (opt-in).** A camada `design-system/tokens/a11y.css` amplia a tipografia (base **18px**) e eleva os alvos de toque para **56px**. É ativada por `<html data-a11y="on">` — pelo menu de configurações (engrenagem) no topo do painel, ou `?a11y=on`. É uma adaptação de runtime, fora do espelho de tokens que o `tokens:check` valida; com o modo desligado, o design acima vale integralmente.
 Spacing scale 0 · 2 · 4 · 6 · 8 · 10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 32 · 40 · 56 · 72
 (`--space-0` … `--space-11`; `-5` names are half-steps such as `--space-4-5` = 14px).
 
@@ -627,7 +632,7 @@ dimmed decimals; a circular "expand ↗" button top-right of cards.
 The library lives in `design-system/components` (React + TypeScript + CSS Modules) and is
 imported from `@design-system`. Tokens above give the canonical look for each atom; states:
 
-- **Button** — `primary · dark · secondary · outline · ghost`; sizes sm 32 / md 40 / lg 48; states hover, active (scale .97), focus (3px orange ring at 35%), disabled (45% opacity), loading (spinner, `aria-busy`).
+- **Button** — `primary · dark · secondary · outline · ghost`; sizes sm 48 / md 48 / lg 48; states hover, active (scale .97), focus (3px orange ring at 40%), disabled (45% opacity), loading (spinner, `aria-busy`).
 - **IconButton** — `soft · dark · brand · white · ghost · inverse`; optional orange unread dot.
 - **Badge** — softly rounded (not pill) status label; `count` renders the red notification bubble.
 - **Chip** — tiny secondary pill link inside cards; `glass` over photos.
@@ -639,7 +644,7 @@ imported from `@design-system`. Tokens above give the canonical look for each at
 - **Dialog, Toast, Tooltip** — feedback; dialog 36px radius over a blurred ink scrim.
 
 Iconography: thin (1.5px) rounded line icons — **Lucide** via the `Icon` component (registry in
-`design-system/components/core/icons.ts`). Icons sit inside 40–48px circles or lead a pill label, at
+`design-system/components/core/icons.ts`). Icons sit inside 48px circles or lead a pill label, at
 ≈45% of the circle. No emoji, no unicode glyphs as icons.
 
 ## Do's and Don'ts
@@ -651,4 +656,4 @@ Iconography: thin (1.5px) rounded line icons — **Lucide** via the `Icon` compo
 - Don't add a second accent color, gradients (except chart fades and photo protection) or emoji.
 - Don't draw a logo — use `Wordmark` until a real mark exists.
 - Don't use green except for positive values, or red except for overdue/alerts.
-- Known gap: white text on brand orange is 3.3:1 (below WCAG AA 4.5:1 for small text). Keep orange-button labels short and ≥14px, and prefer `dark` buttons where text is long.
+- Accessibility: the action orange `#C2410C` clears WCAG AA 4.5:1 with white text; body and label text use a 16px base and interactive controls meet a 48px touch target.

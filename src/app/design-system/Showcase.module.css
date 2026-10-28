@@ -25,6 +25,19 @@
   margin-right: auto;
 }
 
+/* Controle de Acessibilidade (adição ao header; usa só tokens existentes). */
+.a11yToggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h-xs);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--surface-card);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
 .topLabel {
   font-size: var(--text-lg);
   color: var(--text-muted);

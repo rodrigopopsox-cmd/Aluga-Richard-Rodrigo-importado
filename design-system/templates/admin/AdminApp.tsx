@@ -10,6 +10,7 @@ import { LoginScreen } from './LoginScreen';
 import { MaintenanceScreen } from './MaintenanceScreen';
 import { PropertiesScreen } from './PropertiesScreen';
 import { Shell, type DashView, type ModuleId } from './Shell';
+import { useSettings } from './useSettings';
 import { useStoredState } from './useStoredState';
 import styles from './AdminApp.module.css';
 
@@ -27,6 +28,7 @@ export function AdminApp() {
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState({ title: '', where: properties[0], urgent: false });
   const [toasts, setToasts] = useState<Array<ToastInput & { id: number }>>([]);
+  const settings = useSettings();
 
   const goTo = (m: ModuleId) => {
     setModule(m);
@@ -66,7 +68,7 @@ export function AdminApp() {
 
   return (
     <>
-      <Shell module={module} setModule={goTo} view={view} setView={setView} onLogout={logout}>
+      <Shell module={module} setModule={goTo} view={view} setView={setView} onLogout={logout} settings={settings}>
         {(bp) => {
           if (module === 'dash') {
             return (

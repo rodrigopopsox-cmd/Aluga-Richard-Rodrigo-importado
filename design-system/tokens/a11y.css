@@ -1,0 +1,34 @@
+/* Aluga — camada de acessibilidade (opt-in).
+ *
+ * ATENÇÃO: isto é uma adaptação de runtime, NÃO um valor de token. Por isso fica
+ * fora do espelho DESIGN.md ↔ tokens que o `npm run tokens:check` valida — mesma
+ * categoria das media queries `prefers-reduced-motion`. Ativada por
+ * <html data-a11y="on"> (switch "Acessibilidade" na vitrine, ou ?a11y=on).
+ * Sem o atributo, o design aprovado fica Intacto.
+ *
+ * Escopo combinado com o Rodrigo: só tipografia maior + alvos de toque maiores.
+ * Cores, espaçamento e raios ficam de fora de propósito. */
+
+/* 1. Escala tipográfica ampliada — base 16 → 18px (≈ ×1.125 em toda a escala) */
+[data-a11y='on'] {
+  --text-2xs: 12px;
+  --text-xs: 14px;
+  --text-sm: 15px;
+  --text-base: 18px;
+  --text-md: 18px;
+  --text-lg: 20px;
+  --text-xl: 25px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+  --text-4xl: 54px;
+  --text-5xl: 72px;
+  --text-6xl: 81px;
+  --text-display: 108px;
+
+  /* 2. Alvos de toque — mínimo 56px em todos os controles interativos */
+  --control-h-xs: 56px;
+  --control-h-sm: 56px;
+  --control-h-md: 56px;
+  --control-h-field: 56px;
+  --control-h-lg: 56px;
+}
