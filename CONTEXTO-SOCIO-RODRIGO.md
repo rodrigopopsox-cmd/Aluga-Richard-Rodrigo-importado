@@ -162,17 +162,24 @@ cor de ação principal.
    `git cat-file -s origin/main:<path>`) antes de sobrescrever, para não apagar edição de
    outra pessoa.
 6. **Transcrição perde bytes** em conteúdos longos. Confira o tamanho após o push.
-7. **`grep` em CSS não-minificado engana:** `grep` trabalha linha a linha, então
+7. **Tamanho igual NÃO prova conteúdo igual — e push manual já quebrou arquivo duas
+   vezes.** Reenviar um `.tsx` grande reescrevendo o conteúdo à mão colou o JSX da função
+   `Section` no `Showcase.tsx` (quebraria o build) e trocou `t.id` por `id` no
+   `AdminApp.tsx` (variável inexistente, também quebraria). Os dois passaram batendo o
+   tamanho em bytes ou com diferença pequena o bastante para parecer ruído.
+   → **Depois de todo push, baixe o arquivo de volta do Drive e faça `diff` com o espelho
+   local.** Foi assim que os dois foram encontrados. Só confiar no tamanho não basta.
+8. **`grep` em CSS não-minificado engana:** `grep` trabalha linha a linha, então
    `-A 4` corta propriedades e `.{0,180}` para na primeira newline. Use `grep -A N` com N
    grande ou inspecione o arquivo.
-8. **Componente `Switch`** fica em `design-system/components/forms/Switch.tsx` e usa
+9. **Componente `Switch`** fica em `design-system/components/forms/Switch.tsx` e usa
    `Toggle.module.css` (não existe `Switch.module.css`).
-9. **`tsc --noEmit` já erra no `main` limpo:** faltam declarações para os PNG em
-   `design-system/assets/images/` e `LayoutProps` é tipo gerado pelo Next. Não é regressão
-   sua — compare com o base antes de se culpar.
-10. **`next/font/google` não funciona em sandbox** (sem acesso à internet). Use
+10. **`tsc --noEmit` já erra no `main` limpo:** faltam declarações para os PNG em
+    `design-system/assets/images/` e `LayoutProps` é tipo gerado pelo Next. Não é regressão
+    sua — compare com o base antes de se culpar.
+11. **`next/font/google` não funciona em sandbox** (sem acesso à internet). Use
     `@fontsource/plus-jakarta-sans`.
-11. **Windows:** caminho com espaço (`C:\Users\Digo Nego\...`) precisa de aspas no
+12. **Windows:** caminho com espaço (`C:\Users\Digo Nego\...`) precisa de aspas no
     PowerShell, senão o `cd` quebra. E "Extrair Tudo" do Windows cria uma subpasta com o
     nome do zip — sempre confira com `Test-Path`.
 
@@ -208,6 +215,11 @@ cor de ação principal.
   configuracao no template do painel* — já pushed para o `origin`.
 - O `main` do repo (`33f6853`) **ainda não tem** esse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
+- **Drive 100% sincronizado e verificado byte a byte** (2026-10-27): todos os arquivos
+  entregues foram baixados de volta do Drive e comparados com `diff` contra o espelho
+  local. Duas corrupções de push foram encontradas e corrigidas: `Showcase.tsx`
+  (função `Section` com JSX colado) e `AdminApp.tsx` (`y.id !== id` com `id` inexistente).
+  Restou apenas 1 byte de newline final no `Shell.module.css`, sem efeito prático.
 
 ---
 
