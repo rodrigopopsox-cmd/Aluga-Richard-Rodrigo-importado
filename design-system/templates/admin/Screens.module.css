@@ -761,3 +761,56 @@
     flex-basis: 100%;
   }
 }
+
+/* ── Cobranças (R3) ─────────────────────────────────────────────────────── */
+
+.chargeTotals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.chargeTotals > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.chargeTotalsLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.chargeTotalsValue {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.chargeWho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.chargeUnit {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.chargeTenant {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.chargeBalance {
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.chargeSettled {
+  color: var(--text-subtle);
+}

@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { Button, Checkbox, Dialog, Input, SegmentedControl, Select, Toast, type ToastProps } from '../../components';
 import { AnalyticsScreen } from './AnalyticsScreen';
+import { ChargesScreen } from './ChargesScreen';
 import { DashboardScreen } from './DashboardScreen';
 import { tasks as initialTasks, properties, type Task } from './data';
 import { FinanceScreen } from './FinanceScreen';
@@ -115,6 +116,7 @@ export function AdminApp() {
           if (module === 'props') return <PropertiesScreen bp={bp} toast={toast} />;
           if (module === 'maint') return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={() => setAdding(true)} toast={toast} />;
           if (module === 'plans') return <PlansScreen bp={bp} toast={toast} />;
+          if (module === 'charges') return <ChargesScreen bp={bp} toast={toast} />;
           return <FinanceScreen bp={bp} toast={toast} />;
         }}
       </Shell>
