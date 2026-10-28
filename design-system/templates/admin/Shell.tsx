@@ -16,7 +16,8 @@ export type ModuleId =
   | 'plans'
   | 'charges'
   | 'tenants'
-  | 'contracts';
+  | 'contracts'
+  | 'expenses';
 export type DashView = 'overview' | 'analytics';
 
 export const MODULES: Array<RailItem & { id: ModuleId }> = [
@@ -28,6 +29,7 @@ export const MODULES: Array<RailItem & { id: ModuleId }> = [
   { id: 'charges', label: 'Cobranças', icon: 'file-text' },
   { id: 'tenants', label: 'Inquilinos', icon: 'users' },
   { id: 'contracts', label: 'Contratos', icon: 'file-signature' },
+  { id: 'expenses', label: 'Despesas', icon: 'receipt' },
 ];
 
 export interface ShellProps {

@@ -29,6 +29,11 @@ export interface Contract {
    */
   tenantId: string;
   tenantName: string;
+  /**
+   * PF ou PJ do inquilino. O informe de IR (R8) separa os rendimentos por
+   * inquilino pessoa física ou jurídica, e o contrato e onde isso mora.
+   */
+  tenantKind: 'pf' | 'pj';
   /** Valor mensal do aluguel, em reais. */
   amount: number;
   /** Dia de vencimento, 1 a 31. Se o dia não existe no mês, vale o último (R3). */
@@ -56,6 +61,7 @@ export const CONTRACTS: Contract[] = [
     id: 'k1',
     unit: 'Casa do CIC',
     tenantId: 't1',
+    tenantKind: 'pf',
     tenantName: 'Maria Silva',
     amount: 1200,
     dueDay: 5,
@@ -67,6 +73,7 @@ export const CONTRACTS: Contract[] = [
     id: 'k2',
     unit: 'Casa Água Verde',
     tenantId: 't2',
+    tenantKind: 'pf',
     tenantName: 'Pedro Santos',
     amount: 1000,
     dueDay: 3,
@@ -78,6 +85,7 @@ export const CONTRACTS: Contract[] = [
     id: 'k3',
     unit: 'Kitnet',
     tenantId: 't3',
+    tenantKind: 'pf',
     tenantName: 'João Oliveira',
     amount: 800,
     dueDay: 5,
@@ -92,6 +100,7 @@ export const CONTRACTS: Contract[] = [
     id: 'k4',
     unit: 'Sala 2',
     tenantId: 't4',
+    tenantKind: 'pj',
     tenantName: 'Clínica Vida Ltda',
     amount: 1600,
     dueDay: 10,
@@ -104,6 +113,7 @@ export const CONTRACTS: Contract[] = [
     id: 'k5',
     unit: 'Loja Centro',
     tenantId: 't0',
+    tenantKind: 'pf',
     tenantName: 'Ana Costa',
     amount: 1400,
     dueDay: 30,

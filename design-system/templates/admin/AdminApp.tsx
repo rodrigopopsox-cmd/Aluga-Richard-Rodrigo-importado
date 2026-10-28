@@ -7,6 +7,7 @@ import { ChargesScreen } from './ChargesScreen';
 import { ContractsScreen } from './ContractsScreen';
 import { DashboardScreen } from './DashboardScreen';
 import { tasks as initialTasks, properties, type Task } from './data';
+import { ExpensesScreen } from './ExpensesScreen';
 import { FinanceScreen } from './FinanceScreen';
 import { LoginScreen } from './LoginScreen';
 import { MaintenanceScreen } from './MaintenanceScreen';
@@ -121,6 +122,7 @@ export function AdminApp() {
           if (module === 'charges') return <ChargesScreen bp={bp} toast={toast} />;
           if (module === 'tenants') return <TenantsScreen bp={bp} toast={toast} />;
           if (module === 'contracts') return <ContractsScreen bp={bp} toast={toast} />;
+          if (module === 'expenses') return <ExpensesScreen bp={bp} toast={toast} />;
           return <FinanceScreen bp={bp} toast={toast} />;
         }}
       </Shell>

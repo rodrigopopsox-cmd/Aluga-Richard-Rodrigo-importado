@@ -176,6 +176,7 @@ export function ContractsScreen({ bp, toast }: ContractsScreenProps) {
       unit: draft.unit,
       tenantId: draft.tenantId,
       tenantName: TENANTS.find((t) => t.id === draft.tenantId)?.name ?? 'Inquilino',
+      tenantKind: TENANTS.find((t) => t.id === draft.tenantId)?.kind ?? 'pf',
       amount: Number(digits(draft.amount)),
       dueDay: Number(digits(draft.dueDay)),
       start: draft.start,
