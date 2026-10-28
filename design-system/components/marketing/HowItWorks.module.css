@@ -1,0 +1,93 @@
+/* Como funciona — passos numerados da landing. So tokens. */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-5);
+  max-width: 62ch;
+}
+
+.title {
+  margin: 0;
+  font: var(--type-card-title);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+}
+
+.lead {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-muted);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: var(--radius-control);
+  background: var(--brand-soft);
+  color: var(--brand-soft-fg);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-none);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.stepTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font: var(--type-card-title);
+  color: var(--text-strong);
+}
+
+.icon {
+  flex: none;
+  color: var(--brand);
+}
+
+.text {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-secondary);
+  max-width: 46ch;
+}
+
+@media (min-width: 900px) {
+  .list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+}

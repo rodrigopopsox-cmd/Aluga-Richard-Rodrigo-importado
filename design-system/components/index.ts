@@ -30,7 +30,7 @@ export { StatCard, type StatCardProps } from './data/StatCard';
 export { StepChecklist, type Step, type StepChecklistProps } from './data/StepChecklist';
 
 // marketing
-export { PlanCard, PricingNote, PricingTable, type PlanCardProps, type PlanSpec, type PricingNoteProps, type PricingTableProps } from './marketing';
+export { HowItWorks, PlanCard, PricingNote, PricingTable, type HowItWorksProps, type HowItWorksStep, type PlanCardProps, type PlanSpec, type PricingNoteProps, type PricingTableProps } from './marketing';
 
 // navigation
 export { NavPills, type NavItem, type NavPillsProps } from './navigation/NavPills';
