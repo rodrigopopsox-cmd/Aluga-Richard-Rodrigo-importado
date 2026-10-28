@@ -44,10 +44,10 @@ Arquivos de apoio na raiz do Drive:
 
 | Arquivo | id |
 |---|---|
-| `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
+| `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | procure pelo **nome** na pasta — o id do Drive muda a cada sincronização |
 | `ENGENHARIA-REVERSA-ALUGGAPRO.md` (mapa do produto no ar) | `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb` |
 | `ALGGAPRO-INVENTARIO-COMPLETO.txt` (inventário de 19 rotas autenticadas) | `1XAirviGZlE2_ajonNBY9k9tcENyNwU0W` |
-| `SEGUNDO-CEREBRO-ATIVIDADES.md` (backlog do Rodrigo, 15 tarefas em 4 sprints) | `1M3ozYzzCaZpmmhKA8Y37cJN6tBAa_CfC` |
+| `SEGUNDO-CEREBRO-ATIVIDADES.md` (backlog do Rodrigo, 15 tarefas em 4 sprints) | procure pelo **nome** na pasta — o id do Drive muda a cada sincronização |
 | `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
 | `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
