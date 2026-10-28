@@ -885,3 +885,25 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3-5) var(--space-4-5);
 }
+
+/* Titulares do imóvel — linha com nome, fatia e remover. */
+.ownersHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3-5);
+  margin-top: var(--space-3-5);
+}
+
+.ownerRow {
+  display: grid;
+  grid-template-columns: 1fr 88px auto;
+  gap: var(--space-3-5);
+  align-items: start;
+}
+
+@media (max-width: 479px) {
+  .ownerRow {
+    grid-template-columns: 1fr 72px;
+  }
+}

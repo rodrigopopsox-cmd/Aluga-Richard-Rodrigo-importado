@@ -115,7 +115,7 @@ export function AdminApp() {
               </>
             );
           }
-          if (module === 'props') return <PropertiesScreen bp={bp} toast={toast} />;
+          if (module === 'props') return <PropertiesScreen bp={bp} toast={toast} go={goTo} />;
           if (module === 'maint') return <MaintenanceScreen bp={bp} tasks={tasks} setTasks={setTasks} onAddTask={() => setAdding(true)} toast={toast} />;
           if (module === 'plans') return <PlansScreen bp={bp} toast={toast} />;
           if (module === 'charges') return <ChargesScreen bp={bp} toast={toast} />;
