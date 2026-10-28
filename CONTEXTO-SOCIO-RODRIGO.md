@@ -47,6 +47,7 @@ Arquivos de apoio na raiz do Drive:
 | `CONTEXTO-SOCIO-RODRIGO.md` (este documento) | `1yN5L0IfusxQVpIaQBT6YBHNbA8opC090` |
 | `ENGENHARIA-REVERSA-ALUGGAPRO.md` (mapa do produto no ar) | `11O1vFOaGAJ5Ra3Kmp4YfppCPEL-jHxGb` |
 | `ALGGAPRO-INVENTARIO-COMPLETO.txt` (inventário de 19 rotas autenticadas) | `1XAirviGZlE2_ajonNBY9k9tcENyNwU0W` |
+| `SEGUNDO-CEREBRO-ATIVIDADES.md` (backlog do Rodrigo, 15 tarefas em 4 sprints) | ver seção 2 |
 | `aluga-design-system-correcao.zip` (15 arquivos, aplicar por cima) | `1S7XejLzEl83acXt2tmO3EihVWFEZ1SDY` |
 | `aluga-design-system.patch` (alternativa via `git apply`) | `1TRc7IShh01HQJV00VMGhOElx9SusbFCR` |
 
@@ -250,7 +251,49 @@ cor de ação principal.
 
 ---
 
-## 9. Mapa rápido de arquivos
+## 9. Backlog do Rodrigo — app "Segundo Cérebro"
+
+O Rodrigo gerencia o projeto num kanban próprio, o **Segundo Cérebro**
+(`dinastia-cerebro.b6sonj.easypanel.host/tarefas`, EasyPanel). Quadro `A fazer` /
+`Aguardando`, **15 tarefas, ~58h**, todas "Quem faz: Rodrigo".
+
+Inventário completo em **`SEGUNDO-CEREBRO-ATIVIDADES.md`**. O que importa para quem for
+assumir:
+
+**Sprints:** 1 → 06/11/2026 · 2 → 20/11/2026 · 3 → 04/12/2026 · Validação → 15/01/2027.
+
+**A tarefa 1 da Sprint 1 — "Ajustar tokens de acessibilidade no DESIGN.md" — JÁ ESTÁ
+PRONTA.** Os critérios de aceite dela (laranja escuro com contraste AA, texto base 16px,
+alvos de toque 48px, `npm run check` passando, vitrine mostrando o novo laranja) foram
+todos cumpridos e validados em 2026-10-27 — ver seção 4.1. Ela é dependência da tarefa
+"Desenhar as telas da v1", a maior da Sprint 1 (8h).
+
+**Decisões de produto que o backlog revela:**
+
+- **O nome "Aluga" é provisório.** Pesquisa de nome em curso, direções Old Parr /
+  Mustang / nome da V0, consulta ao INPI nas classes 36 e 42. Registro em `PRODUCT.md`.
+- **Preços do Aluga: R$ 59 / 99 / 209 / 269** — **diferentes** do AluggaPro
+  (79/119/229/299). Ainda em validação com os 5 fundadores.
+- **Vocabulário da v1:** `Proprietário · Imóvel · Unidade · Cobrança · Recebimento`.
+  **Unidade**, não Contrato. **Cobrança/Recebimento**, não Financeiro. Bem mais enxuto que
+  os 14 itens de menu do AluggaPro.
+- **Modo simples ("Este mês") é o padrão**, com pergunta "Como prefere ver?" na entrada —
+  mesmo eixo da camada de acessibilidade.
+- **Onboarding em 5 passos:** imóvel → inquilino e contrato → ver a primeira cobrança →
+  conectar WhatsApp → conectar Mercado Pago. **Diferente** do AluggaPro (que junta
+  inquilino e contrato em passos separados e usa "conectar conta bancária").
+- **Aluga é PWA** — ícone para tela inicial do celular e favicon ainda não existem no
+  design system.
+- **Público-alvo inclui pessoa idosa** — o tutorial de WhatsApp é "pensado para pessoa
+  mais velha", com imagens. É a justificativa de produto do trabalho de acessibilidade.
+
+**Consequência para o template do painel:** se ele for a base da v1, precisa **encolher**
+para esse vocabulário, não crescer. Ver a tabela de gap na seção 6 do
+`SEGUNDO-CEREBRO-ATIVIDADES.md`.
+
+---
+
+## 10. Mapa rápido de arquivos
 
 ```
 design-system/
