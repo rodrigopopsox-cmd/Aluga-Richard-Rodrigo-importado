@@ -1,9 +1,16 @@
 # Engenharia reversa — AluggaPro (produto no ar)
 
-> Levantamento feito em **2026-10-27** acessando o site público do produto.
-> **Método:** leitura das páginas públicas (home, demo, ferramentas, 12 calculadoras,
-> termos, privacidade, portal do inquilino, robots.txt e sitemap.xml).
-> **Não foi feito login em nenhuma área** — nenhuma credencial foi usada ou pedida.
+> Levantamento feito em **2026-10-27**.
+>
+> **Método, em duas etapas:**
+> 1. leitura das páginas públicas (home, demo, ferramentas, 12 calculadoras, termos,
+>    privacidade, portal do inquilino, robots.txt e sitemap.xml);
+> 2. **menu lateral e dashboard reais**, obtidos por screenshots do app autenticado
+>    fornecidos pelo Rodrigo em 27/10/2026 (conta Starter em período de teste, **0 imóveis
+>    cadastrados**, nenhum dado criado ou alterado).
+>
+> **Nenhuma credencial foi usada ou pedida por mim.** O material autenticado chegou como
+> imagem, não como acesso.
 >
 > Tudo aqui é **observado**, não inventado. Onde algo é inferência minha, está marcado
 > como *(inferido)*.
@@ -24,7 +31,8 @@ rentabilidade, não em cadastro de imóvel.
 | Portal do inquilino | `inquilino.aluggapro.com.br` (subdomínio separado) |
 | Site institucional | `aluggapro.com.br` |
 | Provas sociais | +300 proprietários, +1.200 imóveis, 32% menos inadimplência |
-| Planos | **Basic, Pro, Elite** (mensais, 7 dias grátis, sem cartão) |
+| Plano observado na conta | **Starter**, em período de teste de 7 dias |
+| Planos citados nos Termos | **Basic, Pro, Elite** — *divergência a confirmar (ver 3.7)* |
 | Intermediador de pagamento | **ASAAS** (confirmado na Política de Privacidade) |
 
 **Promessa central:** *"Administre seus aluguéis em 15 minutos por mês. Sem planilha."*
@@ -53,58 +61,152 @@ com label trocada.
 
 ---
 
-## 3. Mapa de módulos do app do proprietário
+## 3. Mapa de módulos do app do proprietário — MENU REAL
 
-Montado a partir da lista de "mais de 20 recursos" do site, do dashboard citado e dos
-termos de uso. A estrutura interna exata das telas **não pôde ser confirmada** sem login.
+Obtido do screenshot do app autenticado. **14 itens de menu, em 7 grupos.** Esta é a
+estrutura de verdade, não inferida:
 
-### 3.1 Dashboard — "Visão Geral do Portfólio"
+```
+Dashboard                          ← item solto, no topo
 
-Indicadores citados literalmente no texto alternativo da imagem do dashboard:
-**receita, despesas, resultado líquido, ocupação, fluxo de caixa e pendências do mês.**
+Pré-Locação                        ← funil de aquisição, ANTES do aluguel existir
+  · CRM
+  · Vitrine Digital
 
-> ⚠️ O template atual do painel tem Dashboard com cards de fluxo de caixa e pagamentos.
-> **Falta:** ocupação e **resultado líquido** como número de primeira classe.
+Cadastros                          ← as 4 entidades centrais
+  · Meus Imóveis
+  · Proprietários
+  · Inquilinos
+  · Contratos
 
-### 3.2 Imóveis e portfólio
+Operação
+  · Recebimentos
+  · Vistorias
 
-- Cadastro e gestão de imóveis
-- **Rentabilidade por imóvel** (receita, despesa e imposto estimado por imóvel)
-- **Vitrine digital** e **placas inteligentes** (divulgação do imóvel)
-- **Vistorias com fotos**
-- Documentos por imóvel
+Financeiro
+  · Financeiro
+  · Folha de Repasse
+  · Relatórios
 
-### 3.3 Contratos
+Serviços
+  · Parceiros
 
-- Contratos em 1 clique
-- **Assinatura eletrônica** com validade jurídica, ilimitado
-- **Contratos pelo WhatsApp**
-- Alertas de vencimento de contrato
-- **Reajuste IGP-M e IPCA** na data de aniversário
+Configurações
+Suporte
+Ideias da Comunidade e Notificações   ← item único, no rodapé do menu
+```
 
-### 3.4 Financeiro / cobrança
+### 3.1 O que essa estrutura revela
 
-- **Boletos e Pix automáticos** (Banco Inter, Cora ou Mercado Pago — o site cita os três;
-  a política de privacidade cita ASAAS. *Provedor exato: a confirmar*)
-- **Lembrete na véspera** do vencimento
-- **Baixa e recibo automáticos**
-- **Multa e juros no boleto**
-- **Folha de repasse** (repasse ao proprietário)
-- Relatórios **PDF e CSV**
+**a) Existe um funil ANTES da locação.** `Pré-Locação` (CRM + Vitrine Digital) é aquisição:
+lead → proposta → contrato. O template do painel hoje começa no meio da história — assume
+que o imóvel já está alugado.
 
-### 3.5 Fiscal / imposto (módulo que mais se distancia do template atual)
+**b) `Proprietários` é entidade separada de `Meus Imóveis`.** O produto foi feito para
+**investidor com carteira**, não para dono de um imóvel. Um proprietário tem N imóveis;
+um imóvel tem 1 proprietário. *(inferido: relação 1→N, a confirmar nas telas)*
 
-- **Módulo fiscal e IR**
-- Cálculo estimado de impostos
-- Simulações tributárias e comparações fiscais
-- **Simulador de ganho de capital**
-- **Simulador de estruturação via holding imobiliária**
-- Análise patrimonial
+**c) `Inquilinos` também é cadastro independente** — não vive dentro do contrato. Faz
+sentido: o mesmo inquilino pode ter tido contratos anteriores no portfólio.
+
+**d) `Contratos` é o centro de tudo** — liga imóvel + inquilino + proprietário + valor +
+reajuste. É onde a inteligência do produto mora.
+
+**e) `Recebimentos` ≠ `Financeiro`.** Recebimentos é operação (o que entrou, de quem,
+com ou sem atraso); Financeiro é resultado (receita, despesa, lucro). Separação
+deliberada entre **movimento** e **consolidação**.
+
+**f) `Folha de Repasse` é separada do Financeiro** — é o documento que vai para o
+proprietário, não o cálculo interno.
+
+**g) `Parceiros` sob Serviços** — rede de prestadores (provavelmente manutenção,
+vistoria, jurídico). É marketplace, não cadastro.
+
+**h) `Ideias da Comunidade e Notificações`** — canal de feedback dentro do produto.
+Decisão de produto incomum e reveladora: o time usa o próprio app como central de
+sugestões.
+
+### 3.2 Dashboard inicial — layout real
+
+```
+Bom dia, Richard                    ← saudação personalizada
+0 imóveis sob gestão                ← contador de estado vazio, em destaque
+
+[ Este mês ] [ Trimestre ] [ Ano ]  ← filtro de período (segmented control)
+
+[ + Despesa ]  [ Novo contrato ]    ← as 2 ações primárias
+
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│ Receita      │ Despesas     │ Resultado   │ Ocupação     │
+│ R$ 0         │ R$ 0         │ líquido R$0 │ 0%           │
+└──────────────┴──────────────┴──────────────┴──────────────┘
+
+Fluxo de caixa
+Despesas por categoria
+Precisa de atenção                  ← bloco de pendências
+Transações recentes
+```
+
+**Os 4 indicadores são exatamente:** Receita · Despesas · **Resultado líquido** ·
+**Ocupação**. Os dois em negrito são os que o template do painel **não tem**.
+
+**Só duas ações primárias no dashboard:** `Despesa` e `Novo contrato`. Nada de
+"cadastrar imóvel" solto — o cadastro de imóvel mora no checklist, não no topo.
+
+### 3.3 O checklist de configuração — o achado mais valioso
+
+Com a conta vazia, o dashboard mostra um **onboarding de 5 etapas**:
+
+```
+Checklist de configuração
+  1. Cadastrar imóvel
+  2. Cadastrar inquilino
+  3. Criar contrato
+  4. Conectar conta bancária
+  5. Ver lançamentos do mês
+```
+
+Isso é **a ordem canônica do produto**, ditada pelo próprio time:
+
+**imóvel → inquilino → contrato → banco → lançamentos**
+
+Consequências diretas para o design system:
+
+- O **empty state** do dashboard não é "nenhum dado". É um **checklist de progresso** —
+  e o template do painel não tem esse componente.
+- O fluxo de onboarding é **linear e obrigatório**: não dá para criar contrato sem
+  imóvel e inquilino. O design system precisa de estados de "pré-requisito não cumprido".
+- **"Conectar conta bancária" é etapa 4 de 5** — ou seja, o produto assume integração
+  bancária como parte do caminho feliz, não como configuração avançada.
+- A etapa 5 é *"ver"*, não *"fazer"* — o produto encerra o onboarding mostrando
+  resultado, não pedindo mais dado.
+
+### 3.4 Contratos
+
+Confirmado como módulo de menu próprio em `Cadastros`. Do site público sabe-se que
+inclui: contratos em 1 clique, assinatura eletrônica com validade jurídica, contratos
+pelo WhatsApp, alertas de vencimento e reajuste IGP-M/IPCA na data de aniversário.
+
+### 3.5 Fiscal / imposto
+
+O menu **não tem um módulo "Fiscal" visível**. O que existe de fiscal aparece dentro de
+`Financeiro` / `Relatórios` e nas calculadoras de IR. *(inferido: o módulo fiscal pode
+estar em `Configurações` ou ser recurso de plano superior — a confirmar)*
 
 ### 3.6 Conta / assinatura
 
-- Planos Basic / Pro / Elite, upgrade e cancelamento
-- Suspensão automática por não pagamento
+Plano observado: **Starter**, em teste de 7 dias.
+
+### 3.7 Divergência de nomenclatura de planos
+
+| Fonte | Nomes |
+|---|---|
+| Termos de Uso (§7) | Basic, Pro, Elite |
+| Conta real | **Starter** |
+
+Duas explicações possíveis: *Starter* é o nome do período de teste antes de virar Basic,
+ou os planos foram renomeados e os Termos não foram atualizados. **A confirmar** — vale
+perguntar ao time, porque afeta a tela de planos.
 
 ---
 
@@ -193,32 +295,53 @@ módulo fiscal · IR
 Comparado com o template do painel entregue (Login → Painel → Imóveis → Manutenção →
 Financeiro):
 
-### 7.1 Módulos inteiros que faltam
+### 7.1 Módulos inteiros que faltam no template
 
-| Módulo | Existe no template? |
+Comparado com os **14 itens de menu reais** (seção 3) contra o template atual
+(Login → Painel → Imóveis → Manutenção → Financeiro):
+
+| Módulo real | Existe no template? |
 |---|---|
-| Contratos (prazo, reajuste, assinatura, aditivo) | ❌ |
-| Fiscal / IR / ganho de capital / holding | ❌ |
-| Rentabilidade e payback por imóvel | ❌ (Analytics é genérico) |
-| Vistorias com fotos | ❌ |
-| Folha de repasse | ❌ |
-| Vitrine digital / placas | ❌ |
-| Assinatura e planos (Basic/Pro/Elite) | ❌ |
+| Dashboard (Receita · Despesa · Resultado líquido · Ocupação) | ⚠️ parcial — faltam **Resultado líquido** e **Ocupação** |
+| Pré-Locação → **CRM** | ❌ |
+| Pré-Locação → **Vitrine Digital** | ❌ |
+| Cadastros → Meus Imóveis | ⚠️ existe "Imóveis", com outra nomenclatura |
+| Cadastros → **Proprietários** | ❌ |
+| Cadastros → **Inquilinos** | ❌ |
+| Cadastros → **Contratos** | ❌ |
+| Operação → **Recebimentos** | ⚠️ parcial, virou "Manutenção" |
+| Operação → **Vistorias** | ❌ |
+| Financeiro → **Folha de Repasse** | ❌ |
+| Financeiro → **Relatórios** | ❌ |
+| Serviços → **Parceiros** | ❌ |
+| **Configurações / Suporte / Comunidade** | ❌ |
+| **Checklist de onboarding** | ❌ |
+| Fiscal / IR / ganho de capital / holding | ❌ (não é item de menu visível) |
 | Portal do inquilino (superfície inteira) | ❌ |
 | Calculadoras públicas (superfície inteira) | ❌ |
 
+**Resumo:** dos 14 itens de menu reais, o template cobre **3 de forma parcial** e
+**nenhum de forma completa**. E o template tem um módulo — **Manutenção** — que **não
+existe** no produto real (o que existe é `Vistorias` e `Parceiros`, que são coisas
+diferentes).
+
+> ⚠️ **Isso é um erro de escopo a corrigir:** o template foi montado com "Manutenção"
+  onde o produto tem "Recebimentos / Vistorias". O menu do template está **mais longo**
+  que o real em um item e **mais curto** em onze.
+
 ### 7.2 Componentes que esses módulos vão exigir
 
-- **Campo de CPF/CNPJ** com máscara e validação (login do inquilino)
-- **Campo de data de vencimento / aniversário de contrato** com antecedência
+- **Checklist de progresso** com etapas e estado — o onboarding do produto é isso
+- **Estado de pré-requisito** ("crie o imóvel antes do contrato") — o fluxo é linear
+- **Segmented control de período** (Este mês / Trimestre / Ano) — já existe no DS ✅
+- **Duas ações primárias** no topo do dashboard (`Despesa`, `Novo contrato`) — o DS já
+  tem Button ✅
+- **Campo de CPF/CNPJ** com máscara e validação (inquilino, login do portal)
 - **Seletor de índice** (IGP-M / IPCA / percentual livre) — segmented control
 - **Memória de cálculo** — bloco que mostra passo a passo de onde veio o número
-  (padrão repetido nas 12 calculadoras; o design system não tem nada parecido)
-- **Linha de resultado** com bruto → descontos → líquido (comparação lado a lado)
 - **Timeline de contrato** (assinado → vigente → aviso → vencido → rescindido)
 - **Galeria de vistoria** (foto + data + observação)
-- **Empty state de "nenhum imóvel"** com CTA para o primeiro — o site promete
-  *"automatizar meu primeiro aluguel"*, então o onboarding é peça central
+- **Linha de resultado** bruto → descontos → líquido
 - **Aviso legal** discreto mas presente (o produto vive de se proteger)
 
 ### 7.3 Um detalhe de copy que vale adotar
@@ -230,37 +353,46 @@ tributária sem se tornar consultoria.
 
 ---
 
-## 8. O que não dá para ver daqui (e o que resolveria)
+## 8. O que ainda não dá para ver (e o que resolveria)
 
-**Fechado atrás de login, sem credencial:**
+**Já resolvido:** menu lateral completo, dashboard inicial, indicadores, onboarding de
+5 etapas, nomenclatura real dos módulos, plano da conta.
 
-1. A **árvore de telas real** do app do proprietário — menu, rotas, o que existe de fato
-   em cada módulo
-2. O **dashboard de verdade** (só vi a imagem e o texto alternativo)
-3. O **portal do inquilino autenticado**
-4. Os **fluxos de cadastro** (onboarding do primeiro imóvel, criação de contrato)
-5. **Planos e preços** — sei que são Basic/Pro/Elite, não sei o que cada um inclui
-6. O **tom de voz real da interface** (só vi o do marketing)
+**Ainda fechado:**
 
-**O que resolve sem senha:** 6 a 10 screenshots — um por módulo do menu, mais o
-dashboard e o portal do inquilino. Com isso eu fecho a árvore de telas e a nomenclatura
-exata de cada módulo.
+1. **As telas de cada módulo** — cadastro de imóvel, de inquilino, de proprietário,
+   criação de contrato. Sei os nomes e a ordem, não os campos.
+2. **CRM e Vitrine Digital** — o funil de pré-locação inteiro.
+3. **Recebimentos e Folha de Repasse** — como o dado de cobrança é apresentado.
+4. **Relatórios** — quais relatórios existem e em que formato.
+5. **Parceiros** — é marketplace ou só uma lista?
+6. **Configurações** — onde mora assinatura, plano, dados bancários, fiscais.
+7. **Portal do inquilino autenticado**.
+8. **Preços reais** dos planos.
 
-> Não peço e não aceito login e senha. Screenshot ou export "Salvar como"/PDF resolvem.
+**O que resolve:** um screenshot por item de menu (são 14) — ou só dos 6 que importam
+agora: Imóveis, Inquilinos, Contratos, Recebimentos, Financeiro, Configurações.
+
+> Continuo sem pedir e sem aceitar login. Screenshot resolve.
 
 ---
 
 ## 9. Recomendações, em ordem de valor
 
-1. **Fechar a árvore de telas com screenshots** — é o que mais falta e destrava o resto
-2. **Criar o módulo Contratos no template** — é o coração do produto ("contratos em 1
-   clique") e hoje não existe
-3. **Criar o componente "memória de cálculo"** — usado em 12 páginas públicas e em todo
-   módulo fiscal; é a assinatura visual do produto
-4. **Decidir o escopo das 3 superfícies** — se o inquilino e as calculadoras entram no
-   design system ou ficam fora. Isso muda o tamanho do trabalho
-5. **Adotar o vocabulário da seção 6** na copy do template, para o produto não parecer
-   genérico
+1. **Alinhar o menu do template com o menu real** — hoje o template tem "Manutenção",
+   que não existe no produto, e não tem 11 itens que existem. Antes de construir qualquer
+   coisa nova, corrigir o desenho do Shell.
+2. **Construir o checklist de onboarding** — é a peça que define a primeira impressão do
+   produto e o template não tem. 5 etapas, ordem canônica, progresso persistido.
+3. **Criar o módulo Contratos** — confirmado como centro do produto (`Cadastros →
+   Contratos`), e hoje não existe.
+4. **Renomear o que existe** para a nomenclatura real: `Imóveis` → `Meus Imóveis`,
+   `Manutenção` → `Recebimentos` / `Vistorias`. Copy errada confunde mais que copy ausente.
+5. **Criar o componente "memória de cálculo"** — usado nas 12 calculadoras e em todo
+   módulo fiscal.
+6. **Decidir o escopo das 3 superfícies** — se inquilino e calculadoras entram no
+   design system. Isso muda o tamanho do trabalho.
+7. **Adotar o vocabulário da seção 6** na copy do template.
 
 ---
 
@@ -276,3 +408,5 @@ exata de cada módulo.
 - `https://app.aluggapro.com.br/auth` — login do proprietário
 - `https://inquilino.aluggapro.com.br/` — portal do inquilino
 - `https://aluggapro.com.br/sitemap.xml`, `/robots.txt` — mapa completo de URLs públicas
+- **Screenshots do app autenticado** (27/10/2026, fornecidos pelo Rodrigo) — menu lateral
+  real, dashboard inicial, checklist de onboarding, plano da conta
