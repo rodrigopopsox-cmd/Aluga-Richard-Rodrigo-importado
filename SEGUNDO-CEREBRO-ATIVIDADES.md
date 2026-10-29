@@ -14,11 +14,13 @@
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
 >
-> **Estado em 29/10/2026: 6 das 15 tarefas feitas (1, 3, 4, 5, 7 + a 2 depende de consulta
-> externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo) e a 6
-> (título desconhecido). Sprint 2 começou: a 7 (landing) está **pronta e aprovada pelo
-> Rodrigo** — *"Perfeito ficou tudo otimo"* — depois de 10 rodadas de revisão. Falta
-> publicar no VPS, que é do Richard.
+> **Estado em 29/10/2026: 7 das 15 tarefas feitas (1, 3, 4, 5, 7, 9 + a 2 depende de
+> consulta externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo)
+> e a 6 (título desconhecido). Sprint 2: a 7 (landing) está **pronta e aprovada pelo
+> Rodrigo** — *"Perfeito ficou tudo otimo"* — depois de 10 rodadas de revisão. A **9
+> (mensagens)** está entregue. A 8 e a 11 (tutoriais) foram **puladas a pedido do Rodrigo**
+> (*"as tarefas de tutorais nos pulamos por enquanto"*) — depende de prints do WhatsApp,
+> que exigem o celular dele. Falta publicar no VPS, que é do Richard.
 
 ---
 
@@ -366,6 +368,35 @@ Duas consequências para o design system:
   D-3/D0/D+3 são três textos do mesmo evento, escolhidos por data.
 - O **"Recebeu?"** inverte o sentido do fluxo: é o produto perguntando ao proprietário,
   não informando. É um padrão de UX que o template não tem.
+
+#### ✅ TAREFA 9 FEITA — 29/10/2026
+
+**Arquivo:** `docs/messages/v1.md` (12.335 bytes, 283 linhas).
+
+**20 modelos de texto**, prontos para o Richard colocar no fluxo:
+
+| Bloco | Modelos |
+|---|---|
+| Lembrete D-3 | `d3_v1` `d3_v2` `d3_v3` |
+| Lembrete D0 | `d0_v1` `d0_v2` `d0_v3` |
+| Lembrete D+3 | `dp3_v1` `dp3_v2` `dp3_v3` |
+| Confirmação ao inquilino | `pay_v1` `pay_v2` `pay_v3` + `pay_partial` |
+| "Recebeu?" ao proprietário | `recebeu_v1` `recebeu_v2` `recebeu_v3` |
+| Respostas do sistema | `ok_sim` `ok_sim_v2` `ask_valor` `ask_1_2` |
+
+**Validação feita:** 3 variações em cada bloco de 3 · zero emoji · frase mais longa
+com 15 palavras (limite de 20) · todas as variáveis declaradas na tabela ·
+`npm run check` limpo (stylelint, tokens, typecheck).
+
+**Deixado de fora de propósito** (não é da v1, ou é do concorrente): menção a
+multa, juros, mora ou negativação — o Aluga não tem isso na v1 · link de portal do
+inquilino, que a spec marca como **v2** · pedido de dados bancários.
+
+**5 decisões em aberto para o Richard** (seção 7 do arquivo): de qual número sai a
+confirmação ao inquilino · como a variação é escolhida · se D+3 repete · se
+`pay_partial` precisa de campo novo · se o "Recebeu?" tem tempo limite de resposta.
+
+**Próximo passo:** o Rodrigo revisa o tom; o Richard implementa no fluxo.
 
 ### 10. Textos do app em linguagem simples — 20/11 · 4h · Normal
 

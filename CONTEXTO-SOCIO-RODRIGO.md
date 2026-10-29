@@ -305,6 +305,35 @@ nenhum perdido, subir é o inverso exato de descer, salto do topo ao fim não pu
 de "progress", zero emoji, zero "PRODUCT" · **zero classe órfã** (39 no CSS, 39 usadas) ·
 console do servidor sem erros.
 
+### 4.9 Mensagens da régua D-3/D0/D+3 — tarefa 9 do Segundo Cérebro, FECHADA
+
+**Arquivo:** `docs/messages/v1.md`. **Só redação — nenhuma tela, nenhuma imagem, nenhuma
+alteração no Supabase.**
+
+20 modelos de texto para o Richard colocar no fluxo n8n/Evolution:
+
+| Bloco | IDs |
+|---|---|
+| Lembrete D-3 | `d3_v1` `d3_v2` `d3_v3` |
+| Lembrete D0 | `d0_v1` `d0_v2` `d0_v3` |
+| Lembrete D+3 | `dp3_v1` `dp3_v2` `dp3_v3` |
+| Confirmação ao inquilino | `pay_v1` `pay_v2` `pay_v3` + `pay_partial` |
+| "Recebeu?" ao proprietário | `recebeu_v1` `recebeu_v2` `recebeu_v3` |
+| Respostas do sistema | `ok_sim` `ok_sim_v2` `ask_valor` `ask_1_2` |
+
+**Regras que vieram da spec, não de mim:** agenda D-3/D0/D+3 só para cobranças sem
+pagamento · 3 variações por momento (exigência da R5) · máximo 30 envios/dia com intervalo
+aleatório · botão "Pausar envios" · sem conexão com o Mercado Pago, o lembrete leva a chave
+Pix copia-e-cola · confiança baixa na leitura da resposta → *"Responda 1 para recebi, 2
+para ainda não"*, que é frase literal da R6.
+
+**O que não tem, de propósito:** multa, juros, mora, negativação — o Aluga não tem isso na
+v1, e é justamente a régua jurídica do concorrente. Nenhum link de portal do inquilino,
+que a spec marca como **v2**.
+
+**5 decisões em aberto para o Richard** estão na seção 7 do arquivo. Enquanto não forem
+respondidas, os textos já servem para teste manual.
+
 ---
 
 ## 5. Armadilhas conhecidas (já pagamos por elas)
@@ -425,8 +454,11 @@ console do servidor sem erros.
 ## 7. Git — estado
 
 - Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
-- **Último commit pushed: `82918a2`** — *Tour: a última etapa agora é o painel e suas
-  configurações, por rolagem*.
+- **Último commit pushed: `dd1e841`** — *docs(messages): textos das mensagens da v1*.
+  Junto foi `6b99c95`, que troca um `margin-top: 2px` cru pelo token `--space-0-5` no
+  `PlanCard.module.css` (era o único erro do `stylelint`, pré-existente).
+- Antes destes, `bee0a42` — docs de contexto refletindo a 10ª rodada da landing, e
+  `82918a2` — *Tour: a última etapa agora é o painel e suas configurações, por rolagem*.
 - O `main` do repo (`33f6853`) **não tem** nada desse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
 
@@ -513,9 +545,15 @@ rodada ensinou uma coisa que não se vê no commit final:
       Decisão do Rodrigo pendente: se quer, e onde mora (regra de formulário, não máscara).
 - [ ] **Informe de IR em PDF** — hoje sai em tabela e CSV. Falta o formato, não a
       informação.
-- [ ] **Sprint 2 do Segundo Cérebro** — landing (7) **feita e aprovada**; faltam tutorial
-      WhatsApp (8), mensagens (9), linguagem simples (10) e tutorial Mercado Pago (11).
-      Nada iniciado.
+- [x] **Sprint 2 do Segundo Cérebro — tarefa 9 (mensagens)** — **feita** em 29/10/2026.
+      **20 modelos de texto** em `docs/messages/v1.md`: D-3/D0/D+3 com 3 variações cada,
+      confirmação de pagamento ao inquilino e "Recebeu?" ao proprietário, mais as
+      respostas do sistema. Nada de multa/juros/negativação (não é da v1) e nenhum link
+      de portal do inquilino (é v2). 5 decisões em aberto para o Richard.
+- [ ] **Sprint 2 — o que falta:** linguagem simples (10), que depende das telas, e as
+      telas já estão prontas. Os tutoriais WhatsApp (8) e Mercado Pago (11) foram
+      **pulados a pedido do Rodrigo** em 29/10/2026 — metade das imagens depende de
+      prints do celular dele.
 
 ---
 
@@ -637,6 +675,9 @@ design-system/
                                  Aceita `beats?` por etapa: a 7ª etapa tem 4 beats e
                                  ocupa 4 telas de rolagem (Completo → Simples →
                                  tema escuro → letra maior).
+docs/
+    specs/v1.md                 ← especificação da v1 (R1–R10)
+    messages/v1.md              ← 20 modelos de mensagem da régua D-3/D0/D+3 (tarefa 9)
 src/app/
     page.tsx  LandingScreen.tsx  page.module.css   ← landing em "/" (só tokens)
     PanelModes.tsx                ← os 4 estados do painel, última etapa do tour.
