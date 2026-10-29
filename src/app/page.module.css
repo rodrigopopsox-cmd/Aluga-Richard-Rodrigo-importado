@@ -172,34 +172,35 @@
  * ================================================================== */
 
 /*
- * Texto de um lado, demonstração do outro — o ritmo inverte aqui de
- * propósito, porque a seção de cima é vertical e centrada. Duas seções
- * verticais seguidas cansam.
+ * TUDO CENTRALIZADO. A seção era duas colunas — texto à esquerda, demo à
+ * direita — e no monitor largo o texto ficava abandonado num canto com a
+ * demo longe. Agora é uma coluna só, centrada: o texto em largura de
+ * leitura, a demo logo abaixo, alinhada na MESMA coluna do tour (128ch).
+ * Assim a página tem um eixo vertical único do hero até o rodapé, e nada
+ * fica pendurado na borda.
  */
 .mes {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
   padding: var(--space-10) var(--space-9);
   border-top: 1px solid var(--border-subtle);
-  align-items: start;
+  text-align: center;
 }
 
 .mesCopy {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-4);
+  max-width: 62ch;
 }
 
 .mesStage {
-  min-width: 0;
-}
-
-@media (min-width: 1080px) {
-  .mes {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--space-10);
-  }
+  width: 100%;
+  max-width: 128ch;
+  margin-inline: auto;
 }
 
 .sectionTitle {
@@ -581,14 +582,175 @@
 
 /* ---------- o que o "Completo" acrescenta ---------- */
 
-.mesMetrics {
+/*
+ * A Visão geral do painel. Grade que flui: os cartões pequenos ficam em
+ * linha e os blocos largos (manutenção, insights) ocupam duas colunas. É a
+ * mesma receita do `DashboardScreen`, sem os cartões com foto.
+ */
+.mesFull {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
   gap: var(--card-gap);
+  align-items: start;
+}
+
+.mesWide {
+  grid-column: span 2;
+}
+
+/* Em tela estreita os blocos largos voltam a ocupar a linha inteira, em
+   vez de tentar caber dois em 13rem. */
+@media (max-width: 719px) {
+  .mesWide {
+    grid-column: span 1;
+  }
 }
 
 .mesMetricSlot {
   margin-top: var(--space-3);
+}
+
+.mesDelta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.mesDeltaLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesCaption {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesPills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* ---------- saúde financeira ---------- */
+
+.mesHealthHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.mesHealthWord {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesHealthPct {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-metric);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesHealthList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.mesHealthRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mesHealthLabel {
+  flex: none;
+  width: 7rem;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesHealthTrack {
+  flex: 1;
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
+}
+
+.mesFillNeutral,
+.mesFillAlert {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-inverse);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesFillNeutral {
+  background: var(--surface-inverse);
+}
+
+.mesFillAlert {
+  background: var(--brand);
+}
+
+/* ---------- insights ---------- */
+
+.mesAnalysing {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* O ponto que pulsa ao lado de "sistema analisando" — o mesmo do painel. */
+.mesDot {
+  color: var(--brand);
+  animation: dotPulse var(--dur-slow) var(--ease-in-out) infinite alternate;
+}
+
+@keyframes dotPulse {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mesInsightText {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.mesInsightPositive {
+  color: var(--text-strong);
+  font-weight: var(--weight-medium);
+}
+
+/* ---------- confirmação do lembrete ---------- */
+
+.mesUnitReminded {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
 }
 
 /* ---------- um cartão por unidade ---------- */

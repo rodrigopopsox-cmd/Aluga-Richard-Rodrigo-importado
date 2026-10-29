@@ -343,12 +343,16 @@ export function LandingScreen() {
             <h2 className={s.sectionTitle}>E você escolhe como quer ver</h2>
             <p className={s.sectionLead}>
               Quem tem dificuldade com sistema usa a tela “Este mês”: um cartão por unidade, o
-              status escrito em palavras e dois botões. Quem quer controle total usa o painel
-              completo. E dá para deixar a letra maior ou o tema escuro — as duas coisas são
-              configuração, não versão diferente do app.
+              status escrito em palavras e dois botões. Quer controle total? Passa para Completo e
+              entra a Visão geral — ocupação, visitas, manutenção, insights e saúde financeira.
+            </p>
+            <p className={s.sectionLead}>
+              E dá para deixar a letra maior ou o tema escuro. As duas coisas são configuração, não
+              versão diferente do app.
             </p>
             <p className={s.fine}>
-              É a tela de verdade, rodando aqui dentro. Mexe na engrenagem: os modos funcionam.
+              É o painel de verdade, rodando aqui dentro. Mexa na engrenagem e troque Simples por
+              Completo: os dois modos funcionam.
             </p>
           </div>
           <div className={s.mesStage}>
