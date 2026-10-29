@@ -2,12 +2,10 @@
 
 import type { ReactNode } from 'react';
 import {
-  Avatar,
   Badge,
   Button,
   Card,
   CardHeader,
-  Metric,
   PricingNote,
   PricingTable,
   ProductTour,
@@ -67,8 +65,27 @@ const PLANS: PlanSpec[] = [
 ];
 
 /**
- * As seis etapas da apresentação. Todas existem no produto — cada painel é
- * montado com os dados de demonstração das telas reais:
+ * As seis etapas da apresentação.
+ *
+ * ESTRUTURA — a mesma em todas, e é isso que faz seis etapas diferentes
+ * parecerem o mesmo produto:
+ *
+ *     .split            duas colunas iguais, cartões da mesma altura
+ *      ├── painel A     cabeçalho de duas linhas, [destaque], campos
+ *      └── painel B     cabeçalho de duas linhas, [destaque], campos
+ *
+ * Já houve uma etapa (Resultado) que era uma linha de quatro métricas em
+ * largura total enquanto as outras cinco eram duas colunas — era a
+ * "composição que muda no meio da apresentação". Agora todas têm duas
+ * colunas, e os números do resultado moram nos dois painéis.
+ *
+ * O DESTAQUE é no máximo um número grande por painel, e é o que a pessoa
+ * deve ler primeiro naquela etapa. Duas etapas não têm número de destaque
+ * porque o conteúdo delas é uma lista (imóveis, rentabilidade por
+ * unidade) — forçar um número ali seria inventar um que o produto não dá.
+ *
+ * TODOS EXISTEM NO PRODUTO — cada painel é montado com os dados de
+ * demonstração das telas reais:
  *
  *   · imóveis e unidades  → `propertiesData`
  *   · contratos           → `contractsData`
@@ -106,7 +123,7 @@ const TOUR: TourStep[] = [
     panel: (
       <div className={s.split}>
         <Panel title="Casa do CIC" subtitle="Maria Silva · pessoa física">
-          <Field label="Valor" value="R$ 1.200" />
+          <Highlight value="R$ 1.200" label="aluguel por mês" />
           <Field label="Vence" value="dia 5" />
           <Field label="Início" value="05/03/2024" />
           <Field label="Reajuste" value="IGP-M" />
@@ -125,13 +142,11 @@ const TOUR: TourStep[] = [
     body: 'A cobrança do mês é gerada sozinha. Você vê o total e o que está em aberto.',
     panel: (
       <div className={s.split}>
-        <Metrics
-          items={[
-            { title: 'Recebido', value: 'R$ 2.600' },
-            { title: 'Em aberto', value: 'R$ 3.400' },
-            { title: 'Previsto', value: 'R$ 6.000' },
-          ]}
-        />
+        <Panel title="Cobranças de outubro" subtitle="geradas a partir dos contratos">
+          <Highlight value="R$ 2.600" label="recebido de R$ 6.000 previstos" />
+          <Field label="Em aberto" value="R$ 3.400" />
+          <Field label="Atrasadas" value="2 cobranças" />
+        </Panel>
         <Panel title="O que ainda falta" subtitle="outubro">
           <Field label="Kitnet" value="R$ 400 de R$ 800" />
           <Field label="Loja Centro" value="R$ 1.400" />
@@ -145,7 +160,8 @@ const TOUR: TourStep[] = [
     body: 'Mercado Pago, WhatsApp ou você digitando — e quem deu a baixa fica registrado.',
     panel: (
       <div className={s.split}>
-        <Panel title="Entrou em outubro" subtitle="R$ 5.600 no total">
+        <Panel title="Entrou em outubro" subtitle="cinco recebimentos">
+          <Highlight value="R$ 5.600" label="no total do mês" />
           <Field label="Casa do CIC" value="R$ 1.200 · Mercado Pago" />
           <Field label="Casa Água Verde" value="R$ 1.000 · WhatsApp" />
           <Field label="Kitnet" value="R$ 400 · manual" />
@@ -163,14 +179,16 @@ const TOUR: TourStep[] = [
     title: 'Quanto sobrou no mês, sem planilha',
     body: 'Recebido, despesas e resultado calculados. Ocupação para você saber o que está vazio.',
     panel: (
-      <Metrics
-        items={[
-          { title: 'Recebido', value: 'R$ 5.600,00' },
-          { title: 'Despesas', value: 'R$ 962,00' },
-          { title: 'Resultado', value: 'R$ 4.638,00' },
-          { title: 'Ocupação', value: '78%' },
-        ]}
-      />
+      <div className={s.split}>
+        <Panel title="Entrou" subtitle="outubro">
+          <Highlight value="R$ 5.600,00" label="recebido no mês" />
+          <Field label="Ocupação" value="78%" />
+        </Panel>
+        <Panel title="Saiu" subtitle="outubro">
+          <Highlight value="R$ 4.638,00" label="resultado depois das despesas" />
+          <Field label="Despesas" value="R$ 962,00" />
+        </Panel>
+      </div>
     ),
   },
   {
@@ -204,6 +222,12 @@ const TOUR: TourStep[] = [
  * de demonstração de verdade.
  * ------------------------------------------------------------------ */
 
+/*
+ * Painel da demonstração. `size="md"` no cabeçalho (18px) e não `sm`
+ * (16px): com o destaque em 28px, o valor do campo em 16px e o rótulo em
+ * 13px, o título do cartão em 16px ficava no mesmo tamanho do valor e a
+ * escada desandava. Em 18px ele ocupa o lugar dele.
+ */
 function Panel({
   title,
   subtitle,
@@ -216,10 +240,33 @@ function Panel({
   children: ReactNode;
 }) {
   return (
-    <Card>
-      <CardHeader title={title} subtitle={subtitle} action={action} size="sm" />
+    <Card className={s.panel}>
+      <CardHeader title={title} subtitle={subtitle} action={action} size="md" />
       <div className={s.panelBody}>{children}</div>
     </Card>
+  );
+}
+
+/**
+ * O DESTAQUE da etapa: um número grande, no máximo um por painel.
+ *
+ * É o elemento que a pessoa deve ler primeiro, e por isso ele é a única
+ * coisa do cartão que cresce de tamanho — 28px, peso leve, tracking de
+ * métrica, algarismo tabular para os dígitos não dançarem. Fica colado no
+ * cabeçalho, antes das linhas de campo.
+ *
+ * Os números aparecem PRONTOS, não contando. Houve uma versão com contador
+ * animado (o valor subindo de zero) e ela foi reprovada no uso: a
+ * apresentação é comandada pela rolagem, então quem rola rápido via o
+ * contador no meio — "R$ 17", "R$ 23" — e numa página sobre dinheiro um
+ * número errado na tela, mesmo que por 400ms, lê-se como defeito.
+ */
+function Highlight({ value, label }: { value: string; label: string }) {
+  return (
+    <div className={s.highlight}>
+      <span className={s.highlightValue}>{value}</span>
+      <span className={s.highlightLabel}>{label}</span>
+    </div>
   );
 }
 
@@ -229,39 +276,6 @@ function Field({ label, value }: { label: string; value: ReactNode }) {
     <div className={s.field}>
       <span className={s.fieldLabel}>{label}</span>
       <span className={s.fieldValue}>{value}</span>
-    </div>
-  );
-}
-
-/**
- * Régua de métricas — a mesma da tela, em três ou quatro cartões.
- *
- * Os números aparecem PRONTOS, não contando. Houve uma versão com contador
- * animado (o valor subindo de zero) e ela foi reprovada no uso: a
- * apresentação é comandada pela rolagem, então quem rola rápido via o
- * contador no meio — "R$ 17", "R$ 23" — e numa página sobre dinheiro um
- * número errado na tela, mesmo que por 400ms, lê-se como defeito. O valor
- * certo na hora certa é o que a promessa exige.
- */
-function Metrics({ items }: { items: Array<{ title: string; value: string }> }) {
-  return (
-    <div className={s.metrics}>
-      {items.map((m) => (
-        <Card key={m.title}>
-          <CardHeader title={m.title} size="sm" />
-          <div className={s.metricSlot}>
-            {/*
-              Sem `decimals`, de propósito. A `Metric` quebra o decimal
-              procurando ponto ("23680.00"), mas o pt-BR escreve vírgula —
-              passar `decimals` aqui faria "R$ 5.600,00" renderizar como
-              "R$ 5" com ".600,00" acinzentado. A tela real (`FinanceScreen`)
-              também não passa: `value={brl(received)}` e pronto. A landing
-              mostra o número do mesmo jeito que o app.
-            */}
-            <Metric value={m.value} size="md" />
-          </div>
-        </Card>
-      ))}
     </div>
   );
 }

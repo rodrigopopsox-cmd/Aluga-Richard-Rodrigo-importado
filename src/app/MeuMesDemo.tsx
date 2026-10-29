@@ -102,7 +102,7 @@ export function MeuMesDemo() {
           <div className={s.mesBlock}>
             <span className={s.mesLabel}>Como prefere ver?</span>
             <SegmentedControl
-              size="sm"
+              size="md"
               label="Como prefere ver?"
               options={[
                 { value: 'simple', label: 'Simples' },
@@ -120,7 +120,7 @@ export function MeuMesDemo() {
           <div className={s.mesBlock}>
             <span className={s.mesLabel}>Tema</span>
             <SegmentedControl
-              size="sm"
+              size="md"
               label="Tema"
               options={[
                 { value: 'light', label: 'Claro' },

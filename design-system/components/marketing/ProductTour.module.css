@@ -15,6 +15,33 @@
  * transformar o body, nada de capturar a rodinha — o navegador continua
  * dono da rolagem, e é isso que faz trackpad, toque, teclado, rolagem
  * rápida e leitor de tela funcionarem sem caso especial.
+ *
+ * ================================================================== *
+ * O QUE MUDOU NO REFINAMENTO
+ * ================================================================== *
+ *
+ * 1. ESCADA TIPOGRÁFICA. O título de etapa era 28px — o mesmo tamanho do
+ *    título de seção e só 20px abaixo da headline de 48px. Subiu para 36px
+ *    (`--text-3xl`), que é o lugar que ele ocupa na hierarquia: abaixo do
+ *    hero, acima de tudo o mais. O texto de etapa subiu de 16px para 18px.
+ *
+ * 2. O CONTADOR PERDEU O LARANJA. "02 / 06" em laranja mais o selo do
+ *    módulo em laranja eram dois laranjas disputando a mesma informação.
+ *    Agora o contador é neutro e o selo é o único toque de cor — e ele
+ *    carrega o nome do módulo, que é a informação que falta.
+ *
+ * 3. A DEMONSTRAÇÃO GANHOU ÁREA MÍNIMA. `.stage` tinha altura de conteúdo:
+ *    uma etapa com dois cartões baixos deixava a interface minúscula no
+ *    meio de uma tela vazia. Com `min-height: 42vh` a demonstração ocupa
+ *    sempre uma área relevante, e o palco tem a mesma altura em todas as
+ *    etapas — que é também o que acaba com o salto vertical ao trocar de
+ *    etapa, porque o texto de cima não se move.
+ *
+ * 4. A CASCATA É UMA SÓ. Os atrasos daqui (0/50/100ms para o texto, 140ms
+ *    para o palco) continuam no `page.module.css` (140/190ms para os
+ *    cartões, 190ms em diante para as linhas de campo). Antes os dois
+ *    arquivos recomeçavam do zero e o cartão aparecia antes de o título
+ *    ter terminado de entrar.
  */
 
 .tour {
@@ -28,6 +55,9 @@
    * `min-height` e não `height`: se o conteúdo de uma etapa for mais alto
    * que a tela (celular pequeno, painel denso), o elemento cresce em vez
    * de cortar. O sticky continua valendo porque o topo fica preso.
+   *
+   * Centralização em grade: `align-content: center` resolve o eixo
+   * vertical das linhas implícitas sem depender de o conteúdo caber.
    */
   min-height: 100vh;
   display: grid;
@@ -35,9 +65,12 @@
   align-content: center;
   gap: var(--space-5);
   padding: var(--space-8) var(--space-9);
-  /* Coluna de leitura. `ch` é a unidade que a landing já usa para conter
-     texto — painel esticrado em 1920px é o que deixa a interface com ar
-     de tela vazia. */
+  /*
+   * Coluna de leitura. `ch` é a unidade que a landing já usa para conter
+   * texto. 128ch dá largura de aplicação de verdade numa tela larga e
+   * ainda contém o texto — 104ch cabia em dois cartões magros com 700px
+   * de cinza de cada lado num monitor de 2560px.
+   */
   max-width: 128ch;
   margin-inline: auto;
   box-sizing: border-box;
@@ -62,7 +95,7 @@
 }
 
 /*
- * "01 / 06" mais o rótulo do módulo. O contador usa algarismo tabular para
+ * "02 / 06" mais o rótulo do módulo. O contador usa algarismo tabular para
  * os números não dançarem de largura entre 09 e 10.
  */
 .count {
@@ -73,9 +106,9 @@
 }
 
 .countNow {
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   font-weight: var(--weight-medium);
-  color: var(--brand);
+  color: var(--text-strong);
 }
 
 .countSep {
@@ -88,76 +121,86 @@
   color: var(--text-muted);
 }
 
+/*
+ * O selo do módulo. É o ÚNICO laranja da etapa, e carrega a informação que
+ * o contador não dá: de qual parte do produto se está falando.
+ */
 .countLabel {
   margin-left: var(--space-2);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-badge);
   background: var(--brand-soft);
   color: var(--brand-soft-fg);
-  font-size: var(--text-2xs);
+  font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-snug);
 }
 
 .title {
   margin: 0;
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-strong);
   font-weight: var(--weight-regular);
-  max-width: 34ch;
+  max-width: 30ch;
 }
 
 .body {
   margin: 0;
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   line-height: var(--leading-normal);
   color: var(--text-secondary);
-  max-width: 58ch;
+  max-width: 56ch;
 }
 
 /* ---------- interface demonstrada, abaixo ---------- */
 
+/*
+ * Área mínima da demonstração. É o que impede a interface de ficar
+ * minúscula no meio de uma tela vazia, e o que dá ao palco a mesma altura
+ * em todas as etapas — sem isso, um painel de dois cartões baixos e outro
+ * de cinco linhas altas mudavam a posição do texto de cima a cada troca.
+ */
 .stage {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   width: 100%;
-  min-height: 0;
+  min-height: 42vh;
 }
 
 .panel {
   width: 100%;
-  min-height: 0;
 }
 
 /*
- * A CASCATA. Quando a etapa muda, o texto e o painel entram um depois do
- * outro — 60ms de atraso entre um e outro — em fade curto com subida de
- * poucos pixels. É a técnica de stagger que o mercado usa em demonstração
- * de produto (Linear, Ramp) e é o que dá continuidade: o olho acompanha a
- * informação chegando em sequência em vez de uma tela sendo trocada por
- * outra.
+ * A CASCATA. O texto entra em 0/50/100ms e o palco em 140ms — e os atrasos
+ * continuam no `page.module.css`, que começa os cartões em 140ms. Uma
+ * sequência só, de cima para baixo, como se a informação fosse sendo
+ * construída na frente de quem lê.
  *
- * Cada bloco é 360ms — o teto que o DESIGN.md autoriza ("120–360ms,
- * cubic-bezier(.22,1,.36,1). No bounces, no parallax"). `both` é
- * obrigatório: sem ele os blocos piscam invisíveis antes do atraso e de
- * novo no fim.
+ * Duração de 200ms (`--dur-base`): com 360ms por elemento e cinco atrasos,
+ * a etapa levava mais de 700ms para assentar. 200ms está dentro da régua
+ * do DESIGN.md e o conjunto inteiro cabe em ~530ms.
+ *
+ * `both` é obrigatório: sem ele os blocos piscam invisíveis antes do
+ * atraso e de novo no fim.
  */
 .head > *,
 .stage > * {
-  animation: tourIn var(--dur-slow) var(--ease-out) both;
+  animation: tourIn var(--dur-base) var(--ease-out) both;
 }
 
 .head > *:nth-child(1) { animation-delay: 0ms; }
-.head > *:nth-child(2) { animation-delay: 60ms; }
-.head > *:nth-child(3) { animation-delay: 120ms; }
-.stage > *:nth-child(1) { animation-delay: 180ms; }
+.head > *:nth-child(2) { animation-delay: 50ms; }
+.head > *:nth-child(3) { animation-delay: 100ms; }
+.stage > *:nth-child(1) { animation-delay: 140ms; }
 
-.panel[data-reduced] {
-  animation: none;
-}
-
+/*
+ * `prefers-reduced-motion` desliga só as transições. O conteúdo das etapas
+ * é informação, não decoração — a apresentação continua funcionando, ela
+ * apenas para de se mover.
+ */
 .pin[data-reduced] .head > *,
 .pin[data-reduced] .stage > * {
   animation: none;
@@ -231,11 +274,11 @@
 }
 
 /*
- * A dica de que a apresentação é comandada pela rolagem. Some quando o
- * usuário já entrou no mecanismo — não fica repetindo o óbvio.
+ * A dica de que a apresentação é comandada pela rolagem. Em 13px, que é o
+ * menor tamanho usado na página — 12px ficava abaixo do confortável.
  */
 .navHint {
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--text-subtle);
   letter-spacing: var(--tracking-snug);
 }

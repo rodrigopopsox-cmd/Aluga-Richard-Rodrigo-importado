@@ -2,21 +2,45 @@
  * Landing do Aluga. Só tokens de design-system/tokens — nenhum valor solto.
  * Conferivel com o validador que cruza var(--...) com os tokens definidos.
  *
- * REGRAS DO DESIGN.md QUE ESTE ARQUIVO OBEDECE — cada uma delas já foi
- * descumprida aqui e reprovada na revisão:
+ * ================================================================== *
+ * FUNDAÇÃO VISUAL (rodada do refinamento)
+ * ================================================================== *
  *
- *   · **Cartão plano.** "Cards have no drop shadow at rest. Depth comes
- *     from tonal layers (gray page → white cards with a 1px border-subtle
- *     hairline), not shadows." O cartão de demonstração é hairline plano;
- *     as versões anteriores usavam `--shadow-card` e `--shadow-device`
- *     (anel preto de 10px) e as duas foram reprovadas.
- *   · **Movimento curto e quieto.** "120–360ms, cubic-bezier(.22,1,.36,1).
- *     No bounces, no parallax."
- *   · **Respiração.** O `--page-gutter` de 24px é a medida do painel, que
- *     é denso por natureza. Numa landing em tela larga, 24px deixa o texto
- *     colado na borda — foi a reclamação "letras coladas na tela". Aqui a
- *     calha é `--space-9` (40px), ainda dentro da escala.
- *   · **Laranja é uma só ação primária por vista.**
+ * HIERARQUIA TIPOGRÁFICA — uma escada, sem buraco:
+ *
+ *   48px  --text-4xl   headline do hero
+ *   36px  --text-3xl   título de etapa e título de seção
+ *   18px  --text-lg    lead, texto de etapa, título de cartão
+ *   16px  --text-md    valor de campo, número de destaque
+ *   13px  --text-sm    rótulo de campo, dica, nota miúda
+ *
+ * Antes o título de etapa era 28px — o mesmo tamanho do título de seção e
+ * só 20px abaixo da headline do hero. Não havia escada: havia um degrau
+ * faltando. Os textos miúdos (dica de rolagem, nota) estavam em 12px e
+ * 11px, abaixo do confortável; subiram para 13px.
+ *
+ * ESPAÇAMENTO — a mesma escala em tudo:
+ *
+ *   seção        --space-10 (56px) vertical, --space-9 (40px) lateral
+ *   entre blocos --space-6 (20px)
+ *   entre cartões--card-gap (14px), o mesmo vão da grade do painel
+ *   dentro cartão--card-padding (20px)
+ *
+ * COR — o laranja é reserva, não decoração. Aparece em quatro lugares e
+ * em nenhum outro: a palavra-chave da headline, o botão primário, o ponto
+ * da etapa ativa e o selo do módulo. O contador "02 / 06" era laranja e
+ * deixou de ser — com o selo laranja do lado, eram dois laranjas brigando
+ * pela mesma informação.
+ *
+ * SUPERFÍCIE — três camadas distintas e só três: página (cinza), cartão
+ * (branco + hairline) e trilha (cinza claro, para barra de progresso e
+ * fundo de controle). Cartão é plano: profundidade vem da camada tonal,
+ * nunca de sombra.
+ *
+ * REGRAS DO DESIGN.md QUE ESTE ARQUIVO OBEDECE:
+ *   · Cartão plano, hairline de 1px, sem sombra em repouso.
+ *   · Movimento 120–360ms, cubic-bezier(.22,1,.36,1). Sem bounce.
+ *   · Laranja é uma só ação primária por vista.
  */
 
 .page {
@@ -41,7 +65,7 @@
 .topNav {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-6);
 }
 
 .topLink {
@@ -54,25 +78,25 @@
   color: var(--text-strong);
 }
 
-/* ---------- hero: texto de um lado, demo do outro ---------- */
+/* ================================================================== *
+ * HERO
+ * ================================================================== */
 
 /*
- * Hero. Agora é só o convite: título, texto e botões. A demonstração saiu
- * daqui e virou a seção de sticky scrollytelling abaixo, onde a explicação
- * fica acima da interface e a rolagem comanda as etapas. Manter a demo ao
- * lado do texto aqui E a apresentação logo embaixo seria mostrar o produto
- * duas vezes na mesma tela.
+ * Só o convite: título, texto e botões. A demonstração virou a seção de
+ * sticky scrollytelling abaixo. Manter a demo ao lado do texto aqui E a
+ * apresentação logo embaixo seria mostrar o produto duas vezes na mesma
+ * tela.
  *
  * Centralizado, e não encostado à esquerda: num monitor largo o texto
  * colado na borda deixa 2/3 da tela vazios e a página parece inacabada.
- * Centralizado, o convite ocupa a tela e a seção seguinte entra natural.
  */
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-5);
-  max-width: 68ch;
+  max-width: 60ch;
   margin-inline: auto;
   padding: var(--space-11) var(--space-9) var(--space-10);
   text-align: center;
@@ -88,21 +112,23 @@
 }
 
 /* A palavra-chave e o ponto em laranja — o dispositivo de headline do
-   DESIGN.md ("Decisões mais claras."). O ponto é parte da marca. */
+   DESIGN.md. É um dos quatro lugares onde o laranja pode aparecer. */
 .accent {
   color: var(--brand);
 }
 
 .lead {
   margin: 0;
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   line-height: var(--leading-normal);
   color: var(--text-secondary);
+  max-width: 54ch;
 }
 
 .ctas {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-3-5);
   margin-top: var(--space-2);
 }
@@ -116,20 +142,18 @@
 
 /*
  * A dica de que a apresentação é comandada pela rolagem. Sem ela, quem
- * chega no hero não sabe que tem produto para ver embaixo — e a seção
- * seguinte é justamente a que depende da rolagem.
+ * chega no hero não sabe que tem produto para ver embaixo.
  */
 .scrollCue {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  margin: var(--space-3) 0 0;
+  margin: var(--space-4) 0 0;
   font-size: var(--text-sm);
   color: var(--text-muted);
 }
 
-/* A seta desce sozinha, devagar. É o único movimento contínuo da página,
-   e é curto e quieto como a régua manda. */
+/* A seta desce sozinha, devagar. É o único movimento contínuo da página. */
 .scrollCaret {
   animation: cue var(--dur-slow) var(--ease-in-out) infinite alternate;
 }
@@ -143,12 +167,14 @@
   }
 }
 
-/* ---------- do seu jeito ---------- */
+/* ================================================================== *
+ * SEÇÕES
+ * ================================================================== */
 
 /*
  * Texto de um lado, demonstração do outro — o ritmo inverte aqui de
  * propósito, porque a seção de cima é vertical e centrada. Duas seções
- * vertazes seguidas cansam.
+ * verticais seguidas cansam.
  */
 .mes {
   display: grid;
@@ -162,7 +188,7 @@
 .mesCopy {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3-5);
+  gap: var(--space-4);
 }
 
 .mesStage {
@@ -178,7 +204,7 @@
 
 .sectionTitle {
   margin: 0;
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-strong);
@@ -187,7 +213,7 @@
 
 .sectionLead {
   margin: 0;
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   line-height: var(--leading-normal);
   color: var(--text-secondary);
   max-width: 52ch;
@@ -209,7 +235,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-4);
+  gap: var(--space-5);
+  max-width: 60ch;
   padding: var(--space-10) var(--space-9);
   background: var(--surface-inverse);
 }
@@ -237,67 +264,65 @@
 }
 
 /* ================================================================== *
- * Peças dos painéis de demonstração.
+ * PEÇAS DOS PAINÉIS DA DEMONSTRAÇÃO
+ *
+ * A linguagem é uma só em todas as etapas: cartão branco com hairline,
+ * cabeçalho de duas linhas, corpo de linhas "rótulo · valor", e no máximo
+ * um número grande por painel fazendo o papel de destaque. É o que faz
+ * seis etapas diferentes parecerem o mesmo produto.
  * ================================================================== */
 
 /*
- * Interior dos painéis em duas colunas — é o que dá a densidade da ficha
- * de contrato. `--card-gap` (14px) é o mesmo vão da grade do painel.
+ * Duas colunas iguais. A etapa quase sempre junta dois cartões do mesmo
+ * tamanho (imóvel e imóvel, contrato e contrato); a partição 7/5 que
+ * existia antes deixava um gordo e um magro do lado.
+ *
+ * `align-items: stretch` e não `start`: cartões da mesma altura, que é o
+ * que dá a sensação de grade e não de duas caixas soltas.
  */
 .split {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--card-gap);
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (min-width: 720px) {
   .split {
-    /*
-     * Colunas iguais. A etapa quase sempre junta dois cartões do mesmo
-     * tamanho (imóvel e imóvel, contrato e contrato); a partição 7/5 que
-     * existia antes deixava um gordo e um magro do lado, e no monitor
-     * largo isso aparecia mais ainda.
-     */
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
 /*
- * A CASCATA. Cada cartão, cada coluna e cada linha de campo entra um
- * depois do outro, com 60ms de atraso entre um e outro. É a técnica de
- * stagger que o mercado usa em demonstração de produto (Linear, Ramp) e é
- * o que dá a sensação de fluidez: o olho acompanha a informação chegando
- * em sequência, em vez de uma tela sendo trocada por outra.
+ * A CASCATA — uma só, sincronizada, e ela começa onde a cascata do
+ * `ProductTour.module.css` terminou.
  *
- * Cada bloco é 360ms — o teto que o DESIGN.md autoriza ("120–360ms,
- * cubic-bezier(.22,1,.36,1). No bounces, no parallax"). `both` é
- * obrigatório: sem ele os blocos piscam invisíveis antes do atraso e de
- * novo no fim.
+ * Havia DOIS sistemas de cascata: o do módulo do tour atrasava o texto em
+ * 0/60/120ms e o palco em 180ms, e este arquivo recomeçava os cartões em
+ * 0ms. Resultado: o cartão aparecia antes de o título ter terminado de
+ * entrar, e a leitura ficava confusa. Agora o texto entra em 0/50/100ms,
+ * o palco em 140ms, os cartões em 140/190ms e as linhas de campo em
+ * 190/225/260/295/330ms — uma sequência única, de cima para baixo.
+ *
+ * Duração de 200ms (`--dur-base`), não 360ms: com 360ms por elemento e
+ * cinco atrasos, a etapa levava mais de 700ms para assentar e parecia
+ * lenta. 200ms está dentro da régua do DESIGN.md e o conjunto inteiro
+ * cabe em ~530ms.
  */
 .split > *,
-.panelBody > *,
-.metrics > * {
-  animation: fillIn var(--dur-slow) var(--ease-out) both;
+.panelBody > * {
+  animation: fillIn var(--dur-base) var(--ease-out) both;
 }
 
-.split > *:nth-child(1) { animation-delay: 0ms; }
-.split > *:nth-child(2) { animation-delay: 60ms; }
-.split > *:nth-child(3) { animation-delay: 120ms; }
-.split > *:nth-child(4) { animation-delay: 180ms; }
-.split > *:nth-child(5) { animation-delay: 240ms; }
+.split > *:nth-child(1) { animation-delay: 140ms; }
+.split > *:nth-child(2) { animation-delay: 190ms; }
 
-.panelBody > *:nth-child(1) { animation-delay: 120ms; }
-.panelBody > *:nth-child(2) { animation-delay: 180ms; }
-.panelBody > *:nth-child(3) { animation-delay: 240ms; }
-.panelBody > *:nth-child(4) { animation-delay: 300ms; }
-.panelBody > *:nth-child(5) { animation-delay: 360ms; }
-.panelBody > *:nth-child(6) { animation-delay: 420ms; }
-
-.metrics > *:nth-child(1) { animation-delay: 0ms; }
-.metrics > *:nth-child(2) { animation-delay: 80ms; }
-.metrics > *:nth-child(3) { animation-delay: 160ms; }
-.metrics > *:nth-child(4) { animation-delay: 240ms; }
+.panelBody > *:nth-child(1) { animation-delay: 190ms; }
+.panelBody > *:nth-child(2) { animation-delay: 225ms; }
+.panelBody > *:nth-child(3) { animation-delay: 260ms; }
+.panelBody > *:nth-child(4) { animation-delay: 295ms; }
+.panelBody > *:nth-child(5) { animation-delay: 330ms; }
+.panelBody > *:nth-child(6) { animation-delay: 365ms; }
 
 @keyframes fillIn {
   from {
@@ -311,26 +336,64 @@
 }
 
 /*
- * O `Card` já aplica o `--card-padding` (20px) nele todo — inclusive nas
- * laterais. Então aqui só entra o vão vertical entre o cabeçalho e o corpo.
+ * O cartão da demonstração. `Card` já aplica o `--card-padding` (20px)
+ * inline, então aqui entra só a coluna flex — o padding é dele, e repetir
+ * aqui seria brigar com o estilo inline.
  */
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
 .panelBody {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-3) 0 0;
+  padding: var(--space-4) 0 0;
 }
 
-/* `Metric` não tem margem própria: o vão entre o título e o número é nosso. */
-.metricSlot {
-  margin-top: var(--space-3);
+/*
+ * O DESTAQUE. Um número grande por painel, no máximo — é o elemento que a
+ * pessoa deve ler primeiro naquela etapa. Fica colado no cabeçalho, antes
+ * das linhas de campo, e é a única coisa do cartão que cresce de tamanho.
+ */
+.highlight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) 0 var(--space-1);
 }
 
+.highlightValue {
+  font-size: var(--text-2xl);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-metric);
+  color: var(--text-strong);
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.highlightLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Linha "rótulo · valor", como a ficha de um contrato. */
 .field {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-5);
+  /* Linha divisória fina: separa sem grades, e é o que dá ritmo de
+     leitura quando o painel tem cinco linhas. */
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* A primeira linha não precisa de régua: o cabeçalho já separa. */
+.panelBody > .field:first-child {
+  border-top: 0;
+  padding-top: 0;
 }
 
 .fieldLabel {
@@ -341,23 +404,279 @@
 .fieldValue {
   /*
    * 16px e não 13px: o valor é o dado que a pessoa veio ler. Com o cartão
-   * mais largo (a coluna passou de 104ch para 128ch), 13px deixava o
-   * número pequeno demais para a importância que ele tem na frase.
+   * mais largo, 13px deixava o número pequeno demais para a importância
+   * que ele tem na frase.
    */
   font-size: var(--text-md);
   font-weight: var(--weight-medium);
   color: var(--text-strong);
   text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
-.metrics {
+/* ================================================================== *
+ * A SEÇÃO "MEU MÊS"
+ *
+ * ATENÇÃO — estas classes são usadas pelo `MeuMesDemo.tsx`, que importa
+ * ESTE MESMO arquivo de estilo. Numa rodada anterior elas foram apagadas
+ * por engano: a verificação de "classe órfã" só olhava o
+ * `LandingScreen.tsx`. Com 31 regras faltando, a seção inteira ficou sem
+ * layout — barra do app sem posição, painel de configurações colado no
+ * resumo, cartões de unidade empilhados sem vão, e o tema escuro
+ * aplicando tokens num layout que não existia. Era a sobreposição que
+ * aparecia na gravação.
+ *
+ * Regra nova, para não repetir: quem apagar daqui confere os DOIS
+ * consumidores (`LandingScreen.tsx` e `MeuMesDemo.tsx`).
+ * ================================================================== */
+
+/*
+ * O quadro da demo. Recebe `data-a11y` e `data-theme` — os dois são
+ * atributos de elemento, não exclusivos do `<html>`, então o modo
+ * acessibilidade e o tema escuro funcionam aqui dentro sem sequestrar a
+ * landing. No app o atributo vai no `<html>` e vale para o painel todo.
+ *
+ * `overflow: hidden` é o que mantém o canto arredondado recortando os
+ * cartões de dentro, e é também o que faz o painel de configurações
+ * respeitar a moldura em vez de vazar para fora.
+ */
+.mesFrame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--surface-page);
+  overflow: hidden;
+}
+
+/* ---------- barra do app: marca, mês, engrenagem ---------- */
+
+.mesBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  /* `position: relative` + `z-index` explícito: a barra fica acima do
+     painel que ela abre, para o botão não ficar escondido atrás. */
+  position: relative;
+  z-index: 2;
+}
+
+.mesMonth {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+
+/* Empurra a engrenagem para a ponta, sem depender de espaço calculado. */
+.mesBar > :last-child {
+  margin-left: auto;
+}
+
+/* ---------- painel de configurações ---------- */
+
+/*
+ * Bloco normal no fluxo, não sobreposto. Já houve versão absoluta e era
+ * justamente ela que cobria o resumo do mês. Abrir as configurações
+ * empurra o conteúdo para baixo — é previsível e não tapa nada.
+ */
+.mesPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-tile);
+  background: var(--surface-card);
+  position: relative;
+  z-index: 1;
+}
+
+.mesPanelTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  letter-spacing: var(--tracking-snug);
+}
+
+.mesBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mesLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.mesHint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-normal);
+}
+
+/* ---------- resumo do mês ---------- */
+
+.mesSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+}
+
+.mesSummaryMissing {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/*
+ * A barra de progresso do resumo. Ela é do produto (a tela "Este mês" tem
+ * uma), então não é a barra de progresso da APRESENTAÇÃO — a etapa não
+ * depende dela para avançar. Fina, cinza, com o laranja só no preenchido.
+ */
+.mesSummaryTrack {
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
+}
+
+.mesSummaryFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  transition: width var(--dur-base) var(--ease-out);
+}
+
+.mesSummaryPct {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * A navegação de mês dentro do cabeçalho do resumo. Fica à direita, no
+ * `action` do `CardHeader`, e os dois botões abraçam o nome do mês.
+ * `flex: none` nos botões para o nome do mês poder sumir em tela estreita
+ * sem espremer os alvos de toque.
+ */
+.mesMonthNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.mesMonthLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  min-width: 6rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- o que o "Completo" acrescenta ---------- */
+
+.mesMetrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
   gap: var(--card-gap);
 }
 
-/*
- * Balão de WhatsApp. A moldura é o token de carta de chat, não uma cor
- * solta — é o mesmo cinza de superfície que o app usa.
- */
+.mesMetricSlot {
+  margin-top: var(--space-3);
+}
 
+/* ---------- um cartão por unidade ---------- */
+
+.mesUnit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mesUnitHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.mesUnitNames {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.mesUnitName {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesUnitTenant {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesUnitRent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  text-align: right;
+}
+
+.mesUnitRentValue {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesUnitRentLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/*
+ * O status em frase, nunca só cor — é regra da R7 e é o que torna a tela
+ * legível para quem não distingue matiz.
+ */
+.mesUnitStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.mesUnitStatusIcon {
+  flex: none;
+}
+
+.mesUnitStatusText {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.mesUnitActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* ---------- o recado de honestidade ---------- */
+
+.mesNote {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}

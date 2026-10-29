@@ -137,7 +137,15 @@ export function ProductTour({ steps }: ProductTourProps) {
       // reprovado pelo validador.
       style={{ height: `calc(${total} * 100vh + 100vh)` }}
     >
-      <div className={styles.pin}>
+      {/*
+        O `data-reduced` vai no PALCO, não no painel. O painel tem
+        `key={p-${active}}` e é remontado a cada troca de etapa, então o
+        atributo precisaria ser reaplicado a cada frame — e no primeiro
+        frame depois da troca ele ainda não estaria lá, produzindo um
+        piscar de animação em quem pediu movimento reduzido. No palco, que
+        não é remontado, o atributo está sempre certo.
+      */}
+      <div className={styles.pin} data-reduced={reduced ? '' : undefined}>
         {/* ---------- explicação, acima ---------- */}
         <div className={styles.head}>
           <div className={styles.count}>
@@ -159,11 +167,7 @@ export function ProductTour({ steps }: ProductTourProps) {
 
         {/* ---------- interface demonstrada, abaixo ---------- */}
         <div className={styles.stage}>
-          <div
-            className={styles.panel}
-            key={`p-${active}`}
-            data-reduced={reduced ? '' : undefined}
-          >
+          <div className={styles.panel} key={`p-${active}`}>
             {step.panel}
           </div>
         </div>
