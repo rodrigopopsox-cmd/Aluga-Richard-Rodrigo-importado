@@ -14,7 +14,6 @@ import {
   type TourStep,
 } from '@design-system';
 import { MeuMesDemo } from './MeuMesDemo';
-import { ProductShowcase } from './ProductShowcase';
 import s from './page.module.css';
 
 /**
@@ -304,14 +303,10 @@ export function LandingScreen() {
             Cobre, receba e saiba quanto cada <span className={s.accent}>imóvel rende.</span>
           </h1>
           <p className={s.lead}>
-            Cadastre o imóvel e o inquilino uma vez. Daí em diante o Aluga cobra todo mês, dá baixa
-            quando o Pix cai e separa o Imposto de Renda por titular.
+            Você cadastra o imóvel e o inquilino uma vez. Depois disso o Aluga cobra todo mês,
+            lembra quem está devendo, dá baixa quando o Pix cai e ainda separa o Imposto de Renda
+            por titular. Você só acompanha.
           </p>
-
-          {/* A demonstração animada, antes do botão: quem chega precisa ver
-              o produto funcionando antes de decidir qualquer coisa. */}
-          <ProductShowcase />
-
           <div className={s.ctas}>
             <Button
               size="lg"
