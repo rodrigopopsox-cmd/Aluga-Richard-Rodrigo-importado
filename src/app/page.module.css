@@ -416,6 +416,352 @@
 }
 
 /* ================================================================== *
+ * A DEMONSTRAÇÃO ANIMADA DO PRODUTO
+ *
+ * Três tempos passando sozinhos: a cobrança do mês, o lembrete no
+ * WhatsApp, o Pix caindo com a baixa automática. Dados de `chargesData`,
+ * componentes do design system.
+ *
+ * A COR AQUI TRABALHA, NÃO DECORA. O laranja aparece em dois lugares: o
+ * ponto de "ao vivo" e o tempo ativo nos pontos de baixo. O verde e o
+ * âmbar são dos badges de status, que são informação — cobrança paga e
+ * cobrança em aberto. Nada de gradiente, nada de brilho.
+ * ================================================================== */
+
+.showcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 96ch;
+  /* Ar dos dois lados: é o maior elemento do hero e, sem esse respiro,
+     parecia grudado no texto em cima e nos botões embaixo. */
+  margin-block: var(--space-5);
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--surface-card);
+  text-align: left;
+}
+
+/* ---------- barra do app ---------- */
+
+.showBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.showWhere {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/*
+ * O "ao vivo". O ponto pulsa devagar — é o único movimento contínuo da
+ * moldura, e diz que aquilo está acontecendo agora, não é uma foto.
+ */
+.showLive {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+
+.showLiveDot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--brand);
+  animation: livePulse var(--dur-slow) var(--ease-in-out) infinite alternate;
+}
+
+@keyframes livePulse {
+  from {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- o conteúdo do tempo atual ---------- */
+
+/*
+ * `key` no componente remonta este bloco a cada tempo, e é isso que
+ * dispara a animação de entrada. Sem o key, o React reaproveitaria os nós
+ * e nada entraria de novo.
+ */
+.showBody {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--card-gap);
+  align-items: start;
+  animation: showIn var(--dur-base) var(--ease-out) both;
+}
+
+@media (min-width: 760px) {
+  .showBody {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@keyframes showIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- os números do topo ---------- */
+
+.showTotals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--card-gap);
+  margin-top: var(--space-4);
+}
+
+/* ---------- lista de cobranças ---------- */
+
+.showRows {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-3);
+}
+
+.showRow,
+.showRowFocus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.showRow:first-child,
+.showRowFocus:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/*
+ * A cobrança que vai mudar de estado. Fundo de marca bem clarinho e canto
+ * arredondado — chama o olho sem gritar, e é a mesma receita do cartão
+ * selecionado do app.
+ */
+.showRowFocus {
+  margin-inline: calc(var(--space-3) * -1);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--brand-soft);
+}
+
+.showRowMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.showRowUnit {
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.showRowTenant {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.showRowSide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: none;
+}
+
+.showRowValue {
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.showRowPart {
+  font-weight: var(--weight-regular);
+  color: var(--text-muted);
+}
+
+/* ---------- o lembrete no WhatsApp ---------- */
+
+.showChat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+/*
+ * O balão. Cinza de superfície, que é o tom de carta de chat do app — e é
+ * o que o diferencia do cartão branco em volta.
+ */
+.showBubble {
+  align-self: flex-start;
+  max-width: 42ch;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border-top-left-radius: var(--radius-xs);
+  background: var(--surface-sunken);
+  color: var(--text-body);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+}
+
+.showChatMeta {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* ---------- o pagamento identificado ---------- */
+
+.showPaid {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.showPaidIcon {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+/* ---------- o registro que fica ---------- */
+
+.showRecord {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.showRecord:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.showRecordLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.showRecordValue {
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  text-align: right;
+}
+
+/* ---------- os pontos e o nome do tempo ---------- */
+
+.showFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.showCaption {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+}
+
+.showDots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Alvo de 48px — o token já sobe para 56px no modo acessibilidade. */
+.showDot,
+.showDotOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--control-h-md);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.showDot::after,
+.showDotOn::after {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--surface-track);
+  transition: background var(--dur-fast) var(--ease-out), width var(--dur-fast) var(--ease-out);
+}
+
+.showDotOn::after {
+  width: var(--space-5);
+  background: var(--brand);
+}
+
+.showDot:focus-visible,
+.showDotOn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: calc(var(--space-1) * -1);
+  border-radius: var(--radius-pill);
+}
+
+.showNote {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-subtle);
+}
+
+/* Movimento reduzido: o ponto de "ao vivo" para de pulsar. */
+@media (prefers-reduced-motion: reduce) {
+  .showLiveDot {
+    animation: none;
+  }
+
+  .showBody {
+    animation: none;
+  }
+}
+
+/* ================================================================== *
  * A SEÇÃO "VOCÊ CONFIGURA DO SEU JEITO"
  *
  * As telas aqui dentro são as do painel (`SimpleModeScreen` e

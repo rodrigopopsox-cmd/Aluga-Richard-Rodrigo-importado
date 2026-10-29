@@ -7,6 +7,7 @@ import { DashboardScreen } from '../../design-system/templates/admin/DashboardSc
 import { tasks as TASKS_REAIS, type Task } from '../../design-system/templates/admin/data';
 import type { ToastInput } from '../../design-system/templates/admin/AdminApp';
 import { useBreakpoint } from '../../design-system/templates/admin/useBreakpoint';
+import { ProductShowcase } from './ProductShowcase';
 import s from './page.module.css';
 
 /**
@@ -47,7 +48,10 @@ export function MeuMesDemo() {
   const [open, setOpen] = useState(false);
   const [a11y, setA11y] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [view, setView] = useState<'simple' | 'full'>('simple');
+  // Começa no COMPLETO. A Visão geral é o painel como ele é de verdade, e é
+  // ela que a pessoa precisa ver primeiro para entender o que está
+  // experimentando. O Simples fica a um clique, na engrenagem.
+  const [view, setView] = useState<'simple' | 'full'>('full');
   const [tasks, setTasks] = useState<Task[]>(TASKS_REAIS);
   const [toast, setToast] = useState<ToastInput | null>(null);
   // O mesmo breakpoint do painel: a tela escolhe quantas colunas usar, e não
@@ -169,6 +173,21 @@ export function MeuMesDemo() {
           </div>
         </div>
       )}
+
+      {/* ---------- a demonstração animada do produto ---------- */}
+      {/*
+        O ciclo passando sozinho: cobrança do mês, lembrete no WhatsApp, Pix
+        caindo com a baixa automática. Três tempos, dados de `chargesData`.
+
+        Fica DENTRO do quadro de propósito — assim o modo acessibilidade e o
+        tema escuro alcançam ela também. Quem aumenta a letra ou escurece o
+        quadro vê o resultado na animação, não só na tela de baixo.
+
+        Ela não segura a rolagem: um `setTimeout` troca o tempo e a página
+        continua rolando normalmente. Com `prefers-reduced-motion` a troca
+        automática para no primeiro tempo e os três pontos ficam clicáveis.
+      */}
+      <ProductShowcase />
 
       {/* ---------- a tela do painel, no modo escolhido ---------- */}
       <div className={s.mesScreen}>

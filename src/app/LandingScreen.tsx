@@ -342,11 +342,17 @@ export function LandingScreen() {
           <div className={s.mesCopy}>
             <h2 className={s.sectionTitle}>Você configura do seu jeito</h2>
             <p className={s.sectionLead}>
-              Letra maior e botões maiores para quem tem dificuldade com sistema. Tema escuro para
-              quem trabalha à noite. E duas formas de ver o painel: Simples, com um cartão por
-              unidade e o que entrou no mês, ou Completo, com a visão geral inteira.
+              O ciclo acontece sozinho: a cobrança do mês nasce do contrato, o lembrete sai no
+              WhatsApp três dias antes, e quando o Pix cai a baixa é automática. Isso passa aqui em
+              cima, sem você tocar em nada.
             </p>
             <p className={s.sectionLead}>
+              Embaixo, o painel — e você escolhe como quer ver. Letra maior e botões maiores para
+              quem tem dificuldade com sistema. Tema escuro para quem trabalha à noite. E duas
+              formas de ver: Simples, com um cartão por unidade e o que entrou no mês, ou Completo,
+              com a visão geral inteira.
+            </p>
+            <p className={s.fine}>
               Tudo isso é configuração — não é versão diferente do app, e não custa nada a mais.
             </p>
             <p className={s.fine}>
