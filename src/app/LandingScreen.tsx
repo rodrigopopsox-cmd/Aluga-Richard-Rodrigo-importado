@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import {
   Avatar,
   Badge,
@@ -234,69 +234,15 @@ function Field({ label, value }: { label: string; value: ReactNode }) {
 }
 
 /**
- * Número que conta.
+ * Régua de métricas — a mesma da tela, em três ou quatro cartões.
  *
- * Quando o painel entra na cascata, o valor sobe de zero até o número
- * final em vez de piscar pronto. É o padrão de "contador animado" que o
- * Ramp e o Linear usam nas demonstrações, e faz duas coisas que um número
- * estático não faz: chama o olho para o valor que importa e mantém o
- * movimento vivo dentro do passo, sem precisar de barra de progresso.
- *
- * A duração é 900ms, fora da régua de 120–360ms do DESIGN.md — que trata
- * de *transição de interface*, não de contagem de dado. A cascata que
- * trouxe o painel até aqui seguiu a régua; isto é o conteúdo se
- * estabelecendo.
- *
- * `prefers-reduced-motion` pula a contagem e entrega o número final.
+ * Os números aparecem PRONTOS, não contando. Houve uma versão com contador
+ * animado (o valor subindo de zero) e ela foi reprovada no uso: a
+ * apresentação é comandada pela rolagem, então quem rola rápido via o
+ * contador no meio — "R$ 17", "R$ 23" — e numa página sobre dinheiro um
+ * número errado na tela, mesmo que por 400ms, lê-se como defeito. O valor
+ * certo na hora certa é o que a promessa exige.
  */
-function CountUp({ value, duration = 900 }: { value: string; duration?: number }) {
-  const parts = value.match(/^(\D*)([\d.,]+)(\D*)$/);
-  const final = useMemo(() => {
-    if (!parts) return null;
-    const [, prefix, digits, suffix] = parts;
-    const dec = digits.includes(',') ? digits.split(',')[1].length : 0;
-    return {
-      prefix,
-      suffix,
-      dec,
-      n: Number(digits.replace(/\./g, '').replace(',', '.')),
-    };
-  }, [parts]);
-
-  const [n, setN] = useState(0);
-  const reduced = useRef(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    reduced.current = mq.matches;
-    if (mq.matches || !final) return;
-    let raf = 0;
-    const t0 = performance.now();
-    const tick = (t: number): void => {
-      const p = Math.min(1, (t - t0) / duration);
-      // easeOutCubic — sai rápida e assenta. Sem bounce.
-      setN(final.n * (1 - Math.pow(1 - p, 3)));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [final, duration]);
-
-  if (!final) return <>{value}</>;
-  const shown = reduced.current ? final.n : n;
-  return (
-    <>
-      {final.prefix}
-      {shown.toLocaleString('pt-BR', {
-        minimumFractionDigits: final.dec,
-        maximumFractionDigits: final.dec,
-      })}
-      {final.suffix}
-    </>
-  );
-}
-
-/** Régua de métricas — a mesma da tela, em três ou quatro cartões. */
 function Metrics({ items }: { items: Array<{ title: string; value: string }> }) {
   return (
     <div className={s.metrics}>
@@ -304,11 +250,15 @@ function Metrics({ items }: { items: Array<{ title: string; value: string }> }) 
         <Card key={m.title}>
           <CardHeader title={m.title} size="sm" />
           <div className={s.metricSlot}>
-            <Metric
-              value={<CountUp value={m.value} />}
-              size="md"
-              decimals={m.value.includes(',')}
-            />
+            {/*
+              Sem `decimals`, de propósito. A `Metric` quebra o decimal
+              procurando ponto ("23680.00"), mas o pt-BR escreve vírgula —
+              passar `decimals` aqui faria "R$ 5.600,00" renderizar como
+              "R$ 5" com ".600,00" acinzentado. A tela real (`FinanceScreen`)
+              também não passa: `value={brl(received)}` e pronto. A landing
+              mostra o número do mesmo jeito que o app.
+            */}
+            <Metric value={m.value} size="md" />
           </div>
         </Card>
       ))}

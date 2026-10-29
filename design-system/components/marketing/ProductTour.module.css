@@ -30,15 +30,15 @@
    * de cortar. O sticky continua valendo porque o topo fica preso.
    */
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
   gap: var(--space-5);
   padding: var(--space-8) var(--space-9);
   /* Coluna de leitura. `ch` é a unidade que a landing já usa para conter
      texto — painel esticrado em 1920px é o que deixa a interface com ar
      de tela vazia. */
-  max-width: 104ch;
+  max-width: 128ch;
   margin-inline: auto;
   box-sizing: border-box;
 }
