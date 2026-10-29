@@ -382,7 +382,7 @@ export function PropertiesScreen({ bp, toast, go }: PropertiesScreenProps) {
           <Metric value={String(rented)} size="md" className={s.mt3} />
         </Card>
         <Card padding="var(--space-5-5)">
-          <CardHeader size="sm" title="Vagas" subtitle="esperando inquilino" />
+          <CardHeader size="sm" title="Sem inquilino" subtitle="esperando" />
           <Metric value={String(units.length - rented)} size="md" className={s.mt3} />
         </Card>
       </div>

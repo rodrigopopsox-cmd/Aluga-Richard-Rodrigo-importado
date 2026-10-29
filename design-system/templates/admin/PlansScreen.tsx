@@ -46,7 +46,7 @@ export function PlansScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastInp
           toast({
             tone: 'info',
             title: `Plano ${name}`,
-            message: 'Assinatura pelo Mercado Pago — integração na sprint 3.',
+            message: 'Assinatura pelo Mercado Pago.',
           })
         }
       />
@@ -67,8 +67,8 @@ export function PlansScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastInp
       </Card>
 
       <p className={s.caption}>
-        Preços e limites conforme <code>PRODUCT.md</code>. Estão em validação com os 5
-        fundadores — a confirmação entra em <code>PRODUCT.md</code> (preços) na sprint 3.
+        O teste dura 14 dias e não pede cartão. Se assinar, a cobrança vem pelo
+        Mercado Pago e você pode cancelar quando quiser.
       </p>
     </div>
   );

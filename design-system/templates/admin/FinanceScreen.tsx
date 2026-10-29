@@ -75,7 +75,7 @@ export function FinanceScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastI
           <Metric value={brl(spent)} size="md" className={s.mt4} />
         </Card>
         <Card>
-          <CardHeader title="Resultado" subtitle={range} />
+          <CardHeader title="Sobrou" subtitle={range} />
           <Metric value={brl(result)} size="md" className={s.mt4} />
         </Card>
         <Card>
@@ -87,7 +87,7 @@ export function FinanceScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastI
       {/* seletor de período + fluxo de caixa */}
       <Card>
         <CardHeader
-          title="Fluxo de caixa"
+          title="Entradas e saídas"
           subtitle="Recebido e despesas"
           action={
             <SegmentedControl size="sm" options={RANGES} value={range} onChange={(v) => setRange(v as Range)} />
@@ -177,8 +177,8 @@ export function FinanceScreen({ bp, toast }: { bp: Breakpoint; toast: (t: ToastI
         <CardHeader title="Como funciona" subtitle="De onde vem cada número" />
         <p className={s.caption}>
           <strong>Recebido</strong> é o que entrou de verdade. <strong>Despesas</strong> é o que
-          saiu — IPTU, condomínio, manutenção e taxa. <strong>Resultado</strong> é a diferença, e
-          é o número que você leva para o contador. <strong>Ocupação</strong> é quantas das suas
+          saiu — IPTU, condomínio, conserto e taxa. <strong>Sobrou</strong> é a diferença, e é o
+          número que você leva para o contador. <strong>Ocupação</strong> é quantas das suas
           unidades estão alugadas. A <strong>origem</strong> do recebimento mostra se a baixa foi
           automática (Mercado Pago), pela sua resposta ao &ldquo;Recebeu?&rdquo; ou manual.
         </p>

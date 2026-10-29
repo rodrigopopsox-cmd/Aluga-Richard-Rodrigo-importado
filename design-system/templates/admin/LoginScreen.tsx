@@ -36,7 +36,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             <span className={styles.light}>o que você</span> <b className={styles.strong}>aluga</b>
           </div>
           <div className={styles.heroCopy}>
-            Reúne <b>contratos</b>, <b>manutenção</b> e <b>finanças</b> em um só lugar.
+            Reúne <b>contratos</b>, <b>cobranças</b> e <b>recebimentos</b> em um só lugar.
           </div>
         </div>
       )}

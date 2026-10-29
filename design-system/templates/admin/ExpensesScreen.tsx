@@ -261,15 +261,15 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
     <div className={s.stack}>
       <div className={s.grid} style={{ gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(3, minmax(0, 1fr))' }}>
         <Card padding="var(--space-5-5)">
-          <CardHeader size="sm" title={`Despesas de ${year}`} subtitle="registradas no ano" />
+          <CardHeader size="sm" title={`Despesas de ${year}`} subtitle="do ano" />
           <Metric value={money(totalYear)} size="md" className={s.mt3} />
         </Card>
         <Card padding="var(--space-5-5)">
-          <CardHeader size="sm" title="Recebido no ano" subtitle="aluguéis do ano" />
+          <CardHeader size="sm" title="Recebido no ano" subtitle="aluguéis recebidos" />
           <Metric value={money(revenueYear)} size="md" className={s.mt3} />
         </Card>
         <Card padding="var(--space-5-5)">
-          <CardHeader size="sm" title="Resultado" subtitle="recebido menos despesas" />
+          <CardHeader size="sm" title="Sobrou" subtitle="recebido menos despesas" />
           <Metric value={money(resultYear)} size="md" className={s.mt3} />
         </Card>
       </div>
@@ -277,7 +277,7 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
       <Card padding={pad}>
         <CardHeader
           title="Despesas"
-          subtitle={`${yearRows.length} lançamentos em ${year}`}
+          subtitle={`${yearRows.length} registros em ${year}`}
           action={
             <Button icon="plus" onClick={openNew}>
               Nova despesa
@@ -302,8 +302,8 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
       {/* ---------------- Informe de rendimentos (R8) ---------------- */}
       <Card padding={pad}>
         <CardHeader
-          title="Informe de rendimentos"
-          subtitle="Mês a mês, pela fatia de cada titular — é o que o contador pede"
+          title="Imposto de Renda"
+          subtitle="Mês a mês, separado por proprietário — do jeito que o contador pede"
           action={
             <div className={s.rowActions}>
               <Select
@@ -314,7 +314,7 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
                 onChange={setHolder}
               />
               <Button variant="secondary" onClick={downloadCsv}>
-                Baixar extrato CSV
+                Baixar planilha
               </Button>
             </div>
           }
@@ -324,7 +324,7 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
             { key: 'm', label: 'Mês', render: (l) => MONTH_SHORT[l.month - 1] },
             { key: 'r', label: 'Recebido', align: 'right', render: (l) => money(l.revenue) },
             { key: 'e', label: 'Despesas', align: 'right', render: (l) => money(l.expenses) },
-            { key: 's', label: 'Resultado', align: 'right', render: (l) => money(l.result) },
+            { key: 's', label: 'Sobrou', align: 'right', render: (l) => money(l.result) },
           ]}
           rows={informe}
           empty="Nenhum rendimento neste ano."
@@ -333,14 +333,13 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
           <span>Total de {year}</span>
           <span>
             {money(totals.revenue)} recebido · {money(totals.expenses)} de despesas ·{' '}
-            <strong>{money(totals.result)}</strong> de resultado
+            <strong>{money(totals.result)}</strong> sobrou
           </span>
         </div>
         <p className={s.caption}>
-          Recebido é a fatia de {holder} no aluguel de cada mês, pela % de participação de cada
-          imóvel. O reajuste não entra na conta: o valor usado é o que está no contrato hoje, e o
-          histórico de reajuste ainda não existe. O informe fecha por titular e por mês, mas não é o
-          número para declarar — confira com o contador.
+          Recebido é a parte de {holder} no aluguel de cada mês, pela % que ele tem em cada
+          imóvel. O reajuste não entra: vale o que está no contrato hoje. Confira com o
+          contador antes de declarar.
         </p>
       </Card>
 
@@ -348,7 +347,7 @@ export function ExpensesScreen({ bp, toast }: ExpensesScreenProps) {
       <Card padding={pad}>
         <CardHeader
           title="Recebido por inquilino"
-          subtitle="Separado por pessoa física ou jurídica, como o informe pede"
+          subtitle="Separado por pessoa física ou jurídica, como o Imposto de Renda pede"
         />
         <DataTable
           columns={[

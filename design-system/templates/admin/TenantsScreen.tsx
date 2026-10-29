@@ -166,12 +166,11 @@ export function TenantsScreen({ bp, toast }: TenantsScreenProps) {
       <Card padding={pad}>
         <CardHeader title="Como funciona" subtitle="O que cada campo quer dizer" />
         <p className={s.caption}>
-          <strong>WhatsApp é obrigatório</strong> porque é por ele que sai o lembrete de
-          pagamento — 3 dias antes, no dia e 3 dias depois. Sem WhatsApp, o app não consegue
-          cobrar por você. O <strong>documento</strong> pode ser CPF, para pessoa física, ou CNPJ,
-          para empresa. O <strong>e-mail é opcional</strong> e serve só para contato. Um inquilino{' '}
-          <strong>sem unidade</strong> está cadastrado mas ainda não mora em nenhum lugar — ele
-          entra num contrato depois.
+          <strong>WhatsApp é obrigatório</strong> porque é por ele que sai o lembrete — 3 dias
+          antes, no dia e 3 dias depois. Sem WhatsApp, o app não cobra por você. O
+          <strong>documento</strong> é o CPF, para pessoa física, ou o CNPJ, para empresa. O
+          <strong>e-mail é opcional</strong>. Um inquilino <strong>sem unidade</strong> está
+          cadastrado mas ainda não mora em nenhum lugar.
         </p>
       </Card>
 

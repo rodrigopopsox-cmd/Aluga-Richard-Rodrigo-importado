@@ -65,9 +65,9 @@ export function SettingsMenu({ settings, align = 'rail' }: SettingsMenuProps) {
               onChange={(v) => setView(v as 'simple' | 'full')}
             />
             <span className={styles.hint}>
-              Completo mostra tudo: ocupação, visitas, manutenção, insights e saúde
-              financeira. Simples encurta o painel para as unidades, quanto entrou no mês
-              e o que vence agora.
+              Completo mostra o painel inteiro: unidades, recebimentos, cobranças e
+              despesas. Simples encurta para as unidades, quanto entrou no mês e o que
+              vence agora.
             </span>
           </div>
 

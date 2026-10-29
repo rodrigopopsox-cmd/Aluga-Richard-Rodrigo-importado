@@ -113,8 +113,8 @@ const HOW: Array<[string, string]> = [
     'O índice que corrige o valor uma vez por ano. IGP-M e IPCA são índices de mercado; o percentual fixo é um número combinado entre vocês; sem reajuste, o valor congela.',
   ],
   [
-    'Mês do aniversário',
-    'O mês em que o contrato completa mais um ano e o valor muda. É daqui que sai o próximo reajuste.',
+    'Mês do reajuste',
+    'O mês em que o contrato faz mais um ano e o valor muda.',
   ],
   [
     'Encerrar',
@@ -256,7 +256,7 @@ export function ContractsScreen({ bp, toast }: ContractsScreenProps) {
       render: (c) => (
         <div className={s.rowStack}>
           <span>{reajusteLabel(c)}</span>
-          <span className={s.rowSub}>aniversário em {MONTHS[c.anniversaryMonth - 1]}</span>
+          <span className={s.rowSub}>reajuste em {MONTHS[c.anniversaryMonth - 1]}</span>
         </div>
       ),
     },
@@ -405,28 +405,28 @@ export function ContractsScreen({ bp, toast }: ContractsScreenProps) {
               onChange={set('fixoPct')}
               placeholder="7"
               inputMode="decimal"
-              hint="Ajuste combinado, uma vez por ano."
+              hint="Um número combinado entre vocês, uma vez por ano."
             />
           ) : (
             <Input
-              label="Mês do aniversário"
+              label="Mês do reajuste"
               value={draft.anniversaryMonth}
               onChange={set('anniversaryMonth')}
               placeholder="1"
               inputMode="numeric"
-              hint="Mês em que completa o ano e reajusta."
+              hint="Mês em que o valor muda."
             />
           )}
         </div>
 
         {draft.reajuste === 'fixo' && (
           <Input
-            label="Mês do aniversário"
+            label="Mês do reajuste"
             value={draft.anniversaryMonth}
             onChange={set('anniversaryMonth')}
             placeholder="1"
             inputMode="numeric"
-            hint="Mês em que completa o ano e reajusta."
+            hint="Mês em que o valor muda."
           />
         )}
 

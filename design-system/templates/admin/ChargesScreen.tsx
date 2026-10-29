@@ -191,7 +191,7 @@ export function ChargesScreen({ bp, toast }: ChargesScreenProps) {
           action={
             <Select
               size="sm"
-              label="Competência"
+              label="Mês"
               options={PERIODS.map((p) => ({ value: p, label: p.split('-').reverse().join('/') }))}
               value={period}
               onChange={setPeriod}
@@ -207,11 +207,11 @@ export function ChargesScreen({ bp, toast }: ChargesScreenProps) {
             <span className={s.chargeTotalsValue}>{money(totals.received)}</span>
           </div>
           <div>
-            <span className={s.chargeTotalsLabel}>Em aberto</span>
+            <span className={s.chargeTotalsLabel}>Falta receber</span>
             <span className={s.chargeTotalsValue}>{money(totals.missing)}</span>
           </div>
           <div>
-            <span className={s.chargeTotalsLabel}>Previsto</span>
+            <span className={s.chargeTotalsLabel}>Total do mês</span>
             <span className={s.chargeTotalsValue}>{money(totals.expected)}</span>
           </div>
         </div>
@@ -225,17 +225,16 @@ export function ChargesScreen({ bp, toast }: ChargesScreenProps) {
       </Card>
 
       <Card padding={0}>
-        <DataTable columns={columns} rows={monthRows} empty="Nenhuma cobrança nesta competência." />
+        <DataTable columns={columns} rows={monthRows} empty="Nenhuma cobrança neste mês." />
       </Card>
 
       <Card padding={pad}>
         <CardHeader title="Como funciona" subtitle="Os estados de uma cobrança" />
         <p className={s.caption}>
           <strong>Prevista</strong> é o mês que ainda não virou cobrança. <strong>Em aberto</strong>{' '}
-          já venceu ou vence este mês e ainda tem saldo. <strong>Paga</strong> é quando entra
-          tudo — pela baixa automática do Mercado Pago, pela resposta ao &ldquo;Recebeu?&rdquo; ou
-          por você. <strong>Atrasada</strong> aparece em D+1 sem recebimento. Um recebimento
-          parcial deixa a cobrança em aberto, com o saldo à vista.
+          já venceu e ainda falta. <strong>Paga</strong> é quando entra tudo — sozinho pelo
+          Mercado Pago, pelo &ldquo;Recebeu?&rdquo; ou por você. <strong>Atrasada</strong>{' '}
+          passa do vencimento. Se entrar pela metade, continua em aberto com o que falta à vista.
         </p>
       </Card>
 

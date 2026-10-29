@@ -75,7 +75,7 @@ export function SimpleModeScreen({ bp, toast }: SimpleModeScreenProps) {
       {/* cabeçalho com o mês e a navegação — CardHeader é o padrão do app */}
       <Card padding={pad}>
         <CardHeader
-          title="Este mês"
+          title="Resumo do mês"
           subtitle="Tudo o que entra e o que ainda falta"
           action={
             <div className={s.monthNav}>
