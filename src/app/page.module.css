@@ -416,18 +416,19 @@
 }
 
 /* ================================================================== *
- * A SEÇÃO "VOCÊ CONFIGURA DO SEU JEITO"
+ * A SEÇÃO "MEU MÊS"
  *
- * As telas aqui dentro são as do painel (`SimpleModeScreen` e
- * `DashboardScreen`), com o CSS delas. O que este bloco cuida é só da
- * MOLDURA: a borda, o canto arredondado, a barra do app, o painel de
- * configurações e o aviso. Nada do conteúdo é estilizado daqui — era
- * assim que nascia a divergência entre a landing e o produto.
+ * ATENÇÃO — estas classes são usadas pelo `MeuMesDemo.tsx`, que importa
+ * ESTE MESMO arquivo de estilo. Numa rodada anterior elas foram apagadas
+ * por engano: a verificação de "classe órfã" só olhava o
+ * `LandingScreen.tsx`. Com 31 regras faltando, a seção inteira ficou sem
+ * layout — barra do app sem posição, painel de configurações colado no
+ * resumo, cartões de unidade empilhados sem vão, e o tema escuro
+ * aplicando tokens num layout que não existia. Era a sobreposição que
+ * aparecia na gravação.
  *
- * ATENÇÃO — quem mexer aqui confere os DOIS consumidores deste arquivo:
- * `LandingScreen.tsx` e `MeuMesDemo.tsx`. Numa rodada anterior 31 regras
- * `.mes*` foram apagadas por engano porque a verificação de "classe órfã"
- * só olhava o primeiro, e a seção inteira ficou sem estilo.
+ * Regra nova, para não repetir: quem apagar daqui confere os DOIS
+ * consumidores (`LandingScreen.tsx` e `MeuMesDemo.tsx`).
  * ================================================================== */
 
 /*
@@ -436,36 +437,28 @@
  * acessibilidade e o tema escuro funcionam aqui dentro sem sequestrar a
  * landing. No app o atributo vai no `<html>` e vale para o painel todo.
  *
- * `overflow: hidden` recorta o canto arredondado. O padding é pequeno de
- * propósito: as telas do painel já têm o espaçamento interno delas, e
- * encher de padding aqui fazia o painel parecer uma miniatura.
+ * `overflow: hidden` é o que mantém o canto arredondado recortando os
+ * cartões de dentro, e é também o que faz o painel de configurações
+ * respeitar a moldura em vez de vazar para fora.
  */
 .mesFrame {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: var(--space-4);
+  padding: var(--space-5);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-panel);
   background: var(--surface-page);
   overflow: hidden;
 }
 
-/*
- * Onde a tela do painel entra. `min-width: 0` para a grade de dentro poder
- * encolher em tela estreita sem estourar a moldura.
- */
-.mesScreen {
-  min-width: 0;
-}
-
-/* ---------- barra do app: marca, modo, engrenagem ---------- */
+/* ---------- barra do app: marca, mês, engrenagem ---------- */
 
 .mesBar {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  /* `position: relative` + `z-index` explicito: a barra fica acima do
+  /* `position: relative` + `z-index` explícito: a barra fica acima do
      painel que ela abre, para o botão não ficar escondido atrás. */
   position: relative;
   z-index: 2;
@@ -486,8 +479,8 @@
 
 /*
  * Bloco normal no fluxo, não sobreposto. Já houve versão absoluta e era
- * justamente ela que cobria o conteúdo. Abrir as configurações empurra a
- * tela para baixo — é previsível e não tapa nada.
+ * justamente ela que cobria o resumo do mês. Abrir as configurações
+ * empurra o conteúdo para baixo — é previsível e não tapa nada.
  */
 .mesPanel {
   display: flex;
@@ -499,7 +492,6 @@
   background: var(--surface-card);
   position: relative;
   z-index: 1;
-  text-align: left;
 }
 
 .mesPanelTitle {
@@ -526,56 +518,320 @@
   line-height: var(--leading-normal);
 }
 
-/* ---------- o aviso do que acabou de acontecer ---------- */
+/* ---------- resumo do mês ---------- */
 
-/*
- * O `toast` das telas do painel, na horizontal. Some quando a pessoa fecha,
- * não sozinho: aqui ele está no meio da página e não pode desaparecer no
- * meio de uma leitura.
- */
-.mesToast {
+.mesSummary {
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-tile);
-  background: var(--surface-card);
-  text-align: left;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
 }
 
-.mesToastTitle {
+.mesSummaryMissing {
+  margin: 0;
   font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/*
+ * A barra de progresso do resumo. Ela é do produto (a tela "Este mês" tem
+ * uma), então não é a barra de progresso da APRESENTAÇÃO — a etapa não
+ * depende dela para avançar. Fina, cinza, com o laranja só no preenchido.
+ */
+.mesSummaryTrack {
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
+}
+
+.mesSummaryFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  transition: width var(--dur-base) var(--ease-out);
+}
+
+.mesSummaryPct {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * A navegação de mês dentro do cabeçalho do resumo. Fica à direita, no
+ * `action` do `CardHeader`, e os dois botões abraçam o nome do mês.
+ * `flex: none` nos botões para o nome do mês poder sumir em tela estreita
+ * sem espremer os alvos de toque.
+ */
+.mesMonthNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.mesMonthLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  min-width: 6rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- o que o "Completo" acrescenta ---------- */
+
+/*
+ * A Visão geral do painel. Grade que flui: os cartões pequenos ficam em
+ * linha e os blocos largos (manutenção, insights) ocupam duas colunas. É a
+ * mesma receita do `DashboardScreen`, sem os cartões com foto.
+ */
+.mesFull {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--card-gap);
+  align-items: start;
+}
+
+.mesWide {
+  grid-column: span 2;
+}
+
+/* Em tela estreita os blocos largos voltam a ocupar a linha inteira, em
+   vez de tentar caber dois em 13rem. */
+@media (max-width: 719px) {
+  .mesWide {
+    grid-column: span 1;
+  }
+}
+
+.mesMetricSlot {
+  margin-top: var(--space-3);
+}
+
+.mesDelta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.mesDeltaLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesCaption {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesPills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* ---------- saúde financeira ---------- */
+
+.mesHealthHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.mesHealthWord {
+  font-size: var(--text-lg);
   font-weight: var(--weight-medium);
   color: var(--text-strong);
 }
 
-.mesToastMsg {
-  flex: 1;
+.mesHealthPct {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-metric);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesHealthList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.mesHealthRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mesHealthLabel {
+  flex: none;
+  width: 7rem;
   font-size: var(--text-sm);
   color: var(--text-muted);
 }
 
-.mesToastClose {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--control-h-md);
-  height: var(--control-h-md);
-  margin: calc(var(--space-2) * -1);
-  border: 0;
-  border-radius: var(--radius-round);
-  background: none;
-  color: var(--text-muted);
-  font-size: var(--text-lg);
-  line-height: var(--leading-none);
-  cursor: pointer;
+.mesHealthTrack {
+  flex: 1;
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
 }
 
-.mesToastClose:hover {
-  background: var(--surface-hover);
+.mesFillNeutral,
+.mesFillAlert {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-inverse);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesFillNeutral {
+  background: var(--surface-inverse);
+}
+
+.mesFillAlert {
+  background: var(--brand);
+}
+
+/* ---------- insights ---------- */
+
+.mesAnalysing {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* O ponto que pulsa ao lado de "sistema analisando" — o mesmo do painel. */
+.mesDot {
+  color: var(--brand);
+  animation: dotPulse var(--dur-slow) var(--ease-in-out) infinite alternate;
+}
+
+@keyframes dotPulse {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mesInsightText {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.mesInsightPositive {
   color: var(--text-strong);
+  font-weight: var(--weight-medium);
+}
+
+/* ---------- confirmação do lembrete ---------- */
+
+.mesUnitReminded {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* ---------- um cartão por unidade ---------- */
+
+.mesUnit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mesUnitHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.mesUnitNames {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.mesUnitName {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesUnitTenant {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesUnitRent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  text-align: right;
+}
+
+.mesUnitRentValue {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.mesUnitRentLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/*
+ * O status em frase, nunca só cor — é regra da R7 e é o que torna a tela
+ * legível para quem não distingue matiz.
+ */
+.mesUnitStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.mesUnitStatusIcon {
+  flex: none;
+}
+
+.mesUnitStatusText {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.mesUnitActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 /* ---------- o recado de honestidade ---------- */

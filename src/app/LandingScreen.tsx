@@ -335,22 +335,24 @@ export function LandingScreen() {
         </section>
 
         {/* ---------------- A apresentação guiada pela rolagem ---------------- */}
-        <ProductTour steps={TOUR} id="tour" />
+        <ProductTour steps={TOUR} />
 
         {/* ---------------- Do seu jeito ---------------- */}
         <section className={s.mes}>
           <div className={s.mesCopy}>
-            <h2 className={s.sectionTitle}>Você configura do seu jeito</h2>
+            <h2 className={s.sectionTitle}>E você escolhe como quer ver</h2>
             <p className={s.sectionLead}>
-              Letra maior e botões maiores para quem tem dificuldade com sistema. Tema escuro para
-              quem trabalha à noite. E duas formas de ver o painel: Simples, com um cartão por
-              unidade e o que entrou no mês, ou Completo, com a visão geral inteira.
+              Quem tem dificuldade com sistema usa a tela “Este mês”: um cartão por unidade, o
+              status escrito em palavras e dois botões. Quer controle total? Passa para Completo e
+              entra a Visão geral — ocupação, visitas, manutenção, insights e saúde financeira.
             </p>
             <p className={s.sectionLead}>
-              Tudo isso é configuração — não é versão diferente do app, e não custa nada a mais.
+              E dá para deixar a letra maior ou o tema escuro. As duas coisas são configuração, não
+              versão diferente do app.
             </p>
             <p className={s.fine}>
-              É o painel de verdade, rodando aqui dentro. Mexa na engrenagem: os modos funcionam.
+              É o painel de verdade, rodando aqui dentro. Mexa na engrenagem e troque Simples por
+              Completo: os dois modos funcionam.
             </p>
           </div>
           <div className={s.mesStage}>

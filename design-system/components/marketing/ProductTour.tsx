@@ -18,13 +18,6 @@ export interface TourStep {
 
 export interface ProductTourProps {
   steps: TourStep[];
-  /**
-   * `id` da seção. A demonstração da seção seguinte usa para levar a
-   * rolagem até uma etapa específica — os atalhos da Visão geral do painel
-   * ("Ver unidades", "Recebimentos") apontam para a etapa que demonstra
-   * aquele módulo, então eles continuam fazendo o que prometem.
-   */
-  id?: string;
 }
 
 /**
@@ -73,7 +66,7 @@ export interface ProductTourProps {
  *     etapas é informação, não decoração. Desliga só as transições.
  *   · Os botões de etapa são `button` de verdade, com rótulo.
  */
-export function ProductTour({ steps, id }: ProductTourProps) {
+export function ProductTour({ steps }: ProductTourProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const [reduced, setReduced] = useState(false);
@@ -136,7 +129,6 @@ export function ProductTour({ steps, id }: ProductTourProps) {
     <section
       className={styles.tour}
       ref={sectionRef}
-      id={id}
       aria-label="Como o Aluga funciona"
       // Altura: uma tela de rolagem por etapa, mais a tela final onde a
       // seção sai do sticky. Fica inline porque é dimensão de viewport —
