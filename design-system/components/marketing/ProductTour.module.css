@@ -84,6 +84,18 @@
   }
 }
 
+/*
+ * Celular. O título desce um degrau da escada (36 → 28px) porque numa
+ * coluna estreita ele quebra em três linhas, e três linhas de 36px
+ * comem a tela toda antes da demonstração aparecer. A última etapa — a
+ * mais cheia, com legenda, painel e nota — era a que estourava.
+ */
+@media (max-width: 720px) {
+  .title {
+    font-size: var(--text-2xl);
+  }
+}
+
 /* ---------- explicação, acima ---------- */
 
 .head {

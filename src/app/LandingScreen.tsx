@@ -13,7 +13,7 @@ import {
   type PlanSpec,
   type TourStep,
 } from '@design-system';
-import { MeuMesDemo } from './MeuMesDemo';
+import { PanelModes } from './PanelModes';
 import s from './page.module.css';
 
 /**
@@ -36,9 +36,10 @@ import s from './page.module.css';
  *
  * A DEMONSTRAÇÃO NÃO É DESENHO. O `ProductTour` monta os painéis com os
  * componentes de verdade do design system e com os dados de demonstração de
- * verdade; a seção "Meu mês" renderiza a tela real do Modo simples, com o
- * menu de configurações de verdade. Se uma tela mudar no app, a landing
- * muda junto — é a única forma de a promessa não mentir.
+ * verdade; a última etapa renderiza as telas reais do painel — Modo simples
+ * e Visão geral — e liga nelas o tema escuro e a letra maior. Se uma tela
+ * mudar no app, a landing muda junto — é a única forma de a promessa não
+ * mentir.
  *
  * REGRAS DO DESIGN.md QUE ESTA PÁGINA OBEDECE — cada uma delas já foi
  * descumprida aqui e reprovada na revisão:
@@ -101,7 +102,7 @@ const TOUR: TourStep[] = [
     label: 'Imóveis',
     title: 'Seus imóveis, organizados de uma vez',
     body: 'Endereço, titular e unidades em um lugar só. Você cadastra uma vez e não volta nisso.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Casa do CIC" subtitle="casa · Rua das Palmeiras, 120">
           <Field label="Bairro" value="CIC · Curitiba" />
@@ -120,7 +121,7 @@ const TOUR: TourStep[] = [
     label: 'Contratos',
     title: 'O contrato guarda o que você não quer decorar',
     body: 'Valor, dia de vencimento e reajuste ficam no contrato. A cobrança do mês nasce daí.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Casa do CIC" subtitle="Maria Silva · pessoa física">
           <Highlight value="R$ 1.200" label="aluguel por mês" />
@@ -140,7 +141,7 @@ const TOUR: TourStep[] = [
     label: 'Cobranças',
     title: 'O que já entrou e o que ainda falta',
     body: 'A cobrança do mês é gerada sozinha. Você vê o total e o que está em aberto.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Cobranças de outubro" subtitle="geradas a partir dos contratos">
           <Highlight value="R$ 2.600" label="recebido de R$ 6.000 previstos" />
@@ -158,7 +159,7 @@ const TOUR: TourStep[] = [
     label: 'Recebimentos',
     title: 'Cada real que entra com a sua origem',
     body: 'Mercado Pago, WhatsApp ou você digitando — e quem deu a baixa fica registrado.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Entrou em outubro" subtitle="cinco recebimentos">
           <Highlight value="R$ 5.600" label="no total do mês" />
@@ -178,7 +179,7 @@ const TOUR: TourStep[] = [
     label: 'Resultado',
     title: 'Quanto sobrou no mês, sem planilha',
     body: 'Recebido, despesas e resultado calculados. Ocupação para você saber o que está vazio.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Entrou" subtitle="outubro">
           <Highlight value="R$ 5.600,00" label="recebido no mês" />
@@ -195,7 +196,7 @@ const TOUR: TourStep[] = [
     label: 'Rentabilidade',
     title: 'Quanto cada imóvel rende de verdade',
     body: 'Aluguel e despesa por unidade. Na hora do Imposto de Renda, tudo separado por titular.',
-    panel: (
+    panel: () => (
       <div className={s.split}>
         <Panel title="Aluguel do mês" subtitle="por unidade">
           <Field label="Casa do CIC" value="R$ 1.200" />
@@ -212,6 +213,36 @@ const TOUR: TourStep[] = [
         </Panel>
       </div>
     ),
+  },
+  /*
+   * A SÉTIMA ETAPA — o painel, e o que se configura nele.
+   *
+   * Era uma seção separada depois da apresentação ("Do seu jeito"). Ela foi
+   * reprovada porque quebrava a promessa de que a explicação do site está
+   * toda no mesmo lugar: a pessoa via uma apresentação, acabava, e depois
+   * vinha outra demonstração animada embaixo — dois blocos, duas explicações.
+   *
+   * Agora é a última etapa da mesma apresentação, e é a única com
+   * **quatro beats**: ela ocupa quatro telas de rolagem, não uma. Quem rola
+   * vê o painel aparecer no Modo Simples, virar o Completo, escurecer e
+   * crescer a letra — em ordem, sozinho, sem clicar em nada.
+   *
+   * POR QUE QUATRO E NÃO UMA SÓ TELA. As três coisas que se configuram no
+   * painel (tema escuro, letra maior, Simples/Completo) são ESTADOS, não
+   * telas. Encaixotar as quatro numa tela só daria quatro miniaturas
+   * pequenas demais para ler — e foi justamente o excesso de coisa junta
+   * que reprovaram antes ("nas animações está tudo muito perto da outra").
+   * Uma por tela de rolagem mantém o mesmo ritmo do resto da apresentação.
+   *
+   * Começa no Modo Completo — é o padrão do produto, e é a tela com as
+   * fotos das casas. Depois vêm o Simples, o tema escuro e a letra maior.
+   */
+  {
+    label: 'Do seu jeito',
+    title: 'O painel se configura do seu jeito',
+    body: 'Letra maior, tema escuro, e duas formas de ver a mesma coisa. Role: o painel muda sozinho.',
+    beats: 4,
+    panel: (beat) => <PanelModes beat={beat} />,
   },
 ];
 
@@ -334,35 +365,12 @@ export function LandingScreen() {
           </p>
         </section>
 
-        {/* ---------------- A apresentação guiada pela rolagem ---------------- */}
-        <ProductTour steps={TOUR} id="tour" />
+        {/* ---------------- A apresentação guiada pela rolagem ----------------
 
-        {/* ---------------- Do seu jeito ---------------- */}
-        <section className={s.mes}>
-          <div className={s.mesCopy}>
-            <h2 className={s.sectionTitle}>Você configura do seu jeito</h2>
-            <p className={s.sectionLead}>
-              O ciclo acontece sozinho: a cobrança do mês nasce do contrato, o lembrete sai no
-              WhatsApp três dias antes, e quando o Pix cai a baixa é automática. Isso passa aqui em
-              cima, sem você tocar em nada.
-            </p>
-            <p className={s.sectionLead}>
-              Embaixo, o painel — e você escolhe como quer ver. Letra maior e botões maiores para
-              quem tem dificuldade com sistema. Tema escuro para quem trabalha à noite. E duas
-              formas de ver: Simples, com um cartão por unidade e o que entrou no mês, ou Completo,
-              com a visão geral inteira.
-            </p>
-            <p className={s.fine}>
-              Tudo isso é configuração — não é versão diferente do app, e não custa nada a mais.
-            </p>
-            <p className={s.fine}>
-              É o painel de verdade, rodando aqui dentro. Mexa na engrenagem: os modos funcionam.
-            </p>
-          </div>
-          <div className={s.mesStage}>
-            <MeuMesDemo />
-          </div>
-        </section>
+            Sete etapas, e a última ocupa quatro telas de rolagem (os quatro
+            estados do painel). Tudo o que a landing explica está aqui — uma
+            explicação, um bloco. ---------------- */}
+        <ProductTour steps={TOUR} id="tour" />
 
         {/* ---------------- Planos ---------------- */}
         <section className={s.plans} id="planos">

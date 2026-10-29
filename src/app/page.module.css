@@ -167,42 +167,6 @@
   }
 }
 
-/* ================================================================== *
- * SEÇÕES
- * ================================================================== */
-
-/*
- * TUDO CENTRALIZADO. A seção era duas colunas — texto à esquerda, demo à
- * direita — e no monitor largo o texto ficava abandonado num canto com a
- * demo longe. Agora é uma coluna só, centrada: o texto em largura de
- * leitura, a demo logo abaixo, alinhada na MESMA coluna do tour (128ch).
- * Assim a página tem um eixo vertical único do hero até o rodapé, e nada
- * fica pendurado na borda.
- */
-.mes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-7);
-  padding: var(--space-10) var(--space-9);
-  border-top: 1px solid var(--border-subtle);
-  text-align: center;
-}
-
-.mesCopy {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  max-width: 62ch;
-}
-
-.mesStage {
-  width: 100%;
-  max-width: 128ch;
-  margin-inline: auto;
-}
-
 .sectionTitle {
   margin: 0;
   font-size: var(--text-3xl);
@@ -415,104 +379,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ================================================================== *
- * A DEMONSTRAÇÃO ANIMADA DO PRODUTO
- *
- * Três tempos passando sozinhos: a cobrança do mês, o lembrete no
- * WhatsApp, o Pix caindo com a baixa automática. Dados de `chargesData`,
- * componentes do design system.
- *
- * A COR AQUI TRABALHA, NÃO DECORA. O laranja aparece em dois lugares: o
- * ponto de "ao vivo" e o tempo ativo nos pontos de baixo. O verde e o
- * âmbar são dos badges de status, que são informação — cobrança paga e
- * cobrança em aberto. Nada de gradiente, nada de brilho.
- * ================================================================== */
-
-.showcase {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  width: 100%;
-  max-width: 96ch;
-  /* Ar dos dois lados: é o maior elemento do hero e, sem esse respiro,
-     parecia grudado no texto em cima e nos botões embaixo. */
-  margin-block: var(--space-5);
-  margin-inline: auto;
-  padding: var(--space-4) var(--space-5) var(--space-5);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
-  background: var(--surface-card);
-  text-align: left;
-}
-
-/* ---------- barra do app ---------- */
-
-.showBar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.showWhere {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-}
-
-/*
- * O "ao vivo". O ponto pulsa devagar — é o único movimento contínuo da
- * moldura, e diz que aquilo está acontecendo agora, não é uma foto.
- */
-.showLive {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-secondary);
-}
-
-.showLiveDot {
-  width: var(--space-2);
-  height: var(--space-2);
-  border-radius: var(--radius-round);
-  background: var(--brand);
-  animation: livePulse var(--dur-slow) var(--ease-in-out) infinite alternate;
-}
-
-@keyframes livePulse {
-  from {
-    opacity: 0.3;
-    transform: scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ---------- o conteúdo do tempo atual ---------- */
-
-/*
- * `key` no componente remonta este bloco a cada tempo, e é isso que
- * dispara a animação de entrada. Sem o key, o React reaproveitaria os nós
- * e nada entraria de novo.
- */
-.showBody {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--card-gap);
-  align-items: start;
-  animation: showIn var(--dur-base) var(--ease-out) both;
-}
-
-@media (min-width: 760px) {
-  .showBody {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-}
-
-@keyframes showIn {
+@keyframes fillIn {
   from {
     opacity: 0;
     transform: translateY(var(--space-2));
@@ -523,410 +390,185 @@
   }
 }
 
-/* ---------- os números do topo ---------- */
 
-.showTotals {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: var(--card-gap);
-  margin-top: var(--space-4);
-}
+/* ================================================================== *
+ * A ÚLTIMA ETAPA DA APRESENTAÇÃO — O PAINEL E AS TRÊS CONFIGURAÇÕES
+ *
+ * Quatro estados, um por tela de rolagem: Modo Simples, Modo Completo,
+ * tema escuro, letra maior. Quem rola vê um substituir o outro, sozinho.
+ *
+ * O CONTEÚDO NÃO É ESTILIZADO AQUI. `SimpleModeScreen` e `DashboardScreen`
+ * são os componentes do painel e vêm com o CSS deles. Este bloco cuida só
+ * da MOLDURA — era assim que nascia a divergência entre a landing e o
+ * produto: quando a landing re-estilizava a tela por dentro, as duas
+ * saíam de sincronia na primeira mudança.
+ *
+ * O QUE ESTE BLOCO RESOLVE, e só isso:
+ *
+ *   1. A moldura. Borda de 1px, canto arredondado, fundo de superfície —
+ *      o mesmo cartão plano do resto da página. Sem sombra.
+ *   2. O CABEÇALHO DO ESTADO. "01 / 04 · Modo Simples" — sem ele, quatro
+ *      telas iguais passando sozinhas não dizem qual é qual, e a troca de
+ *      estado fica invisível. É o rótulo, não decoração.
+ *   3. A ALTURA. A Visão geral é mais alta que a viewport. Dentro de uma
+ *      etapa sticky, o que passa da tela ficaria inalcancável — a rolagem
+ *      da página já acabou ali dentro. A caixa limita a altura e o degradê
+ *      embaixo diz "tem mais", sem cortar a interface no meio.
+ *   4. O AVISO. O que aconteceu de verdade quando a pessoa mexeu numa
+ *      tarefa ou deu baixa. Sem ele, o botão não confirma o que fez.
+ *
+ * O degradê vai para a cor da MOLDURA, não para uma cor fixa: em tema
+ * escuro ele precisa sumir no fundo em vez de virar uma faixa cinza.
+ * ================================================================== */
 
-/* ---------- lista de cobranças ---------- */
-
-.showRows {
+.modes {
   display: flex;
   flex-direction: column;
-  margin-top: var(--space-3);
-}
-
-.showRow,
-.showRowFocus {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: var(--space-4);
-  padding-block: var(--space-3);
-  border-top: 1px solid var(--border-subtle);
+  width: 100%;
 }
 
-.showRow:first-child,
-.showRowFocus:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
+/* ---------- qual dos quatro estados está na tela ---------- */
 
-/*
- * A cobrança que vai mudar de estado. Fundo de marca bem clarinho e canto
- * arredondado — chama o olho sem gritar, e é a mesma receita do cartão
- * selecionado do app.
- */
-.showRowFocus {
-  margin-inline: calc(var(--space-3) * -1);
-  padding-inline: var(--space-3);
-  border-radius: var(--radius-sm);
-  background: var(--brand-soft);
-}
-
-.showRowMain {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  min-width: 0;
-}
-
-.showRowUnit {
-  font-size: var(--text-md);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.showRowTenant {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-}
-
-.showRowSide {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex: none;
-}
-
-.showRowValue {
-  font-size: var(--text-md);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-  font-variant-numeric: tabular-nums;
-}
-
-.showRowPart {
-  font-weight: var(--weight-regular);
-  color: var(--text-muted);
-}
-
-/* ---------- o lembrete no WhatsApp ---------- */
-
-.showChat {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
-}
-
-/*
- * O balão. Cinza de superfície, que é o tom de carta de chat do app — e é
- * o que o diferencia do cartão branco em volta.
- */
-.showBubble {
-  align-self: flex-start;
-  max-width: 42ch;
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  border-top-left-radius: var(--radius-xs);
-  background: var(--surface-sunken);
-  color: var(--text-body);
-  font-size: var(--text-md);
-  line-height: var(--leading-normal);
-}
-
-.showChatMeta {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-}
-
-/* ---------- o pagamento identificado ---------- */
-
-.showPaid {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-sm);
-  background: var(--surface-sunken);
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
-.showPaidIcon {
-  flex: none;
-  color: var(--text-secondary);
-}
-
-/* ---------- o registro que fica ---------- */
-
-.showRecord {
+.modesCaption {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding-block: var(--space-3);
-  border-top: 1px solid var(--border-subtle);
-}
-
-.showRecord:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
-.showRecordLabel {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-}
-
-.showRecordValue {
-  font-size: var(--text-md);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-  text-align: right;
-}
-
-/* ---------- os pontos e o nome do tempo ---------- */
-
-.showFoot {
-  display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
-.showCaption {
+.modesCaptionNum {
   font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
 }
 
-.showDots {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* Alvo de 48px — o token já sobe para 56px no modo acessibilidade. */
-.showDot,
-.showDotOn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-8);
-  height: var(--control-h-md);
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.showDot::after,
-.showDotOn::after {
-  content: '';
-  width: var(--space-2);
-  height: var(--space-2);
-  border-radius: var(--radius-round);
-  background: var(--surface-track);
-  transition: background var(--dur-fast) var(--ease-out), width var(--dur-fast) var(--ease-out);
-}
-
-.showDotOn::after {
-  width: var(--space-5);
-  background: var(--brand);
-}
-
-.showDot:focus-visible,
-.showDotOn:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: calc(var(--space-1) * -1);
-  border-radius: var(--radius-pill);
-}
-
-.showNote {
-  margin: 0;
-  font-size: var(--text-sm);
+.modesCaptionSep {
+  margin-inline: var(--space-1);
   color: var(--text-subtle);
 }
 
-/* Movimento reduzido: o ponto de "ao vivo" para de pulsar. */
-@media (prefers-reduced-motion: reduce) {
-  .showLiveDot {
-    animation: none;
-  }
-
-  .showBody {
-    animation: none;
-  }
+/* O nome do estado. É a única coisa em laranja do bloco: é a informação
+   que muda de uma tela para a outra, e o olho precisa achar ela primeiro. */
+.modesCaptionLabel {
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--brand);
 }
 
-/* ================================================================== *
- * A SEÇÃO "VOCÊ CONFIGURA DO SEU JEITO"
- *
- * As telas aqui dentro são as do painel (`SimpleModeScreen` e
- * `DashboardScreen`), com o CSS delas. O que este bloco cuida é só da
- * MOLDURA: a borda, o canto arredondado, a barra do app, o painel de
- * configurações e o aviso. Nada do conteúdo é estilizado daqui — era
- * assim que nascia a divergência entre a landing e o produto.
- *
- * ATENÇÃO — quem mexer aqui confere os DOIS consumidores deste arquivo:
- * `LandingScreen.tsx` e `MeuMesDemo.tsx`. Numa rodada anterior 31 regras
- * `.mes*` foram apagadas por engano porque a verificação de "classe órfã"
- * só olhava o primeiro, e a seção inteira ficou sem estilo.
- * ================================================================== */
+.modesCaptionText {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* ---------- a moldura ---------- */
 
 /*
- * O quadro da demo. Recebe `data-a11y` e `data-theme` — os dois são
- * atributos de elemento, não exclusivos do `<html>`, então o modo
- * acessibilidade e o tema escuro funcionam aqui dentro sem sequestrar a
- * landing. No app o atributo vai no `<html>` e vale para o painel todo.
- *
- * `overflow: hidden` recorta o canto arredondado. O padding é pequeno de
- * propósito: as telas do painel já têm o espaçamento interno delas, e
- * encher de padding aqui fazia o painel parecer uma miniatura.
+ * `data-theme` e `data-a11y` são atributos de elemento, não exclusivos do
+ * <html>. Então o tema escuro e a letra maior funcionam aqui dentro sem
+ * sequestrar a landing inteira. No app os dois atributos vão no <html> e
+ * valem para o painel todo — é o mesmo mecanismo, em outro alcance.
  */
-.mesFrame {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4);
+.modesFrame {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--surface-page);
+}
+
+/*
+ * A caixa que segura a tela. `max-height` e não `height`: a tela Simples é
+ * mais baixa e não deve ficar com um vazio embaixo. `overflow: hidden`
+ * corta o resto — e o degradê acima encobre o corte.
+ */
+.modesPreview {
+  max-height: 46vh;
   overflow: hidden;
 }
 
 /*
- * Onde a tela do painel entra. `min-width: 0` para a grade de dentro poder
- * encolher em tela estreita sem estourar a moldura.
+ * Tela curta: menos altura de preview para o cabeçalho e a legenda não
+ * saírem da tela. O `min-height` do palco deixa a seção crescer em vez de
+ * cortar, mas cortar por excesso de preview é evitável.
  */
-.mesScreen {
-  min-width: 0;
+@media (max-height: 780px) {
+  .modesPreview {
+    max-height: 40vh;
+  }
 }
-
-/* ---------- barra do app: marca, modo, engrenagem ---------- */
-
-.mesBar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  /* `position: relative` + `z-index` explicito: a barra fica acima do
-     painel que ela abre, para o botão não ficar escondido atrás. */
-  position: relative;
-  z-index: 2;
-}
-
-.mesMonth {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-secondary);
-}
-
-/* Empurra a engrenagem para a ponta, sem depender de espaço calculado. */
-.mesBar > :last-child {
-  margin-left: auto;
-}
-
-/* ---------- painel de configurações ---------- */
 
 /*
- * Bloco normal no fluxo, não sobreposto. Já houve versão absoluta e era
- * justamente ela que cobria o conteúdo. Abrir as configurações empurra a
- * tela para baixo — é previsível e não tapa nada.
+ * Celular. A etapa 7 é a mais cheia da apresentação — legenda, painel e
+ * nota, além do cabeçalho e dos pontos. Num 375x667 o cálculo fechava em
+ * ~680px contra 667 de tela, e o que sobrava era justamente a ponta da
+ * nota e os pontos. Um degrau menor no título (28px, o `--text-2xl`) e um
+ * preview mais curto resolvem sem tirar informação: no celular a nota
+ * continua aparecendo, só o preview encurta.
  */
-.mesPanel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-5);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-tile);
-  background: var(--surface-card);
-  position: relative;
-  z-index: 1;
-  text-align: left;
+@media (max-width: 720px) {
+  .modesPreview {
+    max-height: 34vh;
+  }
 }
 
-.mesPanelTitle {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-  color: var(--text-strong);
-  letter-spacing: var(--tracking-snug);
-}
-
-.mesBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.mesLabel {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
-.mesHint {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  line-height: var(--leading-normal);
+/*
+ * O degradê que some com o fundo. Fica POR CIMA do conteúdo e não recebe
+ * ponteiro — é só um recado visual de "tem mais embaixo".
+ */
+.modesFade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--space-9);
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--surface-page));
 }
 
 /* ---------- o aviso do que acabou de acontecer ---------- */
 
 /*
- * O `toast` das telas do painel, na horizontal. Some quando a pessoa fecha,
- * não sozinho: aqui ele está no meio da página e não pode desaparecer no
- * meio de uma leitura.
+ * O AVISO DO QUE ACONTECEU. Absoluto, não fluxo: nasce por cima do painel,
+ * no mesmo lugar em que o app mostra avisos, e não desloca nada. Deslocar
+ * seria pior que feio — a etapa é sticky, então um elemento entrando no
+ * fluxo mudava a posição do painel inteiro no meio da rolagem.
+ *
+ * Tem fundo próprio e borda porque flutua sobre a interface; sem isso, o
+ * texto do aviso sentava em cima do conteúdo do painel e ficava ilegível.
  */
-.mesToast {
+.modesToast {
+  position: absolute;
+  inset: auto var(--space-4) var(--space-4);
+  z-index: 2;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  flex-wrap: wrap;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4) var(--space-5);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-tile);
+  border-radius: var(--radius-md);
   background: var(--surface-card);
-  text-align: left;
 }
 
-.mesToastTitle {
-  font-size: var(--text-sm);
+.modesToastTitle {
+  font-size: var(--text-md);
   font-weight: var(--weight-medium);
   color: var(--text-strong);
 }
 
-.mesToastMsg {
+.modesToastMsg {
   flex: 1;
+  min-width: 0;
   font-size: var(--text-sm);
+  line-height: var(--leading-normal);
   color: var(--text-muted);
-}
-
-.mesToastClose {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--control-h-md);
-  height: var(--control-h-md);
-  margin: calc(var(--space-2) * -1);
-  border: 0;
-  border-radius: var(--radius-round);
-  background: none;
-  color: var(--text-muted);
-  font-size: var(--text-lg);
-  line-height: var(--leading-none);
-  cursor: pointer;
-}
-
-.mesToastClose:hover {
-  background: var(--surface-hover);
-  color: var(--text-strong);
 }
 
 /* ---------- o recado de honestidade ---------- */
 
-.mesNote {
+.modesNote {
   margin: 0;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
