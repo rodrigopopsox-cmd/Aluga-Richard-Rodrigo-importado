@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Icon } from '../core/Icon';
+import { Wordmark } from '../core/Wordmark';
 import styles from './ProcessDemo.module.css';
 
 /**
@@ -16,18 +17,23 @@ export interface DemoStep {
   /** O que acontece neste passo. */
   title: string;
   /**
-   * Uma linha explicando. `PRODUCT.md`/DESIGN.md mandam: uma frase, até 20
-   * palavras, sem exclamação.
+   * Uma linha explicando. `DESIGN.md` manda: uma frase, até 20 palavras,
+   * sem exclamação.
    */
   detail: string;
   /**
    * Aviso de que o passo é promessa e não código. Some da tela — aparece
-   * como `Badge tone="warning"` ao lado do título, porque `DESIGN.md`
-   * proíbe emoji na interface e um selo de verdade é melhor que um
-   * triângulo amarelo.
+   * como selo ao lado do título, porque `DESIGN.md` proíbe emoji na
+   * interface.
    */
   pending?: string;
-  /** O painel focalizado. */
+  /**
+   * Estado mostrado no canto do título — "Vigente", "Paga", "Aberta". É o
+   * que muda de um passo para o outro e faz a demonstração parecer um
+   * processo acontecendo, e não uma galeria de telas.
+   */
+  status?: ReactNode;
+  /** O painel focado. */
   children: ReactNode;
 }
 
@@ -40,8 +46,14 @@ export interface ProcessDemoProps {
 }
 
 /**
- * Demonstração de processo: cartão com etiqueta, contador, painel que troca
- * sozinho e a narração embaixo.
+ * Demonstração de processo — **um cartão único e grande**, no formato do
+ * cartão "Novo contrato" que o Rodrigo apontou como referência:
+ *
+ *   · cabeçalho com a marca + o nome da área à esquerda e o contador
+ *     `NN / 04` à direita;
+ *   · linha de título com o selo de estado à direita;
+ *   · interior em grade de colunas densas;
+ *   · rodapé com a legenda e a navegação.
  *
  * POR QUE NÃO É A TELA INTEIRA DENTRO DE UMA MOLDURA. A primeira versão
  * embedava a tela real do painel (`ChargesScreen`, `PropertiesScreen`) numa
@@ -65,23 +77,42 @@ export interface ProcessDemoProps {
  *     versão anterior usava `--shadow-card` e depois `--shadow-device`
  *     (anel preto de 10px) — as duas contra a regra.
  *   · **Movimento curto e quieto.** "120–360ms, cubic-bezier(.22,1,.36,1).
- *     No bounces, no parallax." A troca de painel é 360ms de fade com
- *     subida curta. A versão anterior tinha uma barra de progresso que
- *     corria 4,2 s — doze vezes o limite, e laranja, competindo com a ação
- *     primária. Saiu.
- *   · **Sem emoji.** O aviso de "promessa não construída" é `Badge`, não
- *     ⚠️.
+ *     No bounces, no parallax." A versão anterior tinha uma barra de
+ *     progresso que corria 4,2 s — doze vezes o limite, e laranja,
+ *     competindo com a ação primária. Saiu.
+ *   · **Sem emoji.** O aviso de "promessa não construída" é selo, não
+ *     triângulo amarelo.
+ *
+ * COMO A ANIMAÇÃO FUNCIONA AGORA — e por que é diferente do que já foi
+ * feito aqui. A versão anterior trocava o painel inteiro de uma vez: o
+ * bloco somia e o bloco novo aparecia. Isso é o que parece "quadrado, sem
+ * fluidez nenhuma": o olho perde a referência e não vê continuidade.
+ *
+ * Agora o painel **se preenche em cascata**: cada bloco entra um depois do
+ * outro, com 60 ms de atraso entre um e outro, todos em fade curto com
+ * subida de poucos pixels. É a técnica de stagger que o mercado usa em
+ * demonstração de produto (Linear, Ramp) e ela dá duas coisas que o fade
+ * em bloco não dá:
+ *
+ *   1. **Continuidade.** O olho acompanha a informação chegando em
+ *      sequência, em vez de uma tela sendo substituída por outra.
+ *   2. **Ritmo de processo.** A ordem de entrada segue a ordem de leitura,
+ *      então parece que os campos estão sendo preenchidos — "alguém
+ *      mexendo no site", que é o que foi pedido.
+ *
+ * Não há barra de progresso em nenhum lugar: o contador `NN / 04` no
+ * cabeçalho e o selo de estado no título já dizem onde se está.
  *
  * Três cuidados, porque animação que ninguém pediu para ver é hostil:
  *
- *   · `prefers-reduced-motion` desliga o avanço automático **e** a troca.
+ *   · `prefers-reduced-motion` desliga o avanço automático **e** a cascata.
  *   · Ponteiro em cima e foco pausam — ninguém perde o passo de vista
  *     porque estava lendo.
  *   · Botões com alvo de 48px (o token sobe para 56px no modo
  *     acessibilidade) e narração em `aria-live`: o painel se usa sem ver a
  *     animação.
  */
-export function ProcessDemo({ label, steps, interval = 4600 }: ProcessDemoProps) {
+export function ProcessDemo({ label, steps, interval = 5200 }: ProcessDemoProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -116,23 +147,33 @@ export function ProcessDemo({ label, steps, interval = 4600 }: ProcessDemoProps)
       onBlur={() => setPaused(false)}
       aria-label={`${label} — como funciona`}
     >
+      {/* ---------- cabeçalho: marca, área, contador ---------- */}
       <div className={styles.bar}>
+        <div className={styles.brand}>
+          <Wordmark size={18} />
+        </div>
         <span className={styles.barLabel}>{label}</span>
         <span className={styles.barCount}>
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
       </div>
 
+      {/* ---------- corpo: título com selo + interior denso ---------- */}
       <div className={styles.body} key={index} data-reduced={reduced ? '' : undefined}>
+        <div className={styles.head}>
+          <h3 className={styles.title}>{step.title}</h3>
+          <div className={styles.headSide}>
+            {step.status}
+            {step.pending && <span className={styles.pending}>{step.pending}</span>}
+          </div>
+        </div>
         {step.children}
       </div>
 
+      {/* ---------- rodapé: legenda, narração, navegação ---------- */}
       <figcaption className={styles.foot}>
-        <div className={styles.text} aria-live="polite">
-          <div className={styles.titleRow}>
-            <h3 className={styles.title}>{step.title}</h3>
-            {step.pending && <span className={styles.pending}>{step.pending}</span>}
-          </div>
+        <div className={styles.text}>
+          <span className={styles.legend}>Exemplo ilustrativo</span>
           <p className={styles.detail}>{step.detail}</p>
         </div>
 

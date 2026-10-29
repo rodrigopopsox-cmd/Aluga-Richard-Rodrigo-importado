@@ -266,6 +266,59 @@
   }
 }
 
+/*
+ * A CASCATA. Cada cartão, cada coluna e cada linha de campo entra um
+ * depois do outro, com 60ms de atraso entre um e outro. É a técnica de
+ * stagger que o mercado usa em demonstração de produto (Linear, Ramp) e é
+ * o que dá a sensação de fluidez: o olho acompanha a informação chegando
+ * em sequência, em vez de uma tela sendo trocada por outra.
+ *
+ * Cada bloco é 360ms — o teto que o DESIGN.md autoriza ("120–360ms,
+ * cubic-bezier(.22,1,.36,1). No bounces, no parallax"). `both` é
+ * obrigatório: sem ele os blocos piscam invisíveis antes do atraso e de
+ * novo no fim.
+ */
+.split > *,
+.splitSide > *,
+.panelBody > *,
+.metrics > * {
+  animation: fillIn var(--dur-slow) var(--ease-out) both;
+}
+
+.split > *:nth-child(1) { animation-delay: 0ms; }
+.split > *:nth-child(2) { animation-delay: 60ms; }
+.split > *:nth-child(3) { animation-delay: 120ms; }
+.split > *:nth-child(4) { animation-delay: 180ms; }
+.split > *:nth-child(5) { animation-delay: 240ms; }
+
+.splitSide > *:nth-child(1) { animation-delay: 60ms; }
+.splitSide > *:nth-child(2) { animation-delay: 120ms; }
+.splitSide > *:nth-child(3) { animation-delay: 180ms; }
+.splitSide > *:nth-child(4) { animation-delay: 240ms; }
+
+.panelBody > *:nth-child(1) { animation-delay: 120ms; }
+.panelBody > *:nth-child(2) { animation-delay: 180ms; }
+.panelBody > *:nth-child(3) { animation-delay: 240ms; }
+.panelBody > *:nth-child(4) { animation-delay: 300ms; }
+.panelBody > *:nth-child(5) { animation-delay: 360ms; }
+.panelBody > *:nth-child(6) { animation-delay: 420ms; }
+
+.metrics > *:nth-child(1) { animation-delay: 0ms; }
+.metrics > *:nth-child(2) { animation-delay: 80ms; }
+.metrics > *:nth-child(3) { animation-delay: 160ms; }
+.metrics > *:nth-child(4) { animation-delay: 240ms; }
+
+@keyframes fillIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .splitSide {
   display: flex;
   flex-direction: column;

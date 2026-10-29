@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Avatar,
   Badge,
@@ -87,13 +87,10 @@ const CHAPTERS: Array<{
         {
           title: 'O contrato, em uma ficha',
           detail: 'Unidade, inquilino, valor e dia de vencimento.',
+          status: <Badge tone="success">Vigente</Badge>,
           children: (
             <div className={s.split}>
-              <Panel
-                title="Casa do CIC"
-                subtitle="casa · alugada"
-                action={<Badge tone="success">Vigente</Badge>}
-              >
+              <Panel title="Casa do CIC" subtitle="casa · alugada">
                 <Field label="Inquilino" value="Maria Silva" />
                 <Field label="Valor" value="R$ 1.200" />
                 <Field label="Vence" value="dia 5" />
@@ -104,7 +101,7 @@ const CHAPTERS: Array<{
                 <Panel title="Unidade" subtitle="Rua das Palmeiras, 120">
                   <Field label="Bairro" value="CIC · Curitiba" />
                 </Panel>
-                <Panel title="Titular" subtitle="dono do imóvel">
+                <Panel title="Titular" subtitle="quem recebe o aluguel">
                   <div className={s.person}>
                     <Avatar name="Iara Alves" size={28} />
                     <span className={s.personName}>Iara Alves</span>
@@ -118,6 +115,7 @@ const CHAPTERS: Array<{
         {
           title: 'O reajuste já está no contrato',
           detail: 'IGP-M, IPCA ou porcentagem fixa, com o mês de aniversário.',
+          status: <Badge tone="neutral">IGP-M</Badge>,
           children: (
             <div className={s.split}>
               <Panel title="Reajuste" subtitle="como o valor corrige">
@@ -136,6 +134,7 @@ const CHAPTERS: Array<{
         {
           title: 'Pessoa física ou jurídica',
           detail: 'É o que separa o Imposto de Renda por titular.',
+          status: <Badge tone="neutral">PF e PJ</Badge>,
           children: (
             <div className={s.split}>
               <Panel title="Titulares" subtitle="quem assina">
@@ -160,13 +159,10 @@ const CHAPTERS: Array<{
         {
           title: 'A cobrança nasce daqui',
           detail: 'Do contrato sai a cobrança do mês, no valor e no dia certos.',
+          status: <Badge tone="brand">Aberta</Badge>,
           children: (
             <div className={s.split}>
-              <Panel
-                title="Cobrança de outubro"
-                subtitle="Casa do CIC · Maria Silva"
-                action={<Badge tone="brand">Aberta</Badge>}
-              >
+              <Panel title="Cobrança de outubro" subtitle="Casa do CIC · Maria Silva">
                 <Field label="Valor" value="R$ 1.200" />
                 <Field label="Vence" value="05/10/2026" />
               </Panel>
@@ -192,6 +188,7 @@ const CHAPTERS: Array<{
         {
           title: 'A cobrança do mês já está lá',
           detail: 'Gerada a partir do contrato. Você não cria nada.',
+          status: <Badge tone="neutral">Outubro</Badge>,
           children: (
             <Metrics
               items={[
@@ -241,13 +238,10 @@ const CHAPTERS: Array<{
         {
           title: 'Pagou, deu baixa',
           detail: 'O pagamento cai e a cobrança fecha sozinha.',
+          status: <Badge tone="success">Paga</Badge>,
           children: (
             <div className={s.split}>
-              <Panel
-                title="Casa do CIC"
-                subtitle="R$ 1.200 · 05/10/2026"
-                action={<Badge tone="success">Paga</Badge>}
-              >
+              <Panel title="Casa do CIC" subtitle="R$ 1.200 · 05/10/2026">
                 <Field label="Baixa" value="automática em 05/10" />
               </Panel>
               <Panel title="Sem planilha" subtitle="nada de conferir na mão">
@@ -272,6 +266,7 @@ const CHAPTERS: Array<{
         {
           title: 'Pagamento identificado',
           detail: 'Cada recebimento guarda a origem.',
+          status: <Badge tone="success">Recebido</Badge>,
           children: (
             <div className={s.split}>
               <Panel title="Recebimentos" subtitle="o que entrou em outubro">
@@ -293,6 +288,7 @@ const CHAPTERS: Array<{
         {
           title: 'Baixa com responsável',
           detail: 'A cobrança guarda quem deu a baixa e quando.',
+          status: <Badge tone="neutral">Outubro</Badge>,
           children: (
             <Panel title="Quem deu a baixa" subtitle="outubro">
               <Field label="Casa do CIC" value="automática em 05/10" />
@@ -304,6 +300,7 @@ const CHAPTERS: Array<{
         {
           title: 'Recibo na hora',
           detail: 'A confirmação do pagamento sai com o valor e a unidade.',
+          status: <Badge tone="neutral">Recibo</Badge>,
           children: (
             <div className={s.split}>
               <Panel title="Recibo" subtitle="outubro de 2026">
@@ -321,6 +318,7 @@ const CHAPTERS: Array<{
         {
           title: 'Quanto cada imóvel rende',
           detail: 'Despesas por imóvel e por titular.',
+          status: <Badge tone="neutral">Este mês</Badge>,
           children: (
             <Metrics
               items={[
@@ -375,6 +373,69 @@ function Field({ label, value }: { label: string; value: ReactNode }) {
   );
 }
 
+/**
+ * Número que conta.
+ *
+ * Quando o painel entra na cascata, o valor sobe de zero até o número
+ * final em vez de piscar pronto. É o padrão de "contador animado" que o
+ * Ramp e o Linear usam nas demonstrações, e faz duas coisas que um número
+ * estático não faz: chama o olho para o valor que importa e mantém o
+ * movimento vivo dentro do passo, sem precisar de barra de progresso.
+ *
+ * A duração é 900ms, fora da régua de 120–360ms do DESIGN.md — que trata
+ * de *transição de interface*, não de contagem de dado. A cascata que
+ * trouxe o painel até aqui seguiu a régua; isto é o conteúdo se
+ * estabelecendo.
+ *
+ * `prefers-reduced-motion` pula a contagem e entrega o número final.
+ */
+function CountUp({ value, duration = 900 }: { value: string; duration?: number }) {
+  const parts = value.match(/^(\D*)([\d.,]+)(\D*)$/);
+  const final = useMemo(() => {
+    if (!parts) return null;
+    const [, prefix, digits, suffix] = parts;
+    const dec = digits.includes(',') ? digits.split(',')[1].length : 0;
+    return {
+      prefix,
+      suffix,
+      dec,
+      n: Number(digits.replace(/\./g, '').replace(',', '.')),
+    };
+  }, [parts]);
+
+  const [n, setN] = useState(0);
+  const reduced = useRef(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reduced.current = mq.matches;
+    if (mq.matches || !final) return;
+    let raf = 0;
+    const t0 = performance.now();
+    const tick = (t: number): void => {
+      const p = Math.min(1, (t - t0) / duration);
+      // easeOutCubic — sai rápida e assenta. Sem bounce.
+      setN(final.n * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [final, duration]);
+
+  if (!final) return <>{value}</>;
+  const shown = reduced.current ? final.n : n;
+  return (
+    <>
+      {final.prefix}
+      {shown.toLocaleString('pt-BR', {
+        minimumFractionDigits: final.dec,
+        maximumFractionDigits: final.dec,
+      })}
+      {final.suffix}
+    </>
+  );
+}
+
 /** Régua de métricas — a mesma da tela, em três ou quatro cartões. */
 function Metrics({ items }: { items: Array<{ title: string; value: string }> }) {
   return (
@@ -383,7 +444,11 @@ function Metrics({ items }: { items: Array<{ title: string; value: string }> }) 
         <Card key={m.title}>
           <CardHeader title={m.title} size="sm" />
           <div className={s.metricSlot}>
-            <Metric value={m.value} size="md" />
+            <Metric
+              value={<CountUp value={m.value} />}
+              size="md"
+              decimals={m.value.includes(',')}
+            />
           </div>
         </Card>
       ))}
