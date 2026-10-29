@@ -14,13 +14,14 @@
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
 >
-> **Estado em 29/10/2026: 7 das 15 tarefas feitas (1, 3, 4, 5, 7, 9 + a 2 depende de
+> **Estado em 29/10/2026: 8 das 15 tarefas feitas (1, 3, 4, 5, 7, 9, 10 + a 2 depende de
 > consulta externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo)
 > e a 6 (título desconhecido). Sprint 2: a 7 (landing) está **pronta e aprovada pelo
 > Rodrigo** — *"Perfeito ficou tudo otimo"* — depois de 10 rodadas de revisão. A **9
-> (mensagens)** está entregue. A 8 e a 11 (tutoriais) foram **puladas a pedido do Rodrigo**
-> (*"as tarefas de tutorais nos pulamos por enquanto"*) — depende de prints do WhatsApp,
-> que exigem o celular dele. Falta publicar no VPS, que é do Richard.
+> (mensagens)** e a **10 (linguagem simples)** estão entregues. A 8 e a 11 (tutoriais) foram
+> **puladas a pedido do Rodrigo** (*"as tarefas de tutorais nos pulamos por enquanto"*) —
+> depende de prints do WhatsApp, que exigem o celular dele. Falta publicar no VPS, que é do
+> Richard.
 
 ---
 
@@ -404,6 +405,47 @@ confirmação ao inquilino · como a variação é escolhida · se D+3 repete ·
 > curtas, sem jargão, 'Proprietário/Imóvel/Unidade/Cobrança/Recebimento'. Pronto quando:
 > planilha de textos aprovada e aplicada. Depende de: Desenhar as telas. Ref.:
 > `docs/specs/v1.md`
+
+#### ✅ TAREFA 10 FEITA — 29/10/2026
+
+**Arquivos:** `docs/textos/v1.md` (a planilha) + 10 telas editadas.
+
+**Bug achado no caminho, e corrigido:** a tela de Planos mostrava para o cliente
+*"Assinatura pelo Mercado Pago — integração na sprint 3"* e *"Preços e limites conforme
+PRODUCT.md … na sprint 3"*. Nome de arquivo nosso e agenda interna no meio da interface —
+o mesmo tipo de coisa que o Rodrigo já tinha apontado na landing. Troquei pelo que o
+cliente precisa saber: duração do teste e como cobra.
+
+**Jargão tirado das 8 telas que existem no produto:**
+
+| Antes | Depois |
+|---|---|
+| `competência` | `mês` |
+| `previsto` / `em aberto` | `total do mês` / `falta receber` |
+| `resultado` | `sobrou` |
+| `fluxo de caixa` | `entradas e saídas` |
+| `informe de rendimentos` | `Imposto de Renda` |
+| `extrato CSV` | `baixar planilha` |
+| `mês do aniversário` | `mês do reajuste` |
+| `vagas` | `sem inquilino` |
+| `lançamentos` | `registros` |
+| `Este mês` | `Resumo do mês` |
+
+Duas frases que afirmavam funcionalidade que a v1 não tem foram reescritas para descrever
+só o que existe: o hint do SettingsMenu (*"visitas, manutenção, insights e saúde
+financeira"*) e o hero do Login (*"contratos, manutenção e finanças"*).
+
+**Validação:** rota temporária com as 8 telas empilhadas, `curl` no HTML servido, 12 textos
+novos conferidos um a um, **zero** ocorrência dos 11 jargões na interface. `tokens:check`
+208 OK, `stylelint` limpo, `tsc` limpo. Rota temporária apagada; `/design-system/admin`
+continua 200.
+
+**Ficou pendente, registrado em `docs/textos/v1.md` seção 3:** `DashboardScreen`,
+`MaintenanceScreen` e `AnalyticsScreen` ainda são do template genérico e afirmam ter
+**Visitas, Manutenção, Insights e Saúde Financeira**, que não existem no vocabulário da v1.
+O item de menu **`Manutenção`** no `Shell` também continua, porque tirar muda navegação e
+não é questão de texto. **Recomendação: decidir o que fazer com as três telas antes de
+publicar** — enquanto estiverem no ar, o produto promete o que não entrega.
 
 ### 11. Tutorial 'Conectar Mercado Pago' — 20/11 · 3h · Normal
 

@@ -334,6 +334,42 @@ que a spec marca como **v2**.
 **5 decisões em aberto para o Richard** estão na seção 7 do arquivo. Enquanto não forem
 respondidas, os textos já servem para teste manual.
 
+### 4.10 Textos em linguagem simples — tarefa 10 do Segundo Cérebro, FECHADA
+
+**Arquivos:** `docs/textos/v1.md` (a planilha) + 10 telas editadas. **Só redação.**
+
+**Bug corrigido no caminho:** a tela de Planos mostrava para o cliente
+*"Assinatura pelo Mercado Pago — integração na sprint 3"* e *"Preços e limites conforme
+PRODUCT.md … na sprint 3"*. Nome de arquivo nosso e agenda interna no meio da interface —
+o mesmo tipo de coisa que o Rodrigo apontou na landing. Agora diz o que o cliente precisa:
+quanto dura o teste e como cobra.
+
+**Jargão substituído nas 8 telas que existem no produto:**
+
+| Antes | Depois |
+|---|---|
+| `competência` | `mês` |
+| `previsto` / `em aberto` | `total do mês` / `falta receber` |
+| `resultado` | `sobrou` |
+| `fluxo de caixa` | `entradas e saídas` |
+| `informe de rendimentos` | `Imposto de Renda` |
+| `extrato CSV` | `baixar planilha` |
+| `mês do aniversário` | `mês do reajuste` |
+| `vagas` | `sem inquilino` |
+| `lançamentos` | `registros` |
+| `Este mês` | `Resumo do mês` |
+
+**Validação:** rota temporária com as 8 telas empilhadas, `curl` no HTML servido, 12 textos
+novos conferidos um a um, zero ocorrência dos 11 jargões na interface. `tokens:check` 208
+OK, `stylelint` limpo, `tsc` limpo. Rota apagada depois.
+
+**⚠️ Pendente e importante:** `DashboardScreen`, `MaintenanceScreen` e `AnalyticsScreen`
+ainda são do template genérico e afirmam ter **Visitas, Manutenção, Insights e Saúde
+Financeira** — nenhuma dessas palavras está no vocabulário da v1. O item de menu
+`Manutenção` no `Shell` também continua. Tirar muda navegação, então ficou para depois, mas
+**precisa ser resolvido antes de publicar**: enquanto estiver no ar, o produto promete o que
+não entrega.
+
 ---
 
 ## 5. Armadilhas conhecidas (já pagamos por elas)
@@ -454,11 +490,10 @@ respondidas, os textos já servem para teste manual.
 ## 7. Git — estado
 
 - Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
-- **Último commit pushed: `dd1e841`** — *docs(messages): textos das mensagens da v1*.
-  Junto foi `6b99c95`, que troca um `margin-top: 2px` cru pelo token `--space-0-5` no
-  `PlanCard.module.css` (era o único erro do `stylelint`, pré-existente).
-- Antes destes, `bee0a42` — docs de contexto refletindo a 10ª rodada da landing, e
-  `82918a2` — *Tour: a última etapa agora é o painel e suas configurações, por rolagem*.
+- **Último commit pushed: `f8a3741`** — *docs(textos): tarefa 10 — linguagem simples nas
+  telas da v1*. Antes dele, `b1342af` (mensagens com o schema real conferido), `4d208ff`
+  (contexto da tarefa 9), `dd1e841` (mensagens), `6b99c95` (token `--space-0-5` no
+  `PlanCard`), `bee0a42` e `82918a2`.
 - O `main` do repo (`33f6853`) **não tem** nada desse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
 
@@ -550,10 +585,18 @@ rodada ensinou uma coisa que não se vê no commit final:
       confirmação de pagamento ao inquilino e "Recebeu?" ao proprietário, mais as
       respostas do sistema. Nada de multa/juros/negativação (não é da v1) e nenhum link
       de portal do inquilino (é v2). 5 decisões em aberto para o Richard.
-- [ ] **Sprint 2 — o que falta:** linguagem simples (10), que depende das telas, e as
-      telas já estão prontas. Os tutoriais WhatsApp (8) e Mercado Pago (11) foram
-      **pulados a pedido do Rodrigo** em 29/10/2026 — metade das imagens depende de
-      prints do celular dele.
+- [x] **Sprint 2 — tarefa 10 (linguagem simples)** — **feita** em 29/10/2026. Planilha em
+      `docs/textos/v1.md` e 10 telas editadas. Jargão contábil e bancário trocado por
+      palavra comum. **Bug corrigido no caminho:** a tela de Planos mostrava `PRODUCT.md` e
+      "sprint 3" para o cliente.
+- [ ] **Sprint 2 — o que falta:** os tutoriais WhatsApp (8) e Mercado Pago (11), **pulados a
+      pedido do Rodrigo** em 29/10/2026 — metade das imagens depende de prints do celular
+      dele.
+- [ ] **Tratar as 3 telas de template antes de publicar** — `DashboardScreen`,
+      `MaintenanceScreen` e `AnalyticsScreen` ainda afirmam ter **Visitas, Manutenção,
+      Insights e Saúde Financeira**, que não existem no vocabulário da v1. O item de menu
+      `Manutenção` no `Shell` também. Enquanto estiverem no ar, o produto promete o que não
+      entrega.
 
 ---
 
@@ -678,6 +721,7 @@ design-system/
 docs/
     specs/v1.md                 ← especificação da v1 (R1–R10)
     messages/v1.md              ← 20 modelos de mensagem da régua D-3/D0/D+3 (tarefa 9)
+    textos/v1.md                ← planilha de linguagem simples das telas (tarefa 10)
 src/app/
     page.tsx  LandingScreen.tsx  page.module.css   ← landing em "/" (só tokens)
     PanelModes.tsx                ← os 4 estados do painel, última etapa do tour.
