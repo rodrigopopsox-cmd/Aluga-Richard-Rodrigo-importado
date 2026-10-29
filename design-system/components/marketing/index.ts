@@ -2,4 +2,4 @@
 export { HowItWorks, type HowItWorksProps, type HowItWorksStep } from './HowItWorks';
 export { PlanCard, PricingNote, type PlanCardProps, type PlanSpec, type PricingNoteProps } from './PlanCard';
 export { PricingTable, type PricingTableProps } from './PricingTable';
-export { ProcessDemo, type DemoStep, type ProcessDemoProps } from './ProcessDemo';
+export { ProcessDemo, type DemoStep, type DemoTab, type ProcessDemoProps } from './ProcessDemo';

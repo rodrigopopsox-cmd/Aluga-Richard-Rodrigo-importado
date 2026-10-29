@@ -34,8 +34,9 @@
 
 .bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-3) var(--space-4);
   padding: var(--space-4) var(--space-6);
   background: var(--surface-subtle);
   border-bottom: 1px solid var(--border-subtle);
@@ -49,12 +50,32 @@
   border-right: 1px solid var(--border-default);
 }
 
-.barLabel {
-  flex: 1;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-  letter-spacing: var(--tracking-snug);
+/*
+ * As abas de módulo. É o `SegmentedControl` do design system — o mesmo
+ * componente que o app usa para trocar Dia/Semana/Mês nos gráficos, com
+ * `role="tablist"` e `role="tab"` de fábrica. Nada foi reinventado aqui.
+ *
+ * O wrapper só faz três trabalhos:
+ *
+ *   1. `size="md"` (48px), não `sm` (26px) — a régua de acessibilidade do
+ *      projeto é alvo de toque de 48px, e um controle de aba menor que
+ *      isso reprova.
+ *   2. Encolher em vez de estourar a linha, e em tela estreita cair para
+ *      a linha de baixo ocupando a largura toda — quatro abas não cabem
+ *      ao lado da marca num celular, e espremê-las até caber é o que
+ *      deixa o texto ilegível.
+ *   3. Rolar na horizontal quando ainda assim não couber, em vez de
+ *      empurrar o contador para fora do cartão.
+ */
+.tabs {
+  flex: 1 1 14rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .barCount {

@@ -54,15 +54,50 @@
   color: var(--text-strong);
 }
 
-/* ---------- hero ---------- */
+/* ---------- hero: texto de um lado, demo do outro ---------- */
 
+/*
+ * Duas colunas no desktop, uma no celular. A demonstração leva a coluna
+ * maior (7 de 11) porque o interior dela é grade de duas colunas — dar a
+ * mesma largura para os dois lados é o que estica o texto e espreme o
+ * painel.
+ */
 .hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-9);
+  align-items: start;
+}
+
+.heroCopy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-5);
-  max-width: 62ch;
-  padding: var(--space-11) var(--space-9) var(--space-10);
+}
+
+@media (min-width: 1080px) {
+  .hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-10);
+  }
+}
+
+.heroDemo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* A dica debaixo da demo: convida a clicar, que é o ponto da seção. */
+.heroHint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+  max-width: 58ch;
 }
 
 .headline {
@@ -101,44 +136,46 @@
   color: var(--text-muted);
 }
 
-/* ---------- capítulos: um passo do produto + a prova ---------- */
+/* ---------- como funciona, em texto ---------- */
 
-/*
- * Cada passo do "Como funciona" ganha a sua seção, com o texto à esquerda e
- * a demonstração do processo à direita. A versão anterior tinha uma lista
- * de três passos e, embaixo, três demonstrações repetindo a mesma coisa —
- * redundante, e fazia a página esticar.
- */
-.chapter {
-  display: grid;
-  grid-template-columns: 1fr;
+.how {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-8);
   padding: var(--space-10) var(--space-9);
   border-top: 1px solid var(--border-subtle);
-  align-items: start;
 }
 
-.chapterCopy {
+.howHead {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3-5);
+  max-width: 62ch;
 }
 
-@media (min-width: 1080px) {
-  .chapter {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-    gap: var(--space-10);
-  }
+.howList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.chapterHead {
+.howItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.howItemHead {
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
 /* Número do passo: contador circular, não enfeite. */
-.chapterN {
+.howN {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -152,7 +189,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.chapterKicker {
+.howKicker {
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   color: var(--brand-soft-fg);
@@ -160,48 +197,20 @@
   text-transform: uppercase;
 }
 
-.chapterTitle {
+.howTitle {
   margin: 0;
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-strong);
   font-weight: var(--weight-regular);
 }
 
-.chapterBody {
+.howBody {
   margin: 0;
   font-size: var(--text-md);
   line-height: var(--leading-normal);
   color: var(--text-secondary);
-  max-width: 40ch;
-}
-
-.chapterDemo {
-  min-width: 0;
-}
-
-/* ---------- modo simples ---------- */
-
-.simple {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-8);
-  padding: var(--space-10) var(--space-9);
-  border-top: 1px solid var(--border-subtle);
-  align-items: start;
-  background: var(--surface-subtle);
-}
-
-.simpleCopy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3-5);
-}
-
-.simpleCopy strong {
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
 }
 
 .sectionTitle {
@@ -218,36 +227,62 @@
   font-size: var(--text-md);
   line-height: var(--leading-normal);
   color: var(--text-secondary);
-  max-width: 46ch;
-}
-
-/*
- * Moldura de app. Usa --shadow-device, que e token do design system.
- * Aqui ela faz sentido: a seção mostra uma tela de verdade, e a moldura
- * separa a tela do fundo. O cartão de demonstração, não.
- */
-.device {
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-device);
-  padding: var(--space-2);
-  overflow: hidden;
-  min-width: 0;
-}
-
-.deviceScreen {
-  border-radius: var(--radius-md);
-  background: var(--surface-card);
-  overflow: hidden;
+  max-width: 52ch;
 }
 
 @media (min-width: 900px) {
-  .simple {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--space-10);
+  .howList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8);
   }
 }
 
-/* ---------- peças dos painéis ---------- */
+/* ---------- planos ---------- */
+
+.plans {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: var(--space-10) var(--space-9);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ---------- CTA final ---------- */
+
+.final {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-10) var(--space-9);
+  background: var(--surface-inverse);
+}
+
+.final .sectionTitle {
+  color: var(--text-inverse);
+}
+
+.final .sectionLead {
+  color: var(--on-inverse-muted);
+}
+
+/* ---------- rodapé ---------- */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-7) var(--space-9);
+}
+
+.foot .fine {
+  color: var(--text-subtle);
+}
+
+/* ================================================================== *
+ * Peças dos painéis de demonstração.
+ * ================================================================== */
 
 /*
  * Interior dos painéis em duas colunas — é o que dá a densidade da ficha
@@ -416,45 +451,203 @@
   line-height: var(--leading-normal);
 }
 
-/* ---------- planos ---------- */
+/* ================================================================== *
+ * A aba "Meu mês".
+ *
+ * O quadro recebe `data-a11y` e `data-theme` — os dois são atributos de
+ * elemento, não exclusivos do `<html>`, então o modo acessibilidade e o
+ * tema escuro funcionam aqui dentro sem sequestrar a landing. No app o
+ * atributo vai no `<html>` e vale para o painel todo.
+ * ================================================================== */
 
-.plans {
+.mesFrame {
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
-  padding: var(--space-10) var(--space-9);
-  border-top: 1px solid var(--border-subtle);
-}
-
-/* ---------- CTA final ---------- */
-
-.final {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   gap: var(--space-4);
-  padding: var(--space-10) var(--space-9);
-  background: var(--surface-inverse);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-tile);
+  background: var(--surface-subtle);
 }
 
-.final .sectionTitle {
-  color: var(--text-inverse);
+.mesBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-.final .sectionLead {
-  color: var(--on-inverse-muted);
+.mesMonth {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
 }
 
-/* ---------- rodapé ---------- */
+.mesPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-tile);
+  background: var(--surface-card);
+}
 
-.foot {
+.mesPanelTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+  letter-spacing: var(--tracking-snug);
+}
+
+.mesBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mesLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesHint {
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+.mesMonthNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mesMonthLabel {
+  min-width: 5rem;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.mesSummaryMissing {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.mesSummaryTrack {
+  height: var(--space-2);
+  margin-top: var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-track);
+  overflow: hidden;
+}
+
+.mesSummaryFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+}
+
+.mesSummaryPct {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.mesMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--card-gap);
+}
+
+.mesMetricSlot {
+  margin-top: var(--space-3);
+}
+
+.mesUnit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mesUnitHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.mesUnitNames {
+  min-width: 0;
+}
+
+.mesUnitName {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.mesUnitTenant {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.mesUnitRent {
+  text-align: right;
+}
+
+.mesUnitRentValue {
+  display: block;
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+}
+
+.mesUnitRentLabel {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.mesUnitStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mesUnitStatusIcon {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.mesUnitStatusText {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.mesUnitActions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-7) var(--space-9);
+  gap: var(--space-3);
 }
 
-.foot .fine {
-  color: var(--text-subtle);
+/* O recado de honestidade: o botão é para experimentar, não para usar. */
+.mesNote {
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
 }

@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Icon } from '../core/Icon';
 import { Wordmark } from '../core/Wordmark';
+import { SegmentedControl } from '../forms/SegmentedControl';
 import styles from './ProcessDemo.module.css';
 
 /**
@@ -10,8 +11,8 @@ import styles from './ProcessDemo.module.css';
  *
  * `children` é montado pelo chamador com os **componentes de verdade do
  * design system** (`Card`, `CardHeader`, `Metric`, `Badge`, `Avatar`) e com
- * os **dados de demonstração de verdade** (`chargesData`, `contractsData`,
- * `receiptsData`). Não é print, não é maquete, não é tela de concorrente.
+ * os **dados de demonstração de verdade**. Não é print, não é maquete, não
+ * é tela de concorrente.
  */
 export interface DemoStep {
   /** O que acontece neste passo. */
@@ -37,20 +38,27 @@ export interface DemoStep {
   children: ReactNode;
 }
 
-export interface ProcessDemoProps {
-  /** Rótulo da seção: "Contratos", "Cobranças", "Recebimentos". */
+/** Um módulo do app — uma aba da demonstração. */
+export interface DemoTab {
+  /** Rótulo da aba: "Contratos", "Cobranças", "Recebimentos", "Meu mês". */
   label: string;
+  /** Os passos deste módulo. Uma aba com um passo só fica parada. */
   steps: DemoStep[];
+}
+
+export interface ProcessDemoProps {
+  /** Os módulos, que viram as abas. */
+  tabs: DemoTab[];
   /** Milissegundos por passo. `0` desliga o avanço automático. */
   interval?: number;
 }
 
 /**
- * Demonstração de processo — **um cartão único e grande**, no formato do
- * cartão "Novo contrato" que o Rodrigo apontou como referência:
+ * Demonstração de processo — **um cartão único**, no formato do cartão
+ * "Novo contrato" que o Rodrigo apontou como referência, com **abas de
+ * módulo** para trocar de tela:
  *
- *   · cabeçalho com a marca + o nome da área à esquerda e o contador
- *     `NN / 04` à direita;
+ *   · cabeçalho com a marca, as abas do módulo e o contador `NN / 04`;
  *   · linha de título com o selo de estado à direita;
  *   · interior em grade de colunas densas;
  *   · rodapé com a legenda e a navegação.
@@ -68,14 +76,22 @@ export interface ProcessDemoProps {
  * dados do app, então os números que aparecem são os mesmos que a tela
  * mostra.
  *
+ * AS ABAS. A navegação por módulo é o `SegmentedControl` do próprio design
+ * system — o mesmo componente que o app usa para trocar Dia/Semana/Mês nos
+ * gráficos. Ele já nasce com `role="tablist"`, `role="tab"` e
+ * `aria-selected`, então a semântica de acessibilidade vem de fábrica e não
+ * foi reinventada aqui. O que este componente acrescenta é só a navegação
+ * por setas, que o `tablist` pede e o `SegmentedControl` não tinha.
+ *
+ * Trocar de aba **zera o passo e reexecuta a cascata**: é uma tela nova
+ * entrando, não o mesmo conteúdo com outro rótulo.
+ *
  * O QUE O `DESIGN.md` MANDA E ESTE COMPONENTE OBEDECE — cada item abaixo já
  * foi descumprido uma vez e reprovado na revisão:
  *
  *   · **Cartão plano, sem sombra.** "Cards have no drop shadow at rest.
  *     Depth comes from tonal layers (gray page → white cards with a 1px
- *     border-subtle hairline), not shadows." A moldura é hairline. A
- *     versão anterior usava `--shadow-card` e depois `--shadow-device`
- *     (anel preto de 10px) — as duas contra a regra.
+ *     border-subtle hairline), not shadows."
  *   · **Movimento curto e quieto.** "120–360ms, cubic-bezier(.22,1,.36,1).
  *     No bounces, no parallax." A versão anterior tinha uma barra de
  *     progresso que corria 4,2 s — doze vezes o limite, e laranja,
@@ -83,9 +99,9 @@ export interface ProcessDemoProps {
  *   · **Sem emoji.** O aviso de "promessa não construída" é selo, não
  *     triângulo amarelo.
  *
- * COMO A ANIMAÇÃO FUNCIONA AGORA — e por que é diferente do que já foi
- * feito aqui. A versão anterior trocava o painel inteiro de uma vez: o
- * bloco somia e o bloco novo aparecia. Isso é o que parece "quadrado, sem
+ * COMO A ANIMAÇÃO FUNCIONA — e por que é diferente do que já foi feito
+ * aqui. A versão anterior trocava o painel inteiro de uma vez: o bloco
+ * somia e o bloco novo aparecia. Isso é o que parece "quadrado, sem
  * fluidez nenhuma": o olho perde a referência e não vê continuidade.
  *
  * Agora o painel **se preenche em cascata**: cada bloco entra um depois do
@@ -112,12 +128,16 @@ export interface ProcessDemoProps {
  *     acessibilidade) e narração em `aria-live`: o painel se usa sem ver a
  *     animação.
  */
-export function ProcessDemo({ label, steps, interval = 5200 }: ProcessDemoProps) {
-  const [index, setIndex] = useState(0);
+export function ProcessDemo({ tabs, interval = 5200 }: ProcessDemoProps) {
+  const [tab, setTab] = useState(0);
+  const [step, setStep] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
-  const total = steps.length;
-  const step = steps[index];
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+  const active = tabs[tab];
+  const total = active.steps.length;
+  const current = active.steps[step];
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -127,16 +147,41 @@ export function ProcessDemo({ label, steps, interval = 5200 }: ProcessDemoProps)
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
+  /** Trocar de módulo: volta ao primeiro passo e reexecuta a cascata. */
+  const pick = useCallback((next: number) => {
+    setTab(next);
+    setStep(0);
+  }, []);
+
   const go = useCallback(
-    (next: number) => setIndex(((next % total) + total) % total),
+    (next: number) => setStep(((next % total) + total) % total),
     [total],
   );
 
   useEffect(() => {
-    if (!interval || paused || reduced) return;
-    const id = window.setTimeout(() => setIndex((i) => (i + 1) % total), interval);
+    // Aba com um passo só não tem o que adiantar — fica parada para a
+    // pessoa explorar (é o caso do "Meu mês", que é interativo).
+    if (!interval || total < 2 || paused || reduced) return;
+    const id = window.setTimeout(() => setStep((i) => (i + 1) % total), interval);
     return () => window.clearTimeout(id);
-  }, [index, interval, paused, reduced, total]);
+  }, [step, interval, paused, reduced, total]);
+
+  /**
+   * Setas movem entre as abas, como um `tablist` pede. O foco vai junto,
+   * então quem navega por teclado vê a seleção andar.
+   */
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const last = tabs.length - 1;
+    const next =
+      e.key === 'Home' ? 0 : e.key === 'End' ? last : tab + (e.key === 'ArrowRight' ? 1 : -1);
+    const clamped = ((next % tabs.length) + tabs.length) % tabs.length;
+    pick(clamped);
+    const btns = tabsRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    btns?.[clamped]?.focus();
+  };
 
   return (
     <figure
@@ -145,71 +190,91 @@ export function ProcessDemo({ label, steps, interval = 5200 }: ProcessDemoProps)
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      aria-label={`${label} — como funciona`}
+      aria-label="Demonstração do produto"
     >
-      {/* ---------- cabeçalho: marca, área, contador ---------- */}
+      {/* ---------- cabeçalho: marca, abas, contador ---------- */}
       <div className={styles.bar}>
         <div className={styles.brand}>
           <Wordmark size={18} />
         </div>
-        <span className={styles.barLabel}>{label}</span>
-        <span className={styles.barCount}>
-          {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-        </span>
+
+        <div className={styles.tabs} ref={tabsRef} onKeyDown={onTabKeyDown}>
+          <SegmentedControl
+            size="md"
+            label="Módulos da demonstração"
+            options={tabs.map((t) => t.label)}
+            value={active.label}
+            onChange={(v) => pick(tabs.findIndex((t) => t.label === v))}
+          />
+        </div>
+
+        {total > 1 && (
+          <span className={styles.barCount}>
+            {String(step + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+          </span>
+        )}
       </div>
 
       {/* ---------- corpo: título com selo + interior denso ---------- */}
-      <div className={styles.body} key={index} data-reduced={reduced ? '' : undefined}>
+      <div
+        className={styles.body}
+        key={`${tab}-${step}`}
+        data-reduced={reduced ? '' : undefined}
+        role="tabpanel"
+        aria-label={`${active.label} — passo ${step + 1}`}
+      >
         <div className={styles.head}>
-          <h3 className={styles.title}>{step.title}</h3>
+          <h3 className={styles.title}>{current.title}</h3>
           <div className={styles.headSide}>
-            {step.status}
-            {step.pending && <span className={styles.pending}>{step.pending}</span>}
+            {current.status}
+            {current.pending && <span className={styles.pending}>{current.pending}</span>}
           </div>
         </div>
-        {step.children}
+        {current.children}
       </div>
 
       {/* ---------- rodapé: legenda, narração, navegação ---------- */}
       <figcaption className={styles.foot}>
         <div className={styles.text}>
           <span className={styles.legend}>Exemplo ilustrativo</span>
-          <p className={styles.detail}>{step.detail}</p>
+          <p className={styles.detail}>{current.detail}</p>
         </div>
 
-        <div className={styles.nav}>
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => go(index - 1)}
-            aria-label="Passo anterior"
-          >
-            <Icon name="chevron-left" size={20} />
-          </button>
+        {total > 1 && (
+          <div className={styles.nav}>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => go(step - 1)}
+              aria-label="Passo anterior"
+            >
+              <Icon name="chevron-left" size={20} />
+            </button>
 
-          <ol className={styles.dots}>
-            {steps.map((s, i) => (
-              <li key={s.title}>
-                <button
-                  type="button"
-                  className={i === index ? styles.dotOn : styles.dot}
-                  onClick={() => go(i)}
-                  aria-label={`Passo ${i + 1}: ${s.title}`}
-                  aria-current={i === index ? 'step' : undefined}
-                />
-              </li>
-            ))}
-          </ol>
+            <ol className={styles.dots}>
+              {active.steps.map((s, i) => (
+                <li key={s.title}>
+                  <button
+                    type="button"
+                    className={i === step ? styles.dotOn : styles.dot}
+                    onClick={() => go(i)}
+                    aria-label={`Passo ${i + 1}: ${s.title}`}
+                    aria-current={i === step ? 'step' : undefined}
+                  />
+                </li>
+              ))}
+            </ol>
 
-          <button
-            type="button"
-            className={styles.navBtn}
-            onClick={() => go(index + 1)}
-            aria-label="Próximo passo"
-          >
-            <Icon name="chevron-right" size={20} />
-          </button>
-        </div>
+            <button
+              type="button"
+              className={styles.navBtn}
+              onClick={() => go(step + 1)}
+              aria-label="Próximo passo"
+            >
+              <Icon name="chevron-right" size={20} />
+            </button>
+          </div>
+        )}
       </figcaption>
     </figure>
   );
