@@ -57,47 +57,19 @@
 /* ---------- hero: texto de um lado, demo do outro ---------- */
 
 /*
- * Duas colunas no desktop, uma no celular. A demonstração leva a coluna
- * maior (7 de 11) porque o interior dela é grade de duas colunas — dar a
- * mesma largura para os dois lados é o que estica o texto e espreme o
- * painel.
+ * Hero. Agora é só o convite: título, texto e botões. A demonstração saiu
+ * daqui e virou a seção de sticky scrollytelling abaixo, onde a explicação
+ * fica acima da interface e a rolagem comanda as etapas. Manter a demo ao
+ * lado do texto aqui E a apresentação logo embaixo seria mostrar o produto
+ * duas vezes na mesma tela.
  */
 .hero {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-8);
-  padding: var(--space-10) var(--space-9);
-  align-items: start;
-}
-
-.heroCopy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-5);
-}
-
-@media (min-width: 1080px) {
-  .hero {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--space-10);
-  }
-}
-
-.heroDemo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  min-width: 0;
-}
-
-/* A dica debaixo da demo: convida a clicar, que é o ponto da seção. */
-.heroHint {
-  margin: 0;
-  font-size: var(--text-sm);
-  line-height: var(--leading-normal);
-  color: var(--text-muted);
-  max-width: 58ch;
+  max-width: 62ch;
+  padding: var(--space-11) var(--space-9) var(--space-10);
 }
 
 .headline {
@@ -136,81 +108,66 @@
   color: var(--text-muted);
 }
 
-/* ---------- como funciona, em texto ---------- */
+/*
+ * A dica de que a apresentação é comandada pela rolagem. Sem ela, quem
+ * chega no hero não sabe que tem produto para ver embaixo — e a seção
+ * seguinte é justamente a que depende da rolagem.
+ */
+.scrollCue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
 
-.how {
-  display: flex;
-  flex-direction: column;
+/* A seta desce sozinha, devagar. É o único movimento contínuo da página,
+   e é curto e quieto como a régua manda. */
+.scrollCaret {
+  animation: cue var(--dur-slow) var(--ease-in-out) infinite alternate;
+}
+
+@keyframes cue {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--space-1));
+  }
+}
+
+/* ---------- do seu jeito ---------- */
+
+/*
+ * Texto de um lado, demonstração do outro — o ritmo inverte aqui de
+ * propósito, porque a seção de cima é vertical e centrada. Duas seções
+ * vertazes seguidas cansam.
+ */
+.mes {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--space-8);
   padding: var(--space-10) var(--space-9);
   border-top: 1px solid var(--border-subtle);
+  align-items: start;
 }
 
-.howHead {
+.mesCopy {
   display: flex;
   flex-direction: column;
   gap: var(--space-3-5);
-  max-width: 62ch;
 }
 
-.howList {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-7);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.mesStage {
+  min-width: 0;
 }
 
-.howItem {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.howItemHead {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-/* Número do passo: contador circular, não enfeite. */
-.howN {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-8);
-  height: var(--space-8);
-  border-radius: var(--radius-round);
-  background: var(--brand-soft);
-  color: var(--brand-soft-fg);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  font-variant-numeric: tabular-nums;
-}
-
-.howKicker {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--brand-soft-fg);
-  letter-spacing: var(--tracking-snug);
-  text-transform: uppercase;
-}
-
-.howTitle {
-  margin: 0;
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  color: var(--text-strong);
-  font-weight: var(--weight-regular);
-}
-
-.howBody {
-  margin: 0;
-  font-size: var(--text-md);
-  line-height: var(--leading-normal);
-  color: var(--text-secondary);
+@media (min-width: 1080px) {
+  .mes {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-10);
+  }
 }
 
 .sectionTitle {
@@ -228,13 +185,6 @@
   line-height: var(--leading-normal);
   color: var(--text-secondary);
   max-width: 52ch;
-}
-
-@media (min-width: 900px) {
-  .howList {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-8);
-  }
 }
 
 /* ---------- planos ---------- */
@@ -314,7 +264,6 @@
  * novo no fim.
  */
 .split > *,
-.splitSide > *,
 .panelBody > *,
 .metrics > * {
   animation: fillIn var(--dur-slow) var(--ease-out) both;
@@ -325,11 +274,6 @@
 .split > *:nth-child(3) { animation-delay: 120ms; }
 .split > *:nth-child(4) { animation-delay: 180ms; }
 .split > *:nth-child(5) { animation-delay: 240ms; }
-
-.splitSide > *:nth-child(1) { animation-delay: 60ms; }
-.splitSide > *:nth-child(2) { animation-delay: 120ms; }
-.splitSide > *:nth-child(3) { animation-delay: 180ms; }
-.splitSide > *:nth-child(4) { animation-delay: 240ms; }
 
 .panelBody > *:nth-child(1) { animation-delay: 120ms; }
 .panelBody > *:nth-child(2) { animation-delay: 180ms; }
@@ -352,12 +296,6 @@
     opacity: 1;
     transform: none;
   }
-}
-
-.splitSide {
-  display: flex;
-  flex-direction: column;
-  gap: var(--card-gap);
 }
 
 /*
@@ -401,253 +339,8 @@
   gap: var(--card-gap);
 }
 
-.person {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.personName {
-  flex: 1;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.payRow {
-  display: flex;
-  gap: var(--space-3);
-  margin-top: var(--space-1);
-}
-
 /*
  * Balão de WhatsApp. A moldura é o token de carta de chat, não uma cor
  * solta — é o mesmo cinza de superfície que o app usa.
  */
-.chat {
-  display: flex;
-  padding: var(--space-2) 0;
-}
 
-.bubble {
-  max-width: 38ch;
-  padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-tile) var(--radius-tile) var(--radius-tile) var(--radius-xs);
-  background: var(--surface-subtle);
-}
-
-.bubbleWho {
-  display: block;
-  margin-bottom: var(--space-2);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  color: var(--text-muted);
-}
-
-.bubbleText {
-  margin: 0;
-  font-size: var(--text-md);
-  color: var(--text-strong);
-  line-height: var(--leading-normal);
-}
-
-/* ================================================================== *
- * A aba "Meu mês".
- *
- * O quadro recebe `data-a11y` e `data-theme` — os dois são atributos de
- * elemento, não exclusivos do `<html>`, então o modo acessibilidade e o
- * tema escuro funcionam aqui dentro sem sequestrar a landing. No app o
- * atributo vai no `<html>` e vale para o painel todo.
- * ================================================================== */
-
-.mesFrame {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-tile);
-  background: var(--surface-subtle);
-}
-
-.mesBar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.mesMonth {
-  flex: 1;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.mesPanel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-tile);
-  background: var(--surface-card);
-}
-
-.mesPanelTitle {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-  letter-spacing: var(--tracking-snug);
-}
-
-.mesBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.mesLabel {
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.mesHint {
-  font-size: var(--text-xs);
-  line-height: var(--leading-normal);
-  color: var(--text-muted);
-}
-
-.mesMonthNav {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.mesMonthLabel {
-  min-width: 5rem;
-  text-align: center;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.mesSummary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-}
-
-.mesSummaryMissing {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
-.mesSummaryTrack {
-  height: var(--space-2);
-  margin-top: var(--space-3);
-  border-radius: var(--radius-pill);
-  background: var(--surface-track);
-  overflow: hidden;
-}
-
-.mesSummaryFill {
-  height: 100%;
-  border-radius: var(--radius-pill);
-  background: var(--brand);
-}
-
-.mesSummaryPct {
-  margin: var(--space-2) 0 0;
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-}
-
-.mesMetrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-  gap: var(--card-gap);
-}
-
-.mesMetricSlot {
-  margin-top: var(--space-3);
-}
-
-.mesUnit {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.mesUnitHead {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-
-.mesUnitNames {
-  min-width: 0;
-}
-
-.mesUnitName {
-  margin: 0;
-  font-size: var(--text-md);
-  font-weight: var(--weight-medium);
-  color: var(--text-strong);
-}
-
-.mesUnitTenant {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-}
-
-.mesUnitRent {
-  text-align: right;
-}
-
-.mesUnitRentValue {
-  display: block;
-  font-size: var(--text-lg);
-  color: var(--text-strong);
-}
-
-.mesUnitRentLabel {
-  display: block;
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-}
-
-.mesUnitStatus {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.mesUnitStatusIcon {
-  flex: none;
-  color: var(--text-muted);
-}
-
-.mesUnitStatusText {
-  flex: 1;
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
-.mesUnitActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-/* O recado de honestidade: o botão é para experimentar, não para usar. */
-.mesNote {
-  margin: 0;
-  font-size: var(--text-xs);
-  line-height: var(--leading-normal);
-  color: var(--text-muted);
-}

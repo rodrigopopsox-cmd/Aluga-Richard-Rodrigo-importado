@@ -1,0 +1,257 @@
+/*
+ * ProductTour — sticky scrollytelling: explicação acima, interface abaixo,
+ * e a rolagem do usuário avança as etapas.
+ *
+ * REGRA DA CASA: só tokens de `design-system/tokens`. Nada de cor, raio,
+ * sombra, espaçamento ou duração fora da escala.
+ *
+ * A ALTURA DA SEÇÃO NÃO ESTÁ AQUI. Ela é dimensional de viewport — uma
+ * tela de rolagem por etapa — e vai inline no componente, com comentário.
+ * Um token local para isso já foi reprovado pelo validador.
+ *
+ * O STICKY. `.pin` é o único elemento preso. A seção de fora é alta, então
+ * enquanto a rolagem acontece dentro dela o `.pin` fica parado na viewport
+ * e só o conteúdo interno troca. Nada de `position: fixed`, nada de
+ * transformar o body, nada de capturar a rodinha — o navegador continua
+ * dono da rolagem, e é isso que faz trackpad, toque, teclado, rolagem
+ * rápida e leitor de tela funcionarem sem caso especial.
+ */
+
+.tour {
+  position: relative;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  /*
+   * `min-height` e não `height`: se o conteúdo de uma etapa for mais alto
+   * que a tela (celular pequeno, painel denso), o elemento cresce em vez
+   * de cortar. O sticky continua valendo porque o topo fica preso.
+   */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-8) var(--space-9);
+  /* Coluna de leitura. `ch` é a unidade que a landing já usa para conter
+     texto — painel esticrado em 1920px é o que deixa a interface com ar
+     de tela vazia. */
+  max-width: 104ch;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+/* Tela curta: menos respiração, para a etapa inteira caber. */
+@media (max-height: 820px) {
+  .pin {
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+  }
+}
+
+/* ---------- explicação, acima ---------- */
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+/*
+ * "01 / 06" mais o rótulo do módulo. O contador usa algarismo tabular para
+ * os números não dançarem de largura entre 09 e 10.
+ */
+.count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.countNow {
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--brand);
+}
+
+.countSep {
+  font-size: var(--text-sm);
+  color: var(--text-subtle);
+}
+
+.countTotal {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.countLabel {
+  margin-left: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-badge);
+  background: var(--brand-soft);
+  color: var(--brand-soft-fg);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-snug);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+  font-weight: var(--weight-regular);
+  max-width: 34ch;
+}
+
+.body {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+  max-width: 58ch;
+}
+
+/* ---------- interface demonstrada, abaixo ---------- */
+
+.stage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+.panel {
+  width: 100%;
+  min-height: 0;
+}
+
+/*
+ * A CASCATA. Quando a etapa muda, o texto e o painel entram um depois do
+ * outro — 60ms de atraso entre um e outro — em fade curto com subida de
+ * poucos pixels. É a técnica de stagger que o mercado usa em demonstração
+ * de produto (Linear, Ramp) e é o que dá continuidade: o olho acompanha a
+ * informação chegando em sequência em vez de uma tela sendo trocada por
+ * outra.
+ *
+ * Cada bloco é 360ms — o teto que o DESIGN.md autoriza ("120–360ms,
+ * cubic-bezier(.22,1,.36,1). No bounces, no parallax"). `both` é
+ * obrigatório: sem ele os blocos piscam invisíveis antes do atraso e de
+ * novo no fim.
+ */
+.head > *,
+.stage > * {
+  animation: tourIn var(--dur-slow) var(--ease-out) both;
+}
+
+.head > *:nth-child(1) { animation-delay: 0ms; }
+.head > *:nth-child(2) { animation-delay: 60ms; }
+.head > *:nth-child(3) { animation-delay: 120ms; }
+.stage > *:nth-child(1) { animation-delay: 180ms; }
+
+.panel[data-reduced] {
+  animation: none;
+}
+
+.pin[data-reduced] .head > *,
+.pin[data-reduced] .stage > * {
+  animation: none;
+}
+
+@keyframes tourIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- navegação opcional ---------- */
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Alvo de 48px — o token já sobe para 56px no modo acessibilidade. */
+.dot,
+.dotOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--control-h-md);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* O desenho é pequeno; o alvo de toque é o botão inteiro. */
+.dot::after,
+.dotOn::after {
+  content: '';
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--surface-track);
+  transition: background var(--dur-fast) var(--ease-out), width var(--dur-fast) var(--ease-out);
+}
+
+.dotOn::after {
+  width: var(--space-5);
+  background: var(--brand);
+}
+
+.dot:focus-visible,
+.dotOn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: calc(var(--space-1) * -1);
+  border-radius: var(--radius-pill);
+}
+
+/*
+ * A dica de que a apresentação é comandada pela rolagem. Some quando o
+ * usuário já entrou no mecanismo — não fica repetindo o óbvio.
+ */
+.navHint {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+  letter-spacing: var(--tracking-snug);
+}
+
+/*
+ * Some da tela mas fica para o leitor de tela: é por aqui que quem não vê
+ * a rolagem fica sabendo que a etapa mudou.
+ */
+.srOnly {
+  position: absolute;
+  width: var(--space-0-5);
+  height: var(--space-0-5);
+  padding: 0;
+  margin: calc(var(--space-0-5) * -1);
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
