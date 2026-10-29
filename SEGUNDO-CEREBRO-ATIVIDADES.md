@@ -16,7 +16,9 @@
 >
 > **Estado em 29/10/2026: 6 das 15 tarefas feitas (1, 3, 4, 5, 7 + a 2 depende de consulta
 > externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo) e a 6
-> (título desconhecido). Sprint 2 começou: a 7 (landing) está pronta, falta publicar.
+> (título desconhecido). Sprint 2 começou: a 7 (landing) está **pronta e aprovada pelo
+> Rodrigo** — *"Perfeito ficou tudo otimo"* — depois de 10 rodadas de revisão. Falta
+> publicar no VPS, que é do Richard.
 
 ---
 
@@ -282,6 +284,62 @@ template. Publicar e criar cadastro são do Richard.
 de propósito — o onboarding tem cinco porque é configuração de conta; a landing precisa do
 arco do produto.
 
+---
+
+#### Da 1ª à 10ª rodada — como a landing ficou do jeito que está
+
+A tarefa 7 foi fechada em `0c1b092` e depois passou por **dez rodadas de revisão com o
+Rodrigo**. O que está em `82918a2` é o resultado delas. Registrar o percurso interessa
+porque cada rodada ensinou uma coisa que o commit final não mostra:
+
+| Rodada | O que o Rodrigo disse | O que isso ensinou |
+|---|---|---|
+| 1ª–3ª | *"nossa landing page está horrível, letras colada na tela"* · *"nas animações está tudo muito perto da outra, está muito poluído"* · *"tem product.md escrito em uma das descrições"* · *"animação está bem quadrada sem fluidez nenhuma"* · *"está tudo muito raso"* · *"não gostei de nada na nossa landing, refaça tudo mas com as ideias que já dei"* | tela clean, **bordas menores ou sem borda**, **diminuir as artes para caber tudo no mesmo bloco**, e **nenhum texto de especificação na interface** |
+| 4ª | *"eu quero sem barras mas algo difetente do q fizemos ate agora, preciso que pegue referencias em sites de design grafico para fazer algo bom"* | **barra de progresso de qualquer espessura está proibida** — foram 4 tentativas reprovadas. A resposta foi cascata escalonada, não barra |
+| 5ª–6ª | *"o setor 'meu mes' pode entrar tambem junto mas com o dashboard mostrando o menu simples acessibilidade e tema escuro tambem"* · *"capriche nos textos apresentado esta muito robotico isso para todo os textos do ladingpage"* | os textos são **voz "você"**, uma frase por idéia, e o sistema raramente fala de si mesmo. Referência de layout: `aluggapro.com.br` como **inspiração, não cópia literal** |
+| 7ª | *"Não quero apenas uma animação decorativa"* · *"Não confundo isso com reproduzir uma animação automaticamente por tempo"* · *"Não implemente um mecanismo que capture continuamente a rodinha do mouse"* | **sticky scrollytelling**: a rolagem do navegador comanda, não um timer. Nenhum `preventDefault`, nenhum `position: fixed` |
+| 8ª | *"use essa ideia que eu te dei e refaça por favor... parece que esta incompleto"* · *"use a tela real do Completo incluindo as imagens das casas"* · *"so copie a tela do painel nao invente nada"* · *"tirar o nome de menu 'Este mês'"* | as telas embedadas são as **do produto**, não desenho delas. E número que carrega significado (dinheiro, percentual) **não anima de zero** — só fade/translate |
+| 9ª | *"toda essa area 'estes mês' eu quero junto com Animated Product Showcase mostrando todas as nossas funçoes de acessibilidade, tema e o modo simples e o modo completo, sempre comece com o modo completo"* | os quatro estados entram como **última etapa**, começando no Completo |
+| 10ª | *"vc acabou fazendo outra animaçao embaixo de onde eu queria... o legal seria a explicaçao do site estar tudo no mesmo lugar"* · *"na ultima sessao da animaçao mostrando nosso painel e as funcionalidades dele animada sem o cliente precisar em clicar em nada so dando scroll"* | **nada de bloco separado**: uma explicação, um lugar. E os estados se demonstram **por rolagem**, sem clique |
+
+**Estado final (`82918a2`) — a landing é UMA explicação, num bloco só.** Não existe seção
+depois da apresentação. Estrutura: hero (só texto) → `ProductTour` com **7 etapas** →
+planos → CTA final → rodapé.
+
+**A 7ª etapa ("Do seu jeito") é o painel e o que se configura nele, e é a única com quatro
+beats** — ocupa quatro telas de rolagem, uma por estado:
+
+| Beat | Estado | O que mostra |
+|---|---|---|
+| 01 | **Modo Completo** | a Visão geral inteira, com as fotos das casas |
+| 02 | **Modo Simples** | a tela "Este mês", um cartão por unidade |
+| 03 | **Tema escuro** | o painel completo, escuro |
+| 04 | **Letra maior** | o painel completo, com a acessibilidade ligada |
+
+`ProductTour` passou a aceitar `beats?` por etapa, e `panel` virou função do beat. A seção
+mede `totalScreens` telas em vez de `steps.length`, e a tela é convertida em (etapa, beat).
+**A régua não mudou**: quem rola é o navegador, e a etapa ativa continua sendo função pura
+da posição da rolagem.
+
+**Apagados na 10ª rodada:** `src/app/MeuMesDemo.tsx` e `src/app/ProductShowcase.tsx`.
+Novo: `src/app/PanelModes.tsx`. O `page.module.css` encolheu 590 linhas.
+
+**Validação do `82918a2`:** `check-tokens` 208 OK · `tsc --noEmit` limpo · `stylelint`
+limpo (`oxlint` panica no HEAD também — é do ambiente, não do código) · `/`,
+`/design-system` e `/design-system/admin` em HTTP 200 · as 3 imagens das casas em 200 com
+`image/png` · rota temporária com os 4 beats empilhados: 4 legendas conferidas, 3 imagens
+por beat do Completo, `data-theme="dark"` no beat 3 e `data-a11y="on"` no beat 4 ·
+**matemática da progressão varrida px a px**: 10 estados, nenhum perdido, subir é o inverso
+exato de descer, salto do topo ao fim não pula estado, 10 estados em viewports de 600 a
+1440px, `goTo(i)` cai certo nas 7 etapas · zero ocorrência de "progress", zero emoji, zero
+"PRODUCT" · **zero classe órfã** (39 no CSS, 39 usadas) · console do servidor sem erros.
+
+**Aprovado pelo Rodrigo em 29/10/2026:** *"Perfeito ficou tudo otimo"*.
+
+**O "pronto quando" da tarefa continua NÃO fechado:** depende de publicar no VPS, e o botão
+precisa chegar a um **cadastro que ainda não existe**. O CTA hoje leva a
+`/design-system/admin`. Publicar e criar cadastro são do Richard.
+
 ### 8. Tutorial 'Conectar WhatsApp' — 20/11 · 3h · Normal
 
 > Para: Rodrigo (Marca). Sprint 2. O que fazer: Passo a passo com imagens para ler o QR
@@ -460,9 +518,13 @@ for usado como base da v1, ele precisa **encolher**, não crescer.
   no produto. Não é tarefa do kanban, mas é a próxima tarefa grande e a única tela do painel
   que ainda mente sobre o produto.
 
-**Sprint 2 (20/11) — iniciada:**
+**Sprint 2 (20/11) — em andamento:**
 
-- **Landing (7) — FEITA** (`0c1b092`). Falta publicar no VPS, que é do Richard.
+- **Landing (7) — FEITA e APROVADA** (`82918a2`, 10 rodadas de revisão). O Rodrigo deu
+  *"Perfeito ficou tudo otimo"* em 29/10/2026. Falta publicar no VPS, que é do Richard.
+  A estrutura final: hero → `ProductTour` com 7 etapas → planos → CTA final → rodapé.
+  **Uma explicação, um bloco** — nada depois da apresentação. A 7ª etapa tem quatro beats
+  (Completo → Simples → tema escuro → letra maior), um por tela de rolagem, sem clique.
 - **Tutorial WhatsApp (8), mensagens (9), linguagem simples (10), tutorial Mercado Pago
   (11) — nada iniciado.**
 
@@ -471,10 +533,16 @@ system"*: ela é a prova de que o design system se sustenta sozinho, sem CSS de 
 por isso que ela nasceu **depois** das 7 telas — as telas é que criaram os componentes que
 a landing reusa (`PricingTable`, `HowItWorks`, `SimpleModeScreen`).
 
+**O que a landing provou, no fim das 10 rodadas:** o design system se sustenta sozinho, e
+as telas embedadas na landing são as **do produto** — se uma tela muda no app, a landing
+muda junto. É a única forma de a promessa não mentir.
+
 **Ressalva que o Rodrigo registrou em 29/10/2026:** *"provavelmente quem vai deixar
 funcional sem ser generico é meu socio"*. Ou seja, a **parte funcional** — banco, job de
 cobrança, integração real — é do Richard. O Rodrigo fecha **desenho, texto e fluxo**. Evita
 gastar hora do Rodrigo no que é do Richard.
+
+**Última atualização deste documento:** 29/10/2026, refletindo o commit `82918a2`.
 
 ---
 

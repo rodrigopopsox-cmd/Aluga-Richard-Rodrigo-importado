@@ -16,9 +16,14 @@ Site do **Aluga** (gestão de aluguéis para o mercado brasileiro), composto de 
 |---|---|---|
 | **Vitrine do Design System** | Página `/design-system` que exibe todos os componentes, tokens e telas de exemplo | `src/app/design-system/` |
 | **Template do painel admin** | Telas reais do produto, montadas só com componentes do design system. **7 telas da v1 já desenhadas** (ver seção 4.7) | `design-system/templates/admin/` |
+| **Landing** | Página `/` com a promessa e uma apresentação de 7 etapas comandada pela rolagem. **Feita e aprovada** (ver seção 4.8) | `src/app/` |
 
 O design system é a **fonte da verdade visual**: nada de CSS solto, nada de cor/tamanho
 inventado fora dos tokens.
+
+**A landing e o painel compartilham as telas.** A última etapa do tour renderiza
+`SimpleModeScreen` e `DashboardScreen` de verdade — se uma tela muda no app, a landing muda
+junto. É a única forma de a promessa não mentir.
 
 ---
 
@@ -212,18 +217,66 @@ Cobranças · Inquilinos · Contratos · Despesas. ("Financeiro" virou **Recebim
 
 ### 4.8 Landing page em `/`
 
-Commit `0c1b092`. Tarefa 7 do Segundo Cérebro e R10 da spec. **A restrição que define o
+Commit `82918a2`. Tarefa 7 do Segundo Cérebro e R10 da spec. **A restrição que define o
 commit é a que a própria tarefa põe: "Só componentes e tokens do design system."**
 
-- `src/app/LandingScreen.tsx` + `src/app/page.module.css` — a landing.
-- `components/marketing/HowItWorks.tsx` — **componente novo**: "como funciona (3 passos)".
-  Três, e não cinco, de propósito — o onboarding tem cinco porque é configuração de conta;
-  a landing precisa do arco do produto (cadastrar → cobrar → acompanhar).
-- A seção do Modo simples renderiza a **tela de verdade** (`SimpleModeScreen`), não um
-  desenho dela. Se a tela muda no app, a landing muda junto.
-- Os planos usam o mesmo `PricingTable` da tela de planos do app.
+**A landing é UMA explicação, num bloco só.** Não existe seção depois da apresentação:
+tudo o que a página explica está dentro do tour. Foi o que o Rodrigo pediu na 10ª rodada,
+depois de reprovar uma versão que tinha a demonstração do painel como bloco separado
+embaixo — *"vc acabou fazendo outra animaçao embaixo de onde eu queria... o legal seria
+a explicaçao do site estar tudo no mesmo lugar"*.
 
-**Duas ausências deliberadas:**
+**Estrutura atual:** hero (só texto) → `ProductTour` com **7 etapas** → planos → CTA final
+→ rodapé. Nada entre o tour e os planos.
+
+**As 7 etapas** (todas com dados reais das telas): 01 Imóveis · 02 Contratos · 03 Cobranças
+· 04 Recebimentos · 05 Resultado · 06 Rentabilidade · **07 "Do seu jeito"**.
+
+**A 7ª etapa é o painel e o que se configura nele, e é a única com quatro beats.** Ela
+ocupa quatro telas de rolagem, uma por estado, na ordem em que o produto as apresenta:
+
+| Beat | Estado | O que mostra |
+|---|---|---|
+| 01 | **Modo Completo** | a Visão geral inteira, com as fotos das casas |
+| 02 | **Modo Simples** | a tela "Este mês", um cartão por unidade |
+| 03 | **Tema escuro** | o painel completo, escuro |
+| 04 | **Letra maior** | o painel completo, com a acessibilidade ligada |
+
+Começa no **Completo**, que é o padrão do produto e é a tela com as imagens das casas.
+Quem rola vê um estado substituir o outro **sem clicar em nada** — foi o pedido: *"na
+ultima sessao da animaçao mostrando nosso painel e as funcionalidades dele animada sem o
+cliente precisar em clicar em nada so dando scroll"*.
+
+**Como os beats funcionam.** `ProductTour` aceita `beats?` por etapa e `panel` passou a ser
+função do beat. A seção mede `totalScreens` telas de rolagem em vez de `steps.length`, e a
+tela é convertida em (etapa, beat). Uma etapa com quatro beats = quatro telas.
+
+**A régua não mudou.** Quem rola é o navegador: nenhum `preventDefault`, nenhuma captura
+da rodinha, nenhum `position: fixed`. A etapa ativa continua sendo **função pura da
+posição da rolagem** — rolar para cima desfaz, rolar rápido não pula estado,
+redimensionar e entrar por âncora recomputam do zero. Só a granularidade mudou dentro da
+última etapa.
+
+**Arquivos da landing:**
+- `src/app/LandingScreen.tsx` + `src/app/page.module.css`
+- `src/app/PanelModes.tsx` — os quatro estados, com as telas reais do painel
+- `design-system/components/marketing/ProductTour.tsx` + `.module.css`
+
+**Apagados na 10ª rodada:** `src/app/MeuMesDemo.tsx` e `src/app/ProductShowcase.tsx`.
+Nada mais os referencia.
+
+**Duas decisões técnicas que vale conhecer:**
+
+1. **A tela completa cabe numa caixa de preview.** A Visão geral tem ~1400px e não caberia
+   no `.pin` sticky de 100vh — o que passasse da tela ficaria inalcancável. A caixa limita
+   a altura (`46vh`, `40vh` em tela curta, `34vh` no celular) e um degradê some com o fundo.
+   O degradê vai para `var(--surface-page)`, a cor da moldura, então em tema escuro ele
+   desaparece no fundo em vez de virar faixa cinza.
+2. **`data-theme` e `data-a11y` são atributos de elemento**, não exclusivos do `<html>`.
+   Por isso o tema escuro e a letra maior funcionam dentro da moldura sem sequestrar a
+   landing. No app os dois atributos vão no `<html>` e valem para o painel todo.
+
+**Duas ausências deliberadas, escritas no código:**
 
 1. **Sem prova social.** "+300 proprietários", "+1.200 imóveis" e "32% menos
    inadimplência" são números do **AluggaPro**. O Aluga não lançou — não tem número para
@@ -231,14 +284,26 @@ commit é a que a própria tarefa põe: "Só componentes e tokens do design syst
 2. **Sem comparação com concorrente.** `PRODUCT.md` diz que os termos do AluggaPro
    proíbem copiar interface, código e design.
 
+**Nenhum controle morto.** Os atalhos da Visão geral ("Ver unidades", "Recebimentos") levam
+a rolagem até a etapa da apresentação que demonstra aquele módulo — o número de telas vem
+de `data-screens` no próprio tour, não de uma constante repetida. O "Adicionar tarefa"
+acrescenta uma tarefa de verdade. O aviso do que aconteceu é **absoluto** e desaparece em
+5s: em fluxo ele deslocaria o painel inteiro no meio da rolagem, e a etapa é sticky.
+
 **O "pronto quando" da tarefa NÃO foi fechado:** ela depende de publicar no VPS, e o botão
 precisa chegar a um **cadastro que ainda não existe**. O CTA hoje leva a
 `/design-system/admin`, que é o login do template. Publicar e criar cadastro são do Richard.
 
-**Validação:** `check-tokens` 208 OK · validador de tokens do CSS (nenhum inválido, 177
-tokens no CSS servido) · `tsc` limpo · render de `/` em HTTP 200 sem 500 com **44/44**
-elementos conferidos, inclusive os botões "Recebi" e "Lembrar no WhatsApp" da tela embedada
-e os quatro preços.
+**Validação do `82918a2`:** `check-tokens` 208 OK · `tsc --noEmit` limpo · `stylelint`
+limpo (`oxlint` panica no HEAD também — é do ambiente, não do código) · `/`,
+`/design-system` e `/design-system/admin` em HTTP 200 · as 3 imagens das casas em 200 com
+`image/png` (1,6 MB / 709 KB / 1,8 MB) · rota temporária com os 4 beats empilhados: 4
+legendas conferidas, 3 imagens por beat do Completo, `data-theme="dark"` no beat 3 e
+`data-a11y="on"` no beat 4 · **matemática da progressão varrida px a px**: 10 estados,
+nenhum perdido, subir é o inverso exato de descer, salto do topo ao fim não pula estado,
+10 estados em viewports de 600 a 1440px, `goTo(i)` cai certo nas 7 etapas · zero ocorrência
+de "progress", zero emoji, zero "PRODUCT" · **zero classe órfã** (39 no CSS, 39 usadas) ·
+console do servidor sem erros.
 
 ---
 
@@ -360,8 +425,8 @@ e os quatro preços.
 ## 7. Git — estado
 
 - Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
-- **Último commit pushed: `ee8b8d4`** — *feat(design-system): tela de Despesas e informe de
-  IR (R8)*.
+- **Último commit pushed: `82918a2`** — *Tour: a última etapa agora é o painel e suas
+  configurações, por rolagem*.
 - O `main` do repo (`33f6853`) **não tem** nada desse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
 
@@ -369,8 +434,14 @@ e os quatro preços.
 
 ```powershell
 cd "C:\Users\Digo Nego\Documents\Aluga-Richard-Rodrigo-importado"
+git fetch origin
 git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
+npm install
+npm run dev
 ```
+
+(Se der `couldn't find remote ref`, é propagação da ref no GitHub — o `git fetch origin`
+antes resolve. Depois **Ctrl+Shift+R**, porque o cache de CSS em dev segura a versão velha.)
 
 **Linha do tempo dos commits** (todos pushed na branch da sessão):
 
@@ -390,6 +461,20 @@ git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
 | `8b1c812` | tela de Contratos |
 | `b993638` | tela de Imóveis e Unidades |
 | `ee8b8d4` | tela de Despesas + informe de IR (R8) |
+| `0c1b092` → `2a2ae76` → `82918a2` | a landing, em 10 rodadas de revisão com o Rodrigo |
+
+**A landing levou 10 rodadas.** Vale registrar o que foi ficando pelo caminho, porque cada
+rodada ensinou uma coisa que não se vê no commit final:
+
+| Rodada | O que o Rodrigo disse | O que isso ensinou |
+|---|---|---|
+| 1ª–3ª | *"nossa landing page está horrível, letras colada na tela"* · *"nas animações está tudo muito perto da outra, está muito poluído"* · *"animação está bem quadrada sem fluidez nenhuma"* | tela clean, **bordas menores ou sem borda**, **diminuir as artes para caber tudo no mesmo bloco** |
+| 4ª | *"eu quero sem barras mas algo difetente do q fizemos ate agora"* | **barra de progresso de qualquer espessura está proibida** — foram 4 tentativas reprovadas |
+| 5ª–6ª | *"o setor 'meu mes' pode entrar tambem junto mas com o dashboard mostrando o menu simples acessibilidade e tema escuro tambem"* · *"capriche nos textos apresentado esta muito robotico"* | os textos são **voz "você"**, uma frase por idéia, e o sistema raramente fala de si mesmo |
+| 7ª | *"Não quero apenas uma animação decorativa"* · *"Não implemente um mecanismo que capture continuamente a rodinha do mouse"* | **sticky scrollytelling**: a rolagem do navegador comanda, não um timer |
+| 8ª | *"use a tela real do Completo incluindo as imagens das casas"* · *"so copie a tela do painel nao invente nada"* | as telas embedadas são as **do produto**, não desenho delas |
+| 9ª | *"toda essa area 'estes mês' eu quero junto com Animated Product Showcase... sempre comece com o modo completo"* | os quatro estados entram como **última etapa**, começando no Completo |
+| 10ª | *"vc acabou fazendo outra animaçao embaixo de onde eu queria... o legal seria a explicaçao do site estar tudo no mesmo lugar"* | **nada de bloco separado**: uma explicação, um lugar |
 - **Drive 100% sincronizado e verificado byte a byte** (2026-10-27): todos os arquivos
   entregues foram baixados de volta do Drive e comparados com `diff` contra o espelho
   local. Duas corrupções de push foram encontradas e corrigidas: `Showcase.tsx`
@@ -417,9 +502,10 @@ git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
 - [ ] **Limpar o Painel (dashboard).** Única tela do painel que ainda mostra o template
       genérico: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
       "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
-- [ ] **Publicar no VPS e criar o cadastro** — a landing (`0c1b092`) está pronta, mas o
-      "pronto quando" da tarefa 7 depende de subir no subdomínio e de existir uma tela de
-      cadastro para o botão "Começar teste grátis" chegar. Ambos são do Richard.
+- [ ] **Publicar no VPS e criar o cadastro** — a landing (`82918a2`) está pronta e aprovada
+      pelo Rodrigo, mas o "pronto quando" da tarefa 7 depende de subir no subdomínio e de
+      existir uma tela de cadastro para o botão "Começar teste grátis" chegar. Ambos são do
+      Richard.
 - [ ] **Revisar as 7 telas com o Rodrigo.** Roteiro em `ROTEIRO-REVISAO-TELAS.md`. Faltam
       testar com clique: diálogos de cadastro, CEP (Imóveis), limite do plano e download do
       CSV (Despesas).
@@ -427,8 +513,9 @@ git pull origin arena/8e2745c8-aluga-richard-rodrigo-importad
       Decisão do Rodrigo pendente: se quer, e onde mora (regra de formulário, não máscara).
 - [ ] **Informe de IR em PDF** — hoje sai em tabela e CSV. Falta o formato, não a
       informação.
-- [ ] **Sprint 2 do Segundo Cérebro** — landing (7), tutorial WhatsApp (8), mensagens (9),
-      linguagem simples (10), tutorial Mercado Pago (11). Nada iniciado.
+- [ ] **Sprint 2 do Segundo Cérebro** — landing (7) **feita e aprovada**; faltam tutorial
+      WhatsApp (8), mensagens (9), linguagem simples (10) e tutorial Mercado Pago (11).
+      Nada iniciado.
 
 ---
 
@@ -461,7 +548,7 @@ fechada** — falta só a 2 (nome) e a 6 (título desconhecido).
 
 | # | Tarefa | Estado |
 |---|---|---|
-| 7 | Landing page 'Aluga' na página inicial | **FEITA** (`0c1b092`) — ver seção 4.8. Falta publicar no VPS e criar o cadastro, ambos do Richard |
+| 7 | Landing page 'Aluga' na página inicial | **FEITA E APROVADA** (`82918a2`, 10 rodadas de revisão) — ver seção 4.8. Falta publicar no VPS e criar o cadastro, ambos do Richard |
 | 8 | Tutorial 'Conectar WhatsApp' | em aberto |
 | 9 | Mensagens (D-3/D0/D+3, confirmação, "Recebeu?") | em aberto |
 | 10 | Textos do app em linguagem simples | em aberto |
@@ -546,12 +633,22 @@ design-system/
     marketing/PlanCard.tsx    PricingTable.tsx
   components — novos na tarefa 7 (landing):
     marketing/HowItWorks.tsx  ← "como funciona (3 passos)" da landing
+    marketing/ProductTour.tsx ← a apresentação de 7 etapas comandada pela rolagem.
+                                 Aceita `beats?` por etapa: a 7ª etapa tem 4 beats e
+                                 ocupa 4 telas de rolagem (Completo → Simples →
+                                 tema escuro → letra maior).
 src/app/
     page.tsx  LandingScreen.tsx  page.module.css   ← landing em "/" (só tokens)
+    PanelModes.tsx                ← os 4 estados do painel, última etapa do tour.
+                                      Renderiza SimpleModeScreen e DashboardScreen
+                                      reais, com data-theme / data-a11y na moldura.
     design-system/
       page.tsx  Showcase.tsx  Showcase.module.css
       admin/page.tsx        ← renderiza <AdminApp />
 ```
+
+**Apagados na 10ª rodada (não existem mais):** `src/app/MeuMesDemo.tsx` e
+`src/app/ProductShowcase.tsx`. Nada os referencia.
 
 **Rotas temporárias de validação:** quando uma tela nova precisa ser validada em tela, eu
 crio `src/app/design-system/valNN/page.tsx`, dou `curl`, confiro o HTML servido e **removo
