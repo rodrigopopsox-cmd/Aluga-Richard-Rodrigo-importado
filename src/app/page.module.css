@@ -574,3 +574,1617 @@
   line-height: var(--leading-normal);
   color: var(--text-muted);
 }
+
+/* ---------- cabeçalho comercial ---------- */
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brandLink:focus-visible,
+.topLink:focus-visible,
+.topAction:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--space-1);
+  border-radius: var(--radius-pill);
+}
+
+.topNav {
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+.topLink {
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+.topAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h-md);
+  padding-inline: var(--space-7);
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topAction:hover {
+  background: var(--brand-hover);
+}
+
+@media (max-width: 760px) {
+  .top {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .topNav {
+    order: 3;
+    width: 100%;
+    gap: var(--space-7);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .topAction {
+    padding-inline: var(--space-5);
+  }
+}
+
+/* ==========================================================
+   ALUGA HERO V2
+   Composicao comercial responsiva
+   ========================================================== */
+
+.heroV2 {
+  width: 100%;
+  padding: var(--space-11) var(--space-9) var(--space-9);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.heroLayout {
+  width: 100%;
+  max-width: 128ch;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.heroTitle {
+  margin: 0;
+  max-width: 15ch;
+  font-size: var(--text-5xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-regular);
+  color: var(--text-strong);
+}
+
+.heroTitleAccent {
+  display: block;
+  color: var(--brand);
+}
+
+.heroDescription {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.heroPrimaryLink,
+.heroSecondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: var(--control-h-lg);
+  padding-inline: var(--space-7);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.heroPrimaryLink {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+.heroPrimaryLink:hover {
+  background: var(--brand-hover);
+}
+
+.heroSecondaryLink {
+  background: var(--surface-card);
+  color: var(--text-strong);
+  border: 1px solid var(--border-subtle);
+}
+
+.heroSecondaryLink:hover {
+  background: var(--surface-hover);
+}
+
+.heroPrimaryLink:focus-visible,
+.heroSecondaryLink:focus-visible,
+.heroScrollHint:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--space-1);
+}
+
+.heroDisclaimer {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* ---------- Preview ---------- */
+
+.heroVisual {
+  min-width: 0;
+}
+
+.heroPreview {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.heroPreviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.heroPreviewBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.heroPreviewSection {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.heroPreviewStatus {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.heroPreviewIntro {
+  padding-block: var(--space-7);
+}
+
+.heroPreviewEyebrow {
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.heroPreviewTitle {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-snug);
+}
+
+.heroPreviewSubtitle {
+  margin: var(--space-3) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.heroPreviewMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--card-gap);
+  margin-bottom: var(--space-7);
+}
+
+.heroMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-subtle);
+}
+
+.heroMetricLabel,
+.heroMetricDetail {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.heroMetricValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.heroPreviewList {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.heroPreviewListHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--surface-subtle);
+}
+
+.heroPreviewListHead h3 {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+.heroPreviewListHead > span {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.heroPreviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.heroProperty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.heroPropertyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  background: var(--surface-sunken);
+  border-radius: var(--radius-card);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.heroProperty > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.heroProperty strong,
+.heroPropertyAmount strong {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+.heroProperty > div > span {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.heroPropertyAmount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.heroStatusPaid,
+.heroStatusPending {
+  font-size: var(--text-sm);
+}
+
+.heroStatusPaid {
+  color: var(--success-fg);
+}
+
+.heroStatusPending {
+  color: var(--warning-fg);
+}
+
+.heroPreviewFootnote {
+  margin: var(--space-5) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.heroScrollHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: fit-content;
+  margin: var(--space-10) auto 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.heroScrollHint:hover {
+  color: var(--text-strong);
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1179px) {
+  .heroV2 {
+    padding: var(--space-10) var(--space-7);
+  }
+
+  .heroLayout {
+    gap: var(--space-8);
+  }
+
+  .heroTitle {
+    font-size: var(--text-4xl);
+  }
+
+  .heroPreview {
+    padding: var(--space-5);
+  }
+
+  .heroMetric {
+    padding: var(--space-5);
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 759px) {
+  .heroV2 {
+    padding: var(--space-9) var(--space-5);
+  }
+
+  .heroLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-9);
+  }
+
+  .heroContent {
+    gap: var(--space-5);
+  }
+
+  .heroTitle {
+    max-width: 17ch;
+    font-size: var(--text-3xl);
+  }
+
+  .heroDescription {
+    font-size: var(--text-base);
+  }
+
+  .heroActions {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .heroPrimaryLink,
+  .heroSecondaryLink {
+    flex: 1 1 auto;
+  }
+
+  .heroPreviewTitle {
+    font-size: var(--text-xl);
+  }
+
+  .heroPreviewMetrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroPreviewRow {
+    align-items: flex-start;
+  }
+
+  .heroPropertyIcon {
+    display: none;
+  }
+
+  .heroScrollHint {
+    margin-top: var(--space-9);
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroPrimaryLink,
+  .heroSecondaryLink {
+    transition: none;
+  }
+}
+
+/* ALUGA BENEFICIOS BLOCO 2 */
+.benefitsSection {
+  padding: var(--space-11) var(--space-9);
+  background: var(--surface-card);
+  border-block: 1px solid var(--border-subtle);
+}
+.benefitsContainer {
+  max-width: 128ch;
+  margin-inline: auto;
+}
+.benefitsHeading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: var(--space-10);
+  align-items: end;
+  margin-bottom: var(--space-10);
+}
+.benefitsLabel {
+  display: block;
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-weight: var(--weight-semibold);
+}
+.benefitsTitle {
+  margin: 0;
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-regular);
+  color: var(--text-strong);
+}
+.benefitsTitle span {
+  display: block;
+}
+.benefitsLead {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.benefitsCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--card-gap);
+}
+.benefitsCard {
+  min-width: 0;
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-subtle);
+}
+.benefitsNumber {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.benefitsCard h3 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+.benefitsCard p {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+@media (max-width: 759px) {
+  .benefitsSection {
+    padding: var(--space-10) var(--space-5);
+  }
+  .benefitsHeading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+  }
+  .benefitsTitle {
+    font-size: var(--text-2xl);
+  }
+  .benefitsLead {
+    font-size: var(--text-base);
+  }
+  .benefitsCards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .benefitsCard {
+    padding: var(--space-6);
+  }
+  .benefitsNumber {
+    margin-bottom: var(--space-6);
+  }
+}
+
+/* ALUGA BLOCO 4 - RECURSOS E GESTAO FAMILIAR */
+
+.featuresSection {
+  padding: var(--space-11) var(--space-7);
+  background: var(--surface-page);
+}
+
+.featuresContainer,
+.familyContainer {
+  width: 100%;
+  max-width: 128ch;
+  margin-inline: auto;
+}
+
+.featuresIntro {
+  max-width: 78ch;
+  margin-bottom: var(--space-10);
+}
+
+.featuresEyebrow,
+.familyEyebrow {
+  display: block;
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--brand);
+}
+
+.featuresIntro h2,
+.familyContent h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.featuresIntro h2 span,
+.familyContent h2 span {
+  display: block;
+}
+
+.featuresIntro > p,
+.familyContent > p {
+  max-width: 66ch;
+  margin: var(--space-6) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+}
+
+.featuresLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-9);
+  align-items: center;
+}
+
+.featuresList {
+  display: grid;
+}
+
+.featureItem {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr);
+  gap: var(--space-5);
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.featureItem:first-child {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.featureNumber {
+  padding-top: var(--space-1);
+  color: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.featureItem h3 {
+  margin: 0 0 var(--space-3);
+  color: var(--text-strong);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+}
+
+.featureItem p {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.featuresVisual {
+  min-width: 0;
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.featuresVisualHeader,
+.familyVisualTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.featuresVisualHeader {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.featuresDemoBadge,
+.familyVisualTag {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+}
+
+.featuresFlow {
+  margin-top: var(--space-8);
+}
+
+.featuresFlowMain,
+.featuresFlowCard,
+.featuresFlowResult {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-subtle);
+}
+
+.featuresFlowMain {
+  border-color: var(--brand);
+}
+
+.featuresFlowMain strong,
+.featuresFlowCard strong,
+.featuresFlowResult strong {
+  color: var(--text-strong);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.featuresFlowMain > span:last-child,
+.featuresFlowCard > span:last-child {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.featuresFlowLabel {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.featuresFlowConnector {
+  width: 1px;
+  height: var(--space-6);
+  margin-inline: auto;
+  background: var(--border-subtle);
+}
+
+.featuresFlowPair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.featuresFlowResult {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--surface-card);
+}
+
+.featuresFlowResult > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.featuresFlowStatus {
+  color: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.featuresVisualNote {
+  margin: var(--space-6) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.familySection {
+  padding: var(--space-11) var(--space-7);
+  background: var(--surface-subtle);
+}
+
+.familyContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-10);
+  align-items: center;
+}
+
+.familyContent > p + p {
+  margin-top: var(--space-4);
+}
+
+.familyHighlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-9);
+}
+
+.familyHighlights > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.familyHighlights strong {
+  color: var(--text-strong);
+  font-size: var(--text-base);
+}
+
+.familyHighlights span {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.familyVisual {
+  min-width: 0;
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.familyVisualLabel {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.familyVisualTop h3 {
+  margin: var(--space-3) 0 0;
+  color: var(--text-strong);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+
+.familyHolder {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.familyHolder:first-of-type {
+  margin-top: var(--space-5);
+}
+
+.familyAvatar {
+  display: grid;
+  place-items: center;
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  border-radius: var(--radius-card);
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.familyHolderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.familyHolderInfo strong {
+  color: var(--text-strong);
+  font-size: var(--text-base);
+}
+
+.familyHolderInfo span,
+.familyHolderCount {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.familyHolderCount {
+  grid-column: 2;
+}
+
+.familyVisualFooter {
+  padding-top: var(--space-6);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+@media (max-width: 1000px) {
+  .featuresLayout,
+  .familyContainer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .featuresIntro {
+    max-width: none;
+  }
+
+  .featuresVisual,
+  .familyVisual {
+    width: 100%;
+  }
+}
+
+@media (max-width: 759px) {
+  .featuresSection,
+  .familySection {
+    padding: var(--space-10) var(--space-5);
+  }
+
+  .featuresIntro h2,
+  .familyContent h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .featuresIntro > p,
+  .familyContent > p {
+    font-size: var(--text-base);
+  }
+
+  .featuresIntro {
+    margin-bottom: var(--space-7);
+  }
+
+  .featuresLayout,
+  .familyContainer {
+    gap: var(--space-8);
+  }
+
+  .featuresVisual,
+  .familyVisual {
+    padding: var(--space-5);
+  }
+
+  .featuresFlowPair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .familyHighlights {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .familyVisualTop,
+  .featuresVisualHeader {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/* ALUGA BLOCO 5 - COMO FUNCIONA E PLANOS */
+
+.processSection,
+.plansV2 {
+  padding: var(--space-11) var(--space-7);
+}
+
+.processSection {
+  background: var(--surface-card);
+}
+
+.plansV2 {
+  background: var(--surface-page);
+}
+
+.processContainer,
+.plansV2Container {
+  width: 100%;
+  max-width: 128ch;
+  margin-inline: auto;
+}
+
+.processHeading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: end;
+  gap: var(--space-10);
+  margin-bottom: var(--space-10);
+}
+
+.processEyebrow,
+.plansV2Eyebrow {
+  display: block;
+  margin-bottom: var(--space-6);
+  color: var(--brand);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.processHeading h2,
+.plansV2Intro h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.processHeading h2 span,
+.plansV2Intro h2 span {
+  display: block;
+}
+
+.processHeading > p,
+.plansV2Intro > p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+}
+
+.processSteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--card-gap);
+}
+
+.processStep {
+  min-width: 0;
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-subtle);
+}
+
+.processStepTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-9);
+}
+
+.processNumber {
+  color: var(--brand);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-tight);
+}
+
+.processStepLabel {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.processStep h3 {
+  margin: 0 0 var(--space-4);
+  color: var(--text-strong);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+}
+
+.processStep p,
+.plansV2Notes p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.processBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.processBottom p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.processLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-h-md);
+  color: var(--brand);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.processLink:hover {
+  text-decoration: underline;
+}
+
+.processLink:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: var(--space-2);
+}
+
+.plansV2Intro {
+  max-width: 78ch;
+  margin-bottom: var(--space-9);
+}
+
+.plansV2Intro > p {
+  margin-top: var(--space-6);
+}
+
+.plansV2Table {
+  width: 100%;
+}
+
+.plansV2Notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8);
+  margin-top: var(--space-9);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.plansV2Notes strong {
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--text-strong);
+}
+
+.plansV2Disclaimer {
+  margin: var(--space-7) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+@media (max-width: 1000px) {
+  .processHeading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+@media (max-width: 759px) {
+  .processSection,
+  .plansV2 {
+    padding: var(--space-10) var(--space-5);
+  }
+
+  .processHeading h2,
+  .plansV2Intro h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .processHeading > p,
+  .plansV2Intro > p {
+    font-size: var(--text-base);
+  }
+
+  .processSteps,
+  .plansV2Notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .processStep {
+    padding: var(--space-6);
+  }
+
+  .processBottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
+/* ALUGA REFINAMENTO PLANOS BLOCO 5 */
+
+/* A tabela original usa auto-fit. Aqui a landing define
+   quatro colunas para manter os planos na mesma linha. */
+.plansV2Table > div:last-child {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* O titulo comercial ja aparece acima da tabela.
+   Mantemos o titulo interno disponivel para leitores de tela. */
+.plansV2Table > header h2 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.plansV2Table > header {
+  justify-content: flex-end;
+  margin-bottom: var(--space-6);
+}
+
+.plansV2Notes {
+  padding: var(--space-7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.plansV2Disclaimer {
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .plansV2Table > div:last-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .plansV2Table > div:last-child {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plansV2Notes {
+    padding: var(--space-5);
+  }
+
+  .plansV2Disclaimer {
+    text-align: left;
+  }
+}
+
+/* ALUGA BLOCO 6 - FAQ CTA FINAL E RODAPE */
+
+.faqSection {
+  padding: var(--space-11) var(--space-7);
+  background: var(--surface-card);
+}
+
+.faqContainer,
+.footerV2Container {
+  width: 100%;
+  max-width: 128ch;
+  margin-inline: auto;
+}
+
+.faqContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--space-11);
+  align-items: start;
+}
+
+.faqEyebrow,
+.finalV2Eyebrow {
+  display: block;
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--brand);
+}
+
+.faqIntro h2 {
+  margin: 0;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+}
+
+.faqIntro h2 span {
+  display: block;
+}
+
+.faqIntro p {
+  max-width: 52ch;
+  margin: var(--space-6) 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.faqLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-h-md);
+  color: var(--brand);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.faqLink:hover {
+  text-decoration: underline;
+  text-underline-offset: var(--space-2);
+}
+
+.faqList {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--control-h-md);
+  padding: var(--space-6) 0;
+  color: var(--text-strong);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+
+.faqQuestion::marker {
+  content: '';
+}
+
+.faqQuestion:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: var(--space-2);
+}
+
+.faqIndicator {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  color: var(--brand);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+}
+
+.faqItem[open] .faqIndicator {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  max-width: 66ch;
+  margin: 0 0 var(--space-6);
+  padding-right: var(--space-8);
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.finalV2 {
+  padding: var(--space-11) var(--space-7);
+  background: var(--surface-inverse);
+}
+
+.finalV2Inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 90ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.finalV2Eyebrow {
+  color: var(--on-inverse-muted);
+}
+
+.finalV2 h2 {
+  margin: 0;
+  color: var(--text-inverse);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.finalV2 h2 span {
+  display: block;
+}
+
+.finalV2Inner > p {
+  max-width: 65ch;
+  margin: var(--space-7) 0 var(--space-8);
+  color: var(--on-inverse-muted);
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+}
+
+.finalV2Button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--control-h-md);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: var(--text-inverse);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.finalV2Button:hover {
+  background: var(--brand-hover);
+}
+
+.finalV2Button:focus-visible {
+  outline: 2px solid var(--text-inverse);
+  outline-offset: var(--space-2);
+}
+
+.finalV2Note {
+  margin-top: var(--space-5);
+  color: var(--on-inverse-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.footerV2 {
+  padding: var(--space-10) var(--space-7) var(--space-7);
+  background: var(--surface-card);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footerV2Main {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding-bottom: var(--space-10);
+}
+
+.footerV2Brand {
+  max-width: 36ch;
+}
+
+.footerV2Brand > a {
+  display: inline-flex;
+  min-height: var(--control-h-md);
+  align-items: center;
+}
+
+.footerV2Brand p {
+  margin: var(--space-4) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.footerV2Nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-10);
+}
+
+.footerV2Nav > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.footerV2Nav strong {
+  margin-bottom: var(--space-2);
+  color: var(--text-strong);
+  font-size: var(--text-sm);
+}
+
+.footerV2Nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h-md);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.footerV2Nav a:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+.footerV2Bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footerV2Bottom p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+@media (max-width: 1000px) {
+  .faqContainer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 759px) {
+  .faqSection,
+  .finalV2 {
+    padding: var(--space-10) var(--space-5);
+  }
+
+  .footerV2 {
+    padding: var(--space-9) var(--space-5);
+  }
+
+  .faqIntro h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .faqIntro p,
+  .finalV2Inner > p {
+    font-size: var(--text-base);
+  }
+
+  .finalV2 h2 {
+    font-size: var(--text-3xl);
+  }
+
+  .footerV2Main {
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .footerV2Nav {
+    gap: var(--space-7);
+  }
+
+  .footerV2Bottom {
+    flex-direction: column;
+  }
+}
+
+/* ALUGA CABECALHO - LINK ENTRAR */
+
+.topActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-5);
+}
+
+.topLogin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-h-md);
+  padding-inline: var(--space-4);
+  color: var(--text-strong);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topLogin:hover {
+  color: var(--brand);
+}
+
+.topLogin:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--space-1);
+  border-radius: var(--radius-pill);
+}
+
+@media (max-width: 760px) {
+  .topActions {
+    gap: var(--space-2);
+  }
+
+  .topLogin {
+    padding-inline: var(--space-3);
+  }
+}

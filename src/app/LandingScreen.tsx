@@ -1,9 +1,9 @@
 'use client';
+import Link from 'next/link';
 
 import type { ReactNode } from 'react';
 import {
   Badge,
-  Button,
   Card,
   CardHeader,
   PricingNote,
@@ -240,7 +240,7 @@ const TOUR: TourStep[] = [
   {
     label: 'Do seu jeito',
     title: 'O painel se configura do seu jeito',
-    body: 'Letra maior, tema escuro, e duas formas de ver a mesma coisa. Role: o painel muda sozinho.',
+    body: 'Escolha entre os modos Completo e Simples, use o tema escuro ou aumente as letras para uma leitura mais confortável.',
     beats: 4,
     panel: (beat) => <PanelModes beat={beat} />,
   },
@@ -315,100 +315,631 @@ export function LandingScreen() {
   return (
     <div className={s.page}>
       <header className={s.top}>
-        <Wordmark size={26} />
-        <nav className={s.topNav} aria-label="Atalhos">
-          <a className={s.topLink} href="/design-system">
-            Design system
+        <Link className={s.brandLink} href="/" aria-label="Aluga — página inicial">
+          <Wordmark size={26} />
+        </Link>
+
+        <nav className={s.topNav} aria-label="Navegação principal">
+          <a className={s.topLink} href="#tour">
+            Como funciona
           </a>
-          <a className={s.topLink} href="/design-system/admin">
-            Template do painel
+
+          <a className={s.topLink} href="#planos">
+            Planos
           </a>
         </nav>
+
+        <div className={s.topActions}>
+          <Link className={s.topLogin} href="/design-system/admin">
+            Entrar
+          </Link>
+          <Link className={s.topAction} href="/design-system/admin">
+            Conhecer o painel
+          </Link>
+        </div>
       </header>
 
       <main>
-        {/* ---------------- Hero: só o convite ---------------- */}
-        <section className={s.hero}>
-          <Badge tone="soft">Em construção · nome provisório</Badge>
-          <h1 className={s.headline}>
-            Cobre, receba e saiba quanto cada <span className={s.accent}>imóvel rende.</span>
-          </h1>
-          <p className={s.lead}>
-            Você cadastra o imóvel e o inquilino uma vez. Depois disso o Aluga cobra todo mês,
-            lembra quem está devendo, dá baixa quando o Pix cai e ainda separa o Imposto de Renda
-            por titular. Você só acompanha.
-          </p>
-          <div className={s.ctas}>
-            <Button
-              size="lg"
-              iconRight="arrow-right"
-              onClick={() => (window.location.href = '/design-system/admin')}
-            >
-              Começar teste grátis
-            </Button>
-            <Button
-              size="lg"
-              variant="secondary"
-              onClick={() =>
-                document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })
-              }
-            >
-              Ver os planos
-            </Button>
-          </div>
-          <p className={s.fine}>
-            14 dias de app completo, sem cartão. Quando acabar, você decide se assina.
-          </p>
-          <p className={s.scrollCue}>
-            Role para ver o app funcionando
-            <IconCaret />
-          </p>
-        </section>
+        {/* ---------------- Hero comercial ---------------- */}
+        <section className={s.heroV2} aria-labelledby="hero-title">
+          <div className={s.heroLayout}>
 
+            <div className={s.heroContent}>
+              <Badge tone="soft">
+                Gestão de aluguéis para proprietários
+              </Badge>
+
+              <h1 className={s.heroTitle} id="hero-title">
+                Seus imóveis organizados.
+                <span className={s.heroTitleAccent}>
+                  Seus aluguéis sob controle.
+                </span>
+              </h1>
+
+              <p className={s.heroDescription}>
+                Organize imóveis, contratos, cobranças e recebimentos
+                em um só lugar. Acompanhe o que entrou, o que falta
+                receber e o resultado de cada imóvel.
+              </p>
+
+              <div className={s.heroActions}>
+                <Link
+                  href="/design-system/admin"
+                  className={s.heroPrimaryLink}
+                >
+                  Conhecer o painel
+                  <span aria-hidden="true">→</span>
+                </Link>
+
+                <a
+                  href="#tour"
+                  className={s.heroSecondaryLink}
+                >
+                  Ver como funciona
+                </a>
+              </div>
+
+              <p className={s.heroDisclaimer}>
+                Explore uma demonstração do painel, sem precisar criar uma conta.
+              </p>
+            </div>
+
+            <div className={s.heroVisual}>
+              <div className={s.heroPreview}>
+
+                <div className={s.heroPreviewHeader}>
+                  <div className={s.heroPreviewBrand}>
+                    <Wordmark size={20} />
+                    <span className={s.heroPreviewSection}>
+                      Visão geral
+                    </span>
+                  </div>
+
+                  <span className={s.heroPreviewStatus}>
+                    Demonstração
+                  </span>
+                </div>
+
+                <div className={s.heroPreviewIntro}>
+                  <span className={s.heroPreviewEyebrow}>
+                    Seu patrimônio em um só lugar
+                  </span>
+
+                  <h2 className={s.heroPreviewTitle}>
+                    Acompanhe seus aluguéis
+                  </h2>
+
+                  <p className={s.heroPreviewSubtitle}>
+                    Exemplo ilustrativo de organização financeira.
+                  </p>
+                </div>
+
+                <div className={s.heroPreviewMetrics}>
+                  <div className={s.heroMetric}>
+                    <span className={s.heroMetricLabel}>
+                      Imóveis
+                    </span>
+                    <strong className={s.heroMetricValue}>
+                      04
+                    </strong>
+                    <span className={s.heroMetricDetail}>
+                      Cadastrados
+                    </span>
+                  </div>
+
+                  <div className={s.heroMetric}>
+                    <span className={s.heroMetricLabel}>
+                      Recebido no mês
+                    </span>
+                    <strong className={s.heroMetricValue}>
+                      R$ 8.400
+                    </strong>
+                    <span className={s.heroMetricDetail}>
+                      Valores ilustrativos
+                    </span>
+                  </div>
+                </div>
+
+                <div className={s.heroPreviewList}>
+                  <div className={s.heroPreviewListHead}>
+                    <h3>Recebimentos</h3>
+                    <span>Exemplo do mês</span>
+                  </div>
+
+                  <div className={s.heroPreviewRow}>
+                    <div className={s.heroProperty}>
+                      <span className={s.heroPropertyIcon} aria-hidden="true">
+                        01
+                      </span>
+                      <div>
+                        <strong>Apartamento Aurora</strong>
+                        <span>Unidade 101</span>
+                      </div>
+                    </div>
+
+                    <div className={s.heroPropertyAmount}>
+                      <strong>R$ 2.800</strong>
+                      <span className={s.heroStatusPaid}>
+                        Recebido
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={s.heroPreviewRow}>
+                    <div className={s.heroProperty}>
+                      <span className={s.heroPropertyIcon} aria-hidden="true">
+                        02
+                      </span>
+                      <div>
+                        <strong>Casa Jardim</strong>
+                        <span>Unidade 01</span>
+                      </div>
+                    </div>
+
+                    <div className={s.heroPropertyAmount}>
+                      <strong>R$ 2.200</strong>
+                      <span className={s.heroStatusPending}>
+                        A receber
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={s.heroPreviewRow}>
+                    <div className={s.heroProperty}>
+                      <span className={s.heroPropertyIcon} aria-hidden="true">
+                        03
+                      </span>
+                      <div>
+                        <strong>Sala Comercial</strong>
+                        <span>Unidade 203</span>
+                      </div>
+                    </div>
+
+                    <div className={s.heroPropertyAmount}>
+                      <strong>R$ 3.400</strong>
+                      <span className={s.heroStatusPaid}>
+                        Recebido
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className={s.heroPreviewFootnote}>
+                  Dados fictícios para demonstração visual.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <a className={s.heroScrollHint} href="#tour">
+            Explore o Aluga na apresentação abaixo
+            <IconCaret />
+          </a>
+        </section>
         {/* ---------------- A apresentação guiada pela rolagem ----------------
 
             Sete etapas, e a última ocupa quatro telas de rolagem (os quatro
             estados do painel). Tudo o que a landing explica está aqui — uma
             explicação, um bloco. ---------------- */}
+        {/* Benefícios principais */}
+        <section className={s.benefitsSection} aria-labelledby="benefits-title">
+          <div className={s.benefitsContainer}>
+            <div className={s.benefitsHeading}>
+              <div>
+                <span className={s.benefitsLabel}>POR QUE USAR O ALUGA</span>
+                <h2 id="benefits-title" className={s.benefitsTitle}>
+                  Menos informação espalhada.
+                  <span>Mais clareza para administrar.</span>
+                </h2>
+              </div>
+              <p className={s.benefitsLead}>
+                Imóveis, contratos e informações financeiras organizados para você
+                acompanhar seus aluguéis sem depender de várias planilhas.
+              </p>
+            </div>
+            <div className={s.benefitsCards}>
+              {[
+                {
+                  number: '01',
+                  title: 'Tudo em um só lugar',
+                  text: 'Organize imóveis, unidades, inquilinos e contratos para encontrar o que precisa.',
+                },
+                {
+                  number: '02',
+                  title: 'Saiba o que falta receber',
+                  text: 'Acompanhe cobranças, recebimentos e valores que continuam pendentes.',
+                },
+                {
+                  number: '03',
+                  title: 'Entenda seus resultados',
+                  text: 'Consulte informações financeiras e acompanhe o resultado de cada imóvel.',
+                },
+              ].map((item) => (
+                <article className={s.benefitsCard} key={item.number}>
+                  <span className={s.benefitsNumber}>{item.number}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
         <ProductTour steps={TOUR} id="tour" />
 
-        {/* ---------------- Planos ---------------- */}
-        <section className={s.plans} id="planos">
-          <PricingTable
-            plans={PLANS}
-            yearlyMonths={10}
-            yearlyNote="10 meses, 2 de graça"
-            onSelect={() => (window.location.href = '/design-system/admin')}
-          />
-          <PricingNote>
-            Unidade é o que gera aluguel: cada kitnet ou loja conta como uma. Titular extra sai R$ 9
-            por mês, e toda conta vem com 2 logins de ajudante de graça. Os 5 primeiros fundadores
-            ganham o primeiro mês.
-          </PricingNote>
+        {/* Recursos em detalhe */}
+        <section className={s.featuresSection} id="recursos" aria-labelledby="features-title">
+          <div className={s.featuresContainer}>
+            <div className={s.featuresIntro}>
+              <span className={s.featuresEyebrow}>RECURSOS DO ALUGA</span>
+              <h2 id="features-title">
+                Do cadastro ao recebimento.
+                <span>Tudo faz parte da mesma gestão.</span>
+              </h2>
+              <p>
+                Você não precisa procurar cada informação em um lugar diferente.
+                Acompanhe as etapas da administração dos seus aluguéis com mais contexto.
+              </p>
+            </div>
+
+            <div className={s.featuresLayout}>
+              <div className={s.featuresList}>
+                {[
+                  {
+                    number: '01',
+                    title: 'Imóveis e unidades',
+                    text: 'Organize endereços, unidades e seus respectivos titulares em uma estrutura fácil de consultar.',
+                  },
+                  {
+                    number: '02',
+                    title: 'Contratos e inquilinos',
+                    text: 'Consulte quem ocupa cada unidade, o valor combinado e as datas importantes do contrato.',
+                  },
+                  {
+                    number: '03',
+                    title: 'Cobranças e recebimentos',
+                    text: 'Veja os valores previstos, o que já foi recebido e o que continua pendente.',
+                  },
+                  {
+                    number: '04',
+                    title: 'Despesas e resultados',
+                    text: 'Reúna informações financeiras para entender melhor o resultado de cada imóvel.',
+                  },
+                ].map((feature) => (
+                  <article className={s.featureItem} key={feature.number}>
+                    <span className={s.featureNumber}>{feature.number}</span>
+                    <div>
+                      <h3>{feature.title}</h3>
+                      <p>{feature.text}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className={s.featuresVisual}>
+                <div className={s.featuresVisualHeader}>
+                  <span>VISÃO DA GESTÃO</span>
+                  <span className={s.featuresDemoBadge}>Exemplo ilustrativo</span>
+                </div>
+
+                <div className={s.featuresFlow}>
+                  <div className={s.featuresFlowMain}>
+                    <span className={s.featuresFlowLabel}>IMÓVEL</span>
+                    <strong>Edifício das Araucárias</strong>
+                    <span>3 unidades cadastradas</span>
+                  </div>
+
+                  <div className={s.featuresFlowConnector} aria-hidden="true" />
+
+                  <div className={s.featuresFlowPair}>
+                    <div className={s.featuresFlowCard}>
+                      <span className={s.featuresFlowLabel}>CONTRATO</span>
+                      <strong>Apartamento 201</strong>
+                      <span>Vencimento dia 10</span>
+                    </div>
+                    <div className={s.featuresFlowCard}>
+                      <span className={s.featuresFlowLabel}>COBRANÇA</span>
+                      <strong>Outubro</strong>
+                      <span>R$ 1.850,00 previstos</span>
+                    </div>
+                  </div>
+
+                  <div className={s.featuresFlowConnector} aria-hidden="true" />
+
+                  <div className={s.featuresFlowResult}>
+                    <div>
+                      <span className={s.featuresFlowLabel}>RECEBIMENTO</span>
+                      <strong>R$ 1.850,00</strong>
+                    </div>
+                    <span className={s.featuresFlowStatus}>Recebido</span>
+                  </div>
+                </div>
+
+                <p className={s.featuresVisualNote}>
+                  Dados fictícios para demonstrar a organização das informações.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
-        {/* ---------------- CTA final ---------------- */}
-        <section className={s.final}>
-          <h2 className={s.sectionTitle}>14 dias, sem cartão e sem perguntar nada</h2>
-          <p className={s.sectionLead}>
-            Cadastra um imóvel, um inquilino e um contrato. Se não fizer sentido para você, some e
-            não paga nada.
-          </p>
-          <Button
-            size="lg"
-            iconRight="arrow-right"
-            onClick={() => (window.location.href = '/design-system/admin')}
-          >
-            Começar teste grátis
-          </Button>
+        {/* Gestao familiar */}
+        <section className={s.familySection} id="familia" aria-labelledby="family-title">
+          <div className={s.familyContainer}>
+            <div className={s.familyContent}>
+              <span className={s.familyEyebrow}>GESTÃO FAMILIAR</span>
+              <h2 id="family-title">
+                Patrimônio compartilhado.
+                <span>Informações de cada titular no seu lugar.</span>
+              </h2>
+              <p>
+                Quando os imóveis pertencem a pessoas diferentes da mesma família,
+                a organização precisa respeitar essa divisão.
+              </p>
+              <p>
+                O Aluga permite relacionar imóveis aos seus titulares e consultar
+                informações por responsável, sem perder a visão do conjunto.
+              </p>
+
+              <div className={s.familyHighlights}>
+                <div>
+                  <strong>Por titular</strong>
+                  <span>Identifique a quem pertence cada imóvel.</span>
+                </div>
+                <div>
+                  <strong>Visão conjunta</strong>
+                  <span>Acompanhe os imóveis da família em uma organização central.</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={s.familyVisual}>
+              <div className={s.familyVisualTop}>
+                <div>
+                  <span className={s.familyVisualLabel}>EXEMPLO DE ORGANIZAÇÃO</span>
+                  <h3>Imóveis por titular</h3>
+                </div>
+                <span className={s.familyVisualTag}>Dados fictícios</span>
+              </div>
+
+              {[
+                { initials: 'IA', name: 'Iara Alves', description: '2 imóveis vinculados', properties: 'Casa do CIC · Sala Centro' },
+                { initials: 'MA', name: 'Marcos Alves', description: '1 imóvel vinculado', properties: 'Apartamento Jardim' },
+                { initials: 'LA', name: 'Lúcia Alves', description: '2 imóveis vinculados', properties: 'Sobrado Norte · Loja Central' },
+              ].map((holder) => (
+                <div className={s.familyHolder} key={holder.initials}>
+                  <div className={s.familyAvatar} aria-hidden="true">{holder.initials}</div>
+                  <div className={s.familyHolderInfo}>
+                    <strong>{holder.name}</strong>
+                    <span>{holder.properties}</span>
+                  </div>
+                  <span className={s.familyHolderCount}>{holder.description}</span>
+                </div>
+              ))}
+
+              <div className={s.familyVisualFooter}>
+                Uma organização central, com cada imóvel associado ao seu titular.
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Como funciona */}
+        <section className={s.processSection} id="como-funciona" aria-labelledby="process-title">
+          <div className={s.processContainer}>
+            <div className={s.processHeading}>
+              <div>
+                <span className={s.processEyebrow}>COMO FUNCIONA</span>
+                <h2 id="process-title">
+                  Uma forma mais simples
+                  <span>de cuidar dos seus aluguéis.</span>
+                </h2>
+              </div>
+              <p>
+                Comece organizando seus imóveis. Depois, acompanhe contratos,
+                cobranças e resultados em um mesmo lugar.
+              </p>
+            </div>
+            <div className={s.processSteps}>
+              {[
+                {
+                  number: '01',
+                  label: 'ORGANIZE',
+                  title: 'Cadastre seus imóveis',
+                  text: 'Reúna imóveis e unidades, identificando seus titulares e as informações de cada endereço.',
+                },
+                {
+                  number: '02',
+                  label: 'ACOMPANHE',
+                  title: 'Tenha os contratos à mão',
+                  text: 'Consulte inquilinos, vencimentos e cobranças para saber o que precisa da sua atenção.',
+                },
+                {
+                  number: '03',
+                  label: 'ENTENDA',
+                  title: 'Veja o resultado',
+                  text: 'Acompanhe recebimentos, despesas e informações financeiras dos seus imóveis.',
+                },
+              ].map((step) => (
+                <article className={s.processStep} key={step.number}>
+                  <div className={s.processStepTop}>
+                    <span className={s.processNumber}>{step.number}</span>
+                    <span className={s.processStepLabel}>{step.label}</span>
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </article>
+              ))}
+            </div>
+            <div className={s.processBottom}>
+              <p>Quer conhecer as telas antes de começar?</p>
+              <a href="#tour" className={s.processLink}>
+                Explorar a demonstração
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Planos */}
+        <section className={s.plansV2} id="planos" aria-labelledby="plans-intro-title">
+          <div className={s.plansV2Container}>
+            <div className={s.plansV2Intro}>
+              <span className={s.plansV2Eyebrow}>PLANOS E PREÇOS</span>
+              <h2 id="plans-intro-title">
+                Um plano para o tamanho
+                <span>do seu patrimônio.</span>
+              </h2>
+              <p>
+                Compare os limites de unidades e titulares. Escolha entre
+                pagamento mensal ou anual e encontre a opção adequada à sua gestão.
+              </p>
+            </div>
+            <PricingTable
+              className={s.plansV2Table}
+              plans={PLANS.map((plan) => ({
+                ...plan,
+                ctaLabel: 'Conhecer o painel',
+                ctaIcon: 'arrow-right' as const,
+              }))}
+              yearlyMonths={10}
+              yearlyNote="10 meses, 2 de graça"
+              onSelect={() => (window.location.href = '/design-system/admin')}
+            />
+            <div className={s.plansV2Notes}>
+              <div>
+                <strong>O que conta como unidade?</strong>
+                <p>
+                  Cada espaço que gera aluguel conta como uma unidade.
+                  Uma casa, kitnet ou loja alugada individualmente corresponde a uma unidade.
+                </p>
+              </div>
+              <div>
+                <strong>Informações adicionais</strong>
+                <PricingNote>
+                  Titular adicional: R$ 9 por mês. Cada conta inclui dois acessos
+                  de ajudante. No pagamento anual, o valor equivale a dez mensalidades.
+                </PricingNote>
+              </div>
+            </div>
+            <p className={s.plansV2Disclaimer}>
+              Os botões dos planos abrem uma demonstração do painel.
+              A contratação não é realizada nesta página.
+            </p>
+          </div>
+        </section>
+        {/* Perguntas frequentes */}
+        <section className={s.faqSection} id="perguntas" aria-labelledby="faq-title">
+          <div className={s.faqContainer}>
+            <div className={s.faqIntro}>
+              <span className={s.faqEyebrow}>PERGUNTAS FREQUENTES</span>
+              <h2 id="faq-title">
+                Tudo mais claro
+                <span>antes de começar.</span>
+              </h2>
+              <p>
+                Reunimos algumas respostas sobre a organização dos imóveis,
+                os titulares e os planos do Aluga.
+              </p>
+              <Link href="/design-system/admin" className={s.faqLink}>
+                Conhecer o painel
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <div className={s.faqList}>
+              {[
+                {
+                  question: 'Para quem o Aluga foi pensado?',
+                  answer: 'Para proprietários que administram seus próprios imóveis e precisam organizar contratos, cobranças e informações financeiras.',
+                },
+                {
+                  question: 'O que conta como uma unidade?',
+                  answer: 'Cada espaço alugado individualmente conta como uma unidade. Uma casa conta como uma; três kitnets alugadas separadamente contam como três.',
+                },
+                {
+                  question: 'Posso organizar imóveis de diferentes pessoas da família?',
+                  answer: 'O Aluga trabalha com titulares. Assim, cada imóvel pode ser relacionado ao seu responsável, mantendo as informações organizadas.',
+                },
+                {
+                  question: 'Qual é a diferença entre os planos?',
+                  answer: 'Os limites de unidades e titulares variam conforme o plano. Você pode comparar essas quantidades nos cartões de preços acima.',
+                },
+                {
+                  question: 'Como funciona o pagamento anual?',
+                  answer: 'O valor anual corresponde a dez mensalidades do plano escolhido. O seletor de preços mostra o total anual antes da contratação.',
+                },
+                {
+                  question: 'Preciso criar uma conta para conhecer o painel?',
+                  answer: 'Não para explorar a demonstração disponível nesta página. Ela utiliza dados ilustrativos e não cria uma conta.',
+                },
+              ].map((item) => (
+                <details name="aluga-faq" className={s.faqItem} key={item.question}>
+                  <summary className={s.faqQuestion}>
+                    <span>{item.question}</span>
+                    <span className={s.faqIndicator} aria-hidden="true">+</span>
+                  </summary>
+                  <p className={s.faqAnswer}>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA final */}
+        <section className={s.finalV2} aria-labelledby="final-title">
+          <div className={s.finalV2Inner}>
+            <span className={s.finalV2Eyebrow}>CONHEÇA O ALUGA</span>
+            <h2 id="final-title">
+              Seus imóveis merecem
+              <span>uma gestão mais tranquila.</span>
+            </h2>
+            <p>
+              Explore o painel, conheça as telas e veja como o Aluga organiza
+              as informações importantes dos seus aluguéis.
+            </p>
+            <Link href="/design-system/admin" className={s.finalV2Button}>
+              Explorar o painel
+              <span aria-hidden="true">→</span>
+            </Link>
+            <span className={s.finalV2Note}>
+              Demonstração com dados ilustrativos. Não é necessário criar uma conta.
+            </span>
+          </div>
         </section>
       </main>
 
-      <footer className={s.foot}>
-        <Wordmark variant="spaced" size={14} />
-        <p className={s.fine}>
-          Aluga é o nome provisório. O definitivo passa pelo INPI antes do lançamento.
-        </p>
+      <footer className={s.footerV2}>
+        <div className={s.footerV2Container}>
+          <div className={s.footerV2Main}>
+            <div className={s.footerV2Brand}>
+              <Link href="/" aria-label="Aluga, voltar ao início">
+                <Wordmark variant="spaced" size={20} />
+              </Link>
+              <p>
+                Mais organização para quem cuida dos próprios imóveis.
+              </p>
+            </div>
+
+            <nav className={s.footerV2Nav} aria-label="Navegação do rodapé">
+              <div>
+                <strong>Conheça</strong>
+                <a href="#recursos">Recursos</a>
+                <a href="#familia">Gestão familiar</a>
+                <a href="#como-funciona">Como funciona</a>
+              </div>
+              <div>
+                <strong>Explore</strong>
+                <a href="#tour">Demonstração</a>
+                <a href="#planos">Planos e preços</a>
+                <a href="#perguntas">Perguntas frequentes</a>
+              </div>
+            </nav>
+          </div>
+
+          <div className={s.footerV2Bottom}>
+            <p>Aluga — gestão de aluguéis para proprietários.</p>
+            <p>Nome provisório, sujeito à verificação antes do lançamento.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
