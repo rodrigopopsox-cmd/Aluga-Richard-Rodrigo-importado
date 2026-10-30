@@ -14,10 +14,11 @@
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
 >
-> **Estado em 29/10/2026: 8 das 15 tarefas feitas (1, 3, 4, 5, 7, 9, 10 + a 2 depende de
+> **Estado em 30/10/2026: 8 das 15 tarefas feitas (1, 3, 4, 5, 7, 9, 10 + a 2 depende de
 > consulta externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo)
 > e a 6 (título desconhecido). Sprint 2: a 7 (landing) está **pronta e aprovada pelo
-> Rodrigo** — *"Perfeito ficou tudo otimo"* — depois de 10 rodadas de revisão. A **9
+> Rodrigo** — *"Perfeito ficou tudo otimo"* — e em **30/10/2026 ele próprio refez a
+> página** (commit `542ec1d`, 9 seções; tour e planos preservados). A **9
 > (mensagens)** e a **10 (linguagem simples)** estão entregues. A 8 e a 11 (tutoriais) foram
 > **puladas a pedido do Rodrigo** (*"as tarefas de tutorais nos pulamos por enquanto"*) —
 > depende de prints do WhatsApp, que exigem o celular dele. Falta publicar no VPS, que é do
@@ -304,10 +305,27 @@ porque cada rodada ensinou uma coisa que o commit final não mostra:
 | 8ª | *"use essa ideia que eu te dei e refaça por favor... parece que esta incompleto"* · *"use a tela real do Completo incluindo as imagens das casas"* · *"so copie a tela do painel nao invente nada"* · *"tirar o nome de menu 'Este mês'"* | as telas embedadas são as **do produto**, não desenho delas. E número que carrega significado (dinheiro, percentual) **não anima de zero** — só fade/translate |
 | 9ª | *"toda essa area 'estes mês' eu quero junto com Animated Product Showcase mostrando todas as nossas funçoes de acessibilidade, tema e o modo simples e o modo completo, sempre comece com o modo completo"* | os quatro estados entram como **última etapa**, começando no Completo |
 | 10ª | *"vc acabou fazendo outra animaçao embaixo de onde eu queria... o legal seria a explicaçao do site estar tudo no mesmo lugar"* · *"na ultima sessao da animaçao mostrando nosso painel e as funcionalidades dele animada sem o cliente precisar em clicar em nada so dando scroll"* | **nada de bloco separado**: uma explicação, um lugar. E os estados se demonstram **por rolagem**, sem clique |
+| **11ª (30/10/2026)** | *"Atualizei algumas coisas na landing"* | **o próprio Rodrigo refez a página**: +2.220 linhas nos 2 arquivos, 9 seções, hero com prévia e métricas, recursos, gestão familiar, "Como funciona" (3 passos) e FAQ. **O tour e os planos foram preservados.** |
 
-**Estado final (`82918a2`) — a landing é UMA explicação, num bloco só.** Não existe seção
-depois da apresentação. Estrutura: hero (só texto) → `ProductTour` com **7 etapas** →
-planos → CTA final → rodapé.
+**Estado final (`542ec1d`, 11ª rodada) — o Rodrigo refez a página inteira.** Em 30/10/2026 ele
+reconstruiu `LandingScreen.tsx` e `page.module.css` (+2.220 linhas) e a landing passou a ter
+**9 seções**: hero com prévia e métricas · "Por que usar o Aluga" · **`ProductTour`
+(preservado, 7 etapas)** · "Recursos do Aluga" · "Gestão familiar" · "Como funciona" (3
+passos) · **planos (preservados)** · 6 perguntas frequentes · CTA final · rodapé.
+
+**A 11ª rodada reverteu a decisão da 10ª.** A 10ª tinha pedido "tudo no mesmo lugar" e a
+landing ficou num bloco só; em 30/10 o Rodrigo desfez isso e reconstruiu com seções.
+**Vale a decisão nova** — a do bloco único fica registrada só como histórico.
+
+**Os 3 passos do "Como funciona" não existiam** — a R10 não os definia, era lacuna. Agora:
+**01 ORGANIZE** (cadastre seus imóveis) · **02 ACOMPANHE** (tenha os contratos à mão) ·
+**03 ENTENDA** (veja o resultado). Os três dizem só o que o produto faz.
+
+**Validação do `542ec1d`:** `check-tokens` 208 OK · `stylelint` limpo · `npm run typecheck`
+limpo · `/` em HTTP 200 com 41.257 B (era 23 KB) · `/design-system` e
+`/design-system/admin` em 200 · zero emoji, zero barra de progresso, zero prova social e
+zero menção a concorrente no código · os 10 textos novos conferidos nos chunks do servidor
+· dados ilustrativos identificados ("Dados fictícios para demonstração visual.").
 
 **A 7ª etapa ("Do seu jeito") é o painel e o que se configura nele, e é a única com quatro
 beats** — ocupa quatro telas de rolagem, uma por estado:

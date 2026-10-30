@@ -16,7 +16,7 @@ Site do **Aluga** (gestão de aluguéis para o mercado brasileiro), composto de 
 |---|---|---|
 | **Vitrine do Design System** | Página `/design-system` que exibe todos os componentes, tokens e telas de exemplo | `src/app/design-system/` |
 | **Template do painel admin** | Telas reais do produto, montadas só com componentes do design system. **7 telas da v1 já desenhadas** (ver seção 4.7) | `design-system/templates/admin/` |
-| **Landing** | Página `/` com a promessa e uma apresentação de 7 etapas comandada pela rolagem. **Feita e aprovada** (ver seção 4.8) | `src/app/` |
+| **Landing** | Página `/` com **9 seções**, entre elas a demonstração de 7 etapas comandada pela rolagem. **Refeita pelo Rodrigo em 30/10/2026** (ver seção 4.8) | `src/app/` |
 
 O design system é a **fonte da verdade visual**: nada de CSS solto, nada de cor/tamanho
 inventado fora dos tokens.
@@ -217,17 +217,42 @@ Cobranças · Inquilinos · Contratos · Despesas. ("Financeiro" virou **Recebim
 
 ### 4.8 Landing page em `/`
 
-Commit `82918a2`. Tarefa 7 do Segundo Cérebro e R10 da spec. **A restrição que define o
-commit é a que a própria tarefa põe: "Só componentes e tokens do design system."**
+Commit `542ec1d` — **redesign do Rodrigo, 30/10/2026**. Tarefa 7 do Segundo Cérebro e R10 da
+spec. **A restrição que define o commit é a que a própria tarefa põe: "Só componentes e
+tokens do design system."** Esse commit só mexe em `LandingScreen.tsx` e
+`page.module.css`; `ProductTour` e `PricingTable` ficaram intactos.
 
-**A landing é UMA explicação, num bloco só.** Não existe seção depois da apresentação:
-tudo o que a página explica está dentro do tour. Foi o que o Rodrigo pediu na 10ª rodada,
-depois de reprovar uma versão que tinha a demonstração do painel como bloco separado
-embaixo — *"vc acabou fazendo outra animaçao embaixo de onde eu queria... o legal seria
-a explicaçao do site estar tudo no mesmo lugar"*.
+**O Rodrigo refez a página inteira (+2.220 linhas nos dois arquivos).** O tour e os planos
+foram **mantidos** — o tour segue com as **7 etapas** e os 4 beats da 7ª, e a tela de planos
+continua aprovada sem ressalva. O que ele acrescentou foi **a página comercial em volta**:
+a landing deixou de ser só a explicação e ganhou as seções que uma comercial precisa.
 
-**Estrutura atual:** hero (só texto) → `ProductTour` com **7 etapas** → planos → CTA final
-→ rodapé. Nada entre o tour e os planos.
+> **Reversão de decisão — registrar.** Na 10ª rodada o Rodrigo tinha pedido *"a explicaçao
+> do site estar tudo no mesmo lugar"* e a landing ficou num bloco só (hero → tour → planos).
+> Em 30/10 ele próprio desfez isso e reconstruiu a página com 9 seções. **A decisão
+> vigente é a nova**; a do bloco único fica aqui só como histórico.
+
+**Estrutura atual (9 seções, nesta ordem):**
+
+| # | Seção | âncora | O que é |
+|---|---|---|---|
+| 1 | `heroV2` | — | hero em duas colunas: texto + prévia do painel com métricas |
+| 2 | `benefitsSection` | — | "Por que usar o Aluga", 3 cartões |
+| 3 | `ProductTour` | `tour` | **a demonstração, preservada** — 7 etapas, 4 beats na 7ª |
+| 4 | `featuresSection` | `recursos` | "Recursos do Aluga", 4 itens |
+| 5 | `familySection` | `familia` | "Gestão familiar", por titular |
+| 6 | `processSection` | `como-funciona` | 3 passos: organize → acompanhe → entenda |
+| 7 | `plansV2` | `planos` | a tela de planos aprovada |
+| 8 | `faqSection` | `perguntas` | 6 perguntas factuais |
+| 9 | `finalV2` + `footerV2` | — | CTA final e rodapé |
+
+**Os 3 passos do "Como funciona" não existiam antes** — a R10 não os definia, era lacuna.
+Agora: **01 ORGANIZE** (cadastre seus imóveis) · **02 ACOMPANHE** (tenha os contratos à mão)
+· **03 ENTENDA** (veja o resultado). Os três dizem só o que o produto faz.
+
+**O hero tem prévia, não é mais só texto.** Mostra métricas de exemplo (Imóveis 04,
+Recebido no mès R$ 8.400) e três recebimentos, com a nota **"Dados fictícios para
+demonstração visual."** no rodapé do cartão — dados ilustrativos identificados.
 
 **As 7 etapas** (todas com dados reais das telas): 01 Imóveis · 02 Contratos · 03 Cobranças
 · 04 Recebimentos · 05 Resultado · 06 Rentabilidade · **07 "Do seu jeito"**.
