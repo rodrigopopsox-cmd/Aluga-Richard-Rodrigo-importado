@@ -23,13 +23,53 @@ import styles from './AdminApp.module.css';
 
 export type ToastInput = Pick<ToastProps, 'tone' | 'title' | 'message'>;
 
+/** Rótulo discreto que a demonstração mostra no topo do painel. */
+export const DEMO_BADGE = 'Demonstração · dados ilustrativos';
+
+export interface AdminAppProps {
+  /**
+   * `login` (padrão) é o fluxo de sempre: login simulado e depois o painel.
+   * `demo` abre o painel direto, sem login e sem onboarding — é a experiência
+   * comercial servida em `/demonstracao`.
+   */
+  mode?: 'login' | 'demo';
+}
+
 /**
  * Click-through admin template: Login → Painel (Visão geral / Análises) → Imóveis → Manutenção → Recebimentos → Cobranças → Planos.
  * Demo state only (fake data; auth flag and current module in localStorage). Use it as the starting composition for real screens.
+ *
+ * DOIS FLUXOS DE ENTRADA, UM SÓ PAINEL. O `AdminApp` apenas escolhe o caminho:
+ * `AdminLogin` monta `aluga_kit_auth`; `AdminPanel` é o painel em si. No modo
+ * demonstração o `AdminLogin` não é montado, então a chave de autenticação não é
+ * lida nem escrita — a demonstração não consegue interferir no fluxo "Entrar".
  */
-export function AdminApp() {
+export function AdminApp({ mode = 'login' }: AdminAppProps) {
+  if (mode === 'demo') return <AdminPanel demo />;
+  return <AdminLogin />;
+}
+
+/** Fluxo "Entrar". É o único lugar que monta a chave de autenticação. */
+function AdminLogin() {
   const [auth, setAuth] = useStoredState<'0' | '1'>('aluga_kit_auth', '0');
-  const [module, setModule] = useStoredState<ModuleId>('aluga_kit_module', 'dash');
+  if (auth !== '1') return <LoginScreen onLogin={() => setAuth('1')} />;
+  return <AdminPanel onLogout={() => setAuth('0')} />;
+}
+
+interface AdminPanelProps {
+  /** Demonstração: sem login, sem onboarding, e a saída volta para o site. */
+  demo?: boolean;
+  /** Só no fluxo com login. Na demonstração a saída é "Voltar ao site". */
+  onLogout?: () => void;
+}
+
+function AdminPanel({ demo = false, onLogout }: AdminPanelProps) {
+  // A demonstração navega com chave própria: visitar `/demonstracao` não muda o
+  // módulo em que o fluxo "Entrar" cai.
+  const [module, setModule] = useStoredState<ModuleId>(
+    demo ? 'aluga_demo_module' : 'aluga_kit_module',
+    'dash',
+  );
   const [view, setView] = useState<DashView>('overview');
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [adding, setAdding] = useState(false);
@@ -38,15 +78,19 @@ export function AdminApp() {
   const settings = useSettings();
   // Passos do onboarding concluídos (ids separados por vírgula). Persistido para a
   // tela não voltar a cada reload — no app real isso vem do banco.
+  //
+  // NA DEMONSTRAÇÃO o bloqueio é ignorado (`demo ||`) e `toggleOnb` não escreve:
+  // `aluga_onboarding` fica exatamente como o fluxo "Entrar" deixou.
   const [onbRaw, setOnbRaw] = useStoredState<string>('aluga_onboarding', '');
   const onbDone = onbRaw ? onbRaw.split(',').filter(Boolean) : [];
-  const onbComplete = onbRaw.split(',').filter(Boolean).length >= 5;
+  const onbComplete = demo || onbRaw.split(',').filter(Boolean).length >= 5;
   const toggleOnb = useCallback(
     (id: string) => {
+      if (demo) return;
       const next = onbDone.includes(id) ? onbDone.filter((x) => x !== id) : [...onbDone, id];
       setOnbRaw(next.join(','));
     },
-    [onbDone, onbRaw, setOnbRaw],
+    [demo, onbDone, onbRaw, setOnbRaw],
   );
 
   const goTo = (m: ModuleId) => {
@@ -60,8 +104,18 @@ export function AdminApp() {
     window.setTimeout(() => setToasts((x) => x.filter((y) => y.id !== id)), 3200);
   }, []);
 
-  const login = () => setAuth('1');
-  const logout = () => setAuth('0');
+  // Na demonstração não existe logout: a saída volta para a landing e não
+  // encosta em `aluga_kit_auth`.
+  const exit = demo
+    ? {
+        label: 'Voltar ao site',
+        icon: 'chevron-left' as const,
+        run: () => {
+          window.location.href = '/';
+        },
+      }
+    : undefined;
+
   const closeDialog = useCallback(() => setAdding(false), []);
   const save = () => {
     if (!draft.title.trim()) return;
@@ -83,11 +137,18 @@ export function AdminApp() {
     toast({ title: 'Tarefa criada', message: 'A equipe de manutenção foi notificada.' });
   };
 
-  if (auth !== '1') return <LoginScreen onLogin={login} />;
-
   return (
     <>
-      <Shell module={module} setModule={goTo} view={view} setView={setView} onLogout={logout} settings={settings}>
+      <Shell
+        module={module}
+        setModule={goTo}
+        view={view}
+        setView={setView}
+        onLogout={onLogout}
+        exit={exit}
+        badge={demo ? DEMO_BADGE : undefined}
+        settings={settings}
+      >
         {(bp) => {
           if (module === 'dash') {
             // Enquanto os 5 passos não estão feitos, o painel É o onboarding.

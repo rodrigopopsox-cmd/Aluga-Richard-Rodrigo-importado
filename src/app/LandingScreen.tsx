@@ -333,7 +333,12 @@ export function LandingScreen() {
           <Link className={s.topLogin} href="/design-system/admin">
             Entrar
           </Link>
-          <Link className={s.topAction} href="/design-system/admin">
+          <Link
+            className={s.topAction}
+            href="/demonstracao"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Conhecer o painel
           </Link>
         </div>
@@ -364,8 +369,10 @@ export function LandingScreen() {
 
               <div className={s.heroActions}>
                 <Link
-                  href="/design-system/admin"
+                  href="/demonstracao"
                   className={s.heroPrimaryLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Conhecer o painel
                   <span aria-hidden="true">→</span>
@@ -802,7 +809,7 @@ export function LandingScreen() {
               }))}
               yearlyMonths={10}
               yearlyNote="10 meses, 2 de graça"
-              onSelect={() => (window.location.href = '/design-system/admin')}
+              onSelect={() => window.open('/demonstracao', '_blank', 'noopener,noreferrer')}
             />
             <div className={s.plansV2Notes}>
               <div>
@@ -839,7 +846,12 @@ export function LandingScreen() {
                 Reunimos algumas respostas sobre a organização dos imóveis,
                 os titulares e os planos do Aluga.
               </p>
-              <Link href="/design-system/admin" className={s.faqLink}>
+              <Link
+                href="/demonstracao"
+                className={s.faqLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Conhecer o painel
                 <span aria-hidden="true">→</span>
               </Link>
@@ -896,7 +908,12 @@ export function LandingScreen() {
               Explore o painel, conheça as telas e veja como o Aluga organiza
               as informações importantes dos seus aluguéis.
             </p>
-            <Link href="/design-system/admin" className={s.finalV2Button}>
+            <Link
+              href="/demonstracao"
+              className={s.finalV2Button}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Explorar o painel
               <span aria-hidden="true">→</span>
             </Link>

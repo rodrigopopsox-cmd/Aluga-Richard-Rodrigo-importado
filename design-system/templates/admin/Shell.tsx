@@ -1,7 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Avatar, IconButton, Input, NavPills, SideRail, Wordmark, type RailItem } from '../../components';
+import { Avatar, Badge, IconButton, Input, NavPills, SideRail, Wordmark, type RailItem } from '../../components';
+import type { IconName } from '../../components/core/icons';
 import { user } from './data';
 import { SettingsMenu } from './SettingsMenu';
 import { useBreakpoint, type Breakpoint } from './useBreakpoint';
@@ -37,7 +38,18 @@ export interface ShellProps {
   setModule: (m: ModuleId) => void;
   view: DashView;
   setView: (v: DashView) => void;
-  onLogout: () => void;
+  /**
+   * Saída do fluxo com login. Opcional porque a demonstração não tem logout —
+   * ela usa `exit`. Sem `exit` e sem `onLogout` o botão de saída não aparece.
+   */
+  onLogout?: () => void;
+  /**
+   * Substitui o botão "Sair". Usado pela demonstração, que em vez de deslogar
+   * volta para o site (`/`).
+   */
+  exit?: { label: string; icon: IconName; run: () => void };
+  /** Rótulo discreto de demonstração, mostrado acima do conteúdo. */
+  badge?: string;
   settings: AppSettings;
   children: (bp: Breakpoint) => ReactNode;
 }
@@ -46,9 +58,12 @@ export interface ShellProps {
  * App frame. Desktop/tablet: sticky icon rail + top bar (nav pills or page title, search ⌘K, chat/bell, avatar).
  * Mobile: header with icon buttons + floating bottom pill bar.
  */
-export function Shell({ module, setModule, view, setView, onLogout, settings, children }: ShellProps) {
+export function Shell({ module, setModule, view, setView, onLogout, exit, badge, settings, children }: ShellProps) {
   const bp = useBreakpoint();
   const current = MODULES.find((m) => m.id === module) ?? MODULES[0];
+  // A demonstração troca "Sair" por "Voltar ao site". Se nenhuma das duas ações
+  // existir, o botão não é renderizado — nada de controle morto.
+  const exitAction = exit ?? (onLogout ? { label: 'Sair', icon: 'log-out' as const, run: onLogout } : null);
 
   if (bp === 'm') {
     return (
@@ -62,11 +77,26 @@ export function Shell({ module, setModule, view, setView, onLogout, settings, ch
           <IconButton icon="message-circle" label="Mensagens" dot />
           <IconButton icon="bell" label="Notificações" />
           <SettingsMenu settings={settings} align="header" />
-          <button type="button" onClick={onLogout} className={styles.avatarButton} title="Sair" aria-label="Sair">
-            <Avatar name={user.name} size={40} />
-          </button>
+          {exitAction && (
+            <button
+              type="button"
+              onClick={exitAction.run}
+              className={styles.avatarButton}
+              title={exitAction.label}
+              aria-label={exitAction.label}
+            >
+              <Avatar name={user.name} size={40} />
+            </button>
+          )}
         </header>
-        <main className={styles.mobileMain}>{children(bp)}</main>
+        <main className={styles.mobileMain}>
+          {badge && (
+            <div className={styles.demoNote}>
+              <Badge tone="soft">{badge}</Badge>
+            </div>
+          )}
+          {children(bp)}
+        </main>
         <div className={styles.bottomBar}>
           <NavPills compact bar label="Módulos" items={MODULES} value={module} onChange={(id) => setModule(id as ModuleId)} className={styles.bottomNav} />
         </div>
@@ -91,7 +121,14 @@ export function Shell({ module, setModule, view, setView, onLogout, settings, ch
           footer={
             <>
               <SettingsMenu settings={settings} align="rail" />
-              <IconButton icon="log-out" label="Sair" variant="ghost" onClick={onLogout} />
+              {exitAction && (
+                <IconButton
+                  icon={exitAction.icon}
+                  label={exitAction.label}
+                  variant="ghost"
+                  onClick={exitAction.run}
+                />
+              )}
             </>
           }
         />
@@ -127,7 +164,14 @@ export function Shell({ module, setModule, view, setView, onLogout, settings, ch
             <Avatar name={user.name} size={44} />
           </div>
         </header>
-        <main className={styles.main}>{children(bp)}</main>
+        <main className={styles.main}>
+          {badge && (
+            <div className={styles.demoNote}>
+              <Badge tone="soft">{badge}</Badge>
+            </div>
+          )}
+          {children(bp)}
+        </main>
       </div>
     </div>
   );
