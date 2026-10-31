@@ -1,0 +1,19 @@
+.lockup {
+  display: inline-block;
+  font-family: var(--font-sans);
+  line-height: var(--leading-none);
+  color: var(--text-strong);
+}
+
+.texto {
+  letter-spacing: var(--tracking-snug);
+  white-space: nowrap;
+}
+
+/*
+ * "Vibe." em laranja. É a única aparição do laranja na peça desde que o
+ * símbolo saiu — antes eram duas (o "A" inteiro e o "Vibe.").
+ */
+.vibe {
+  color: var(--brand);
+}

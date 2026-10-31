@@ -3,6 +3,7 @@
 // core
 export { Avatar, AvatarGroup, type AvatarProps, type AvatarGroupProps } from './core/Avatar';
 export { Badge, type BadgeProps, type BadgeTone } from './core/Badge';
+export { BrandLockup, type BrandLockupProps } from './core/BrandLockup';
 export { Button, type ButtonProps, type ButtonVariant } from './core/Button';
 export { Chip, type ChipProps } from './core/Chip';
 export { Icon, type IconProps } from './core/Icon';

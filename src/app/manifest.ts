@@ -6,8 +6,8 @@ import type { MetadataRoute } from 'next';
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Aluga',
-    short_name: 'Aluga',
+    name: 'Aluga Vibe',
+    short_name: 'Aluga Vibe',
     description: 'Gestão de imóveis para aluguel — unidades, inquilinos, contratos, cobranças e recebimentos.',
     lang: 'pt-BR',
     start_url: '/',

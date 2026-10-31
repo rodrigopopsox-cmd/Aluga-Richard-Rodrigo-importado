@@ -29,7 +29,7 @@ import "@fontsource/plus-jakarta-sans/700.css";
 import "@fontsource/plus-jakarta-sans/400-italic.css";
 
 export const metadata: Metadata = {
-  title: "Aluga",
+  title: "Aluga Vibe",
   description:
     "Gestão de imóveis para aluguel — unidades, inquilinos, contratos, cobranças e recebimentos.",
   // Ícones: os PNGs vêm de `scripts/build-icons.mjs`. `icon.svg` e `apple-icon.png`
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Aluga",
+    title: "Aluga Vibe",
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],

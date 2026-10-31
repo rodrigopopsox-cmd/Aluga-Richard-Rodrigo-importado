@@ -4,12 +4,12 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import {
   Badge,
+  BrandLockup,
   Card,
   CardHeader,
   PricingNote,
   PricingTable,
   ProductTour,
-  Wordmark,
   type PlanSpec,
   type TourStep,
 } from '@design-system';
@@ -315,8 +315,8 @@ export function LandingScreen() {
   return (
     <div className={s.page}>
       <header className={s.top}>
-        <Link className={s.brandLink} href="/" aria-label="Aluga — página inicial">
-          <Wordmark size={26} />
+        <Link className={s.brandLink} href="/" aria-label="Aluga Vibe — página inicial">
+          <BrandLockup size={32} />
         </Link>
 
         <nav className={s.topNav} aria-label="Navegação principal">
@@ -396,7 +396,7 @@ export function LandingScreen() {
 
                 <div className={s.heroPreviewHeader}>
                   <div className={s.heroPreviewBrand}>
-                    <Wordmark size={20} />
+                    <BrandLockup size={25} />
                     <span className={s.heroPreviewSection}>
                       Visão geral
                     </span>
@@ -519,7 +519,7 @@ export function LandingScreen() {
           </div>
 
           <a className={s.heroScrollHint} href="#tour">
-            Explore o Aluga na apresentação abaixo
+            Explore o Aluga Vibe na apresentação abaixo
             <IconCaret />
           </a>
         </section>
@@ -683,7 +683,7 @@ export function LandingScreen() {
                 a organização precisa respeitar essa divisão.
               </p>
               <p>
-                O Aluga permite relacionar imóveis aos seus titulares e consultar
+                O Aluga Vibe permite relacionar imóveis aos seus titulares e consultar
                 informações por responsável, sem perder a visão do conjunto.
               </p>
 
@@ -844,7 +844,7 @@ export function LandingScreen() {
               </h2>
               <p>
                 Reunimos algumas respostas sobre a organização dos imóveis,
-                os titulares e os planos do Aluga.
+                os titulares e os planos do Aluga Vibe.
               </p>
               <Link
                 href="/demonstracao"
@@ -860,7 +860,7 @@ export function LandingScreen() {
             <div className={s.faqList}>
               {[
                 {
-                  question: 'Para quem o Aluga foi pensado?',
+                  question: 'Para quem o Aluga Vibe foi pensado?',
                   answer: 'Para proprietários que administram seus próprios imóveis e precisam organizar contratos, cobranças e informações financeiras.',
                 },
                 {
@@ -869,7 +869,7 @@ export function LandingScreen() {
                 },
                 {
                   question: 'Posso organizar imóveis de diferentes pessoas da família?',
-                  answer: 'O Aluga trabalha com titulares. Assim, cada imóvel pode ser relacionado ao seu responsável, mantendo as informações organizadas.',
+                  answer: 'O Aluga Vibe trabalha com titulares. Assim, cada imóvel pode ser relacionado ao seu responsável, mantendo as informações organizadas.',
                 },
                 {
                   question: 'Qual é a diferença entre os planos?',
@@ -905,7 +905,7 @@ export function LandingScreen() {
               <span>uma gestão mais tranquila.</span>
             </h2>
             <p>
-              Explore o painel, conheça as telas e veja como o Aluga organiza
+              Explore o painel, conheça as telas e veja como o Aluga Vibe organiza
               as informações importantes dos seus aluguéis.
             </p>
             <Link
@@ -928,8 +928,8 @@ export function LandingScreen() {
         <div className={s.footerV2Container}>
           <div className={s.footerV2Main}>
             <div className={s.footerV2Brand}>
-              <Link href="/" aria-label="Aluga, voltar ao início">
-                <Wordmark variant="spaced" size={20} />
+              <Link href="/" aria-label="Aluga Vibe, voltar ao início">
+                <BrandLockup size={25} />
               </Link>
               <p>
                 Mais organização para quem cuida dos próprios imóveis.
@@ -949,12 +949,17 @@ export function LandingScreen() {
                 <a href="#planos">Planos e preços</a>
                 <a href="#perguntas">Perguntas frequentes</a>
               </div>
+              <div>
+                <strong>Legal</strong>
+                <a href="/termos">Termos de uso</a>
+                <a href="/privacidade">Privacidade</a>
+              </div>
             </nav>
           </div>
 
           <div className={s.footerV2Bottom}>
-            <p>Aluga — gestão de aluguéis para proprietários.</p>
-            <p>Nome provisório, sujeito à verificação antes do lançamento.</p>
+            <p>Aluga Vibe — gestão de aluguéis para proprietários.</p>
+            <p>Em fase de testes com os primeiros proprietários.</p>
           </div>
         </div>
       </footer>

@@ -16,3 +16,9 @@
 .period {
   color: var(--brand);
 }
+
+/* Segundo termo da marca ("Vibe"). Peso médio para separar de "ALUGA" sem
+   recorrer a cor — o laranja é reservado para o ponto. */
+.second {
+  font-weight: var(--weight-medium);
+}
