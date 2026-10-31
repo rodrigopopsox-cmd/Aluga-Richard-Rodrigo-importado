@@ -1,10 +1,10 @@
-# Contexto do projeto — Aluga (para o sócio Rodrigo e para qualquer IA que for assumir)
+# Contexto do projeto — Aluga Vibe (para o sócio Rodrigo e para qualquer IA que for assumir)
 
 > Documento de handoff. Ele existe para que **qualquer IA** (ou pessoa) consiga entrar no
 > projeto sem perguntar nada: o que já está pronto, o que foi corrigido, como rodar e
 > quais são as regras inegociáveis.
 >
-> Última atualização: 2026-10-29.
+> Última atualização: 2026-10-31.
 
 ---
 
@@ -397,6 +397,74 @@ não entrega.
 
 ---
 
+### 4.11 Marca "Aluga Vibe." e páginas legais — 31/10/2026
+
+O nome foi fechado por Richard e Rodrigo pelo WhatsApp em 31/10/2026, e a marca entrou na
+landing no mesmo dia.
+
+**O wordmark.** `design-system/components/core/BrandLockup.tsx` (novo) renderiza
+`Aluga Vibe.` — "Aluga" em tinta forte, "Vibe." em laranja. O ponto mora dentro do span
+laranja, então sai de graça. Aparece em três lugares: topo (32px), prévia do hero (25px) e
+rodapé (25px).
+
+**Por que um componente novo e não o `Wordmark`.** O `Wordmark` é tipográfico puro e
+sustenta 13 usos — painel, login, showcase. Enfiar desenho nele sujaria todos de uma vez.
+Em vez disso o `Wordmark` ganhou duas props **opcionais**: `secondWord` e `firstCase`.
+Omitidas, ele fica exatamente como era; nenhum uso existente mudou.
+
+**O símbolo entrou e saiu.** O Rodrigo desenhou um "A" sem barra com o ponto na base, e
+eu implementei como SVG inline. Na revisão ele pediu para tirar: *"vamos deixar só Aluga
+Vibe"*. Duas correções que ficaram no caminho:
+
+- O viewBox era `0 0 48 70` com o desenho ocupando só 30 × 57,5 — sobrava espaço vazio
+  dos lados e o "A" renderizava com proporção 0,52, quando um "A" de verdade é ~0,75.
+  Corrigido para `0 0 56 72` com `aspect-ratio` no CSS.
+- Ao tirar o símbolo, o `size` dos três lugares **subiu** (26→32, 20→25, 20→25). Sem
+  isso a marca encolhia: o símbolo somava ~1,36em de largura. A conta está no comentário
+  do `BrandLockup`, porque mexer num `size` sem mexer nos outros dois quebra a marca.
+
+**Bug achado no caminho:** o reset de `design-system/tokens/base.css` sobe
+`text-decoration: underline` em **todo** `a:hover`. O `.brandLink` tinha
+`text-decoration: none` mas não tinha `:hover`, então no hover o reset vencia e sublinhava o
+"Aluga Vibe." inteiro, inclusive por baixo do espaço entre as palavras. Corrigido em
+`.brandLink:hover` e `.footerV2Brand > a:hover`.
+
+**Páginas legais (R10).** `src/app/termos/page.tsx` e `src/app/privacidade/page.tsx`,
+com `src/app/legal.module.css`. Só fato do documento de produto: preços, limites, teste de
+14 dias e — o mais importante — a seção *"o que o Aluga Vibe não faz"*, que deixa claro
+que a ferramenta não substitui contrato, contador nem advogado. Os dados que faltam (CNPJ,
+encarregado, foro) estão marcados com **⚠️ visível**, de propósito — melhor que um texto
+que parece completo e não está. Linkadas no rodapé, que passou a ter 3 colunas.
+
+**Publicação.** `src/proxy.ts` devolve **404** para `/design-system` e o que vem abaixo
+quando `NODE_ENV` é `production`. Motivo: o `AdminLogin` não verifica senha — só escreve
+`aluga_kit_auth='1'` no localStorage. Não existe back-end de autenticação ainda. Publicar
+essa rota exporia os dados de demonstração como se fossem a conta de alguém. Em
+desenvolvimento as rotas continuam 200, porque é assim que o time revisa as telas.
+Convenção `proxy`, não `middleware` — o Next.js 16 renomeou o arquivo.
+
+Validado com servidor de produção de verdade em porta separada: `/`, `/demonstracao`,
+`/termos` e `/privacidade` em 200; `/design-system`, `/design-system/admin` e
+`/design-system/identidade` em 404 com corpo "Not Found".
+
+**Ponte com o Supabase.** `src/lib/supabase.ts` + `.env.example`. Cliente que lé de
+`NEXT_PUBLIC_SUPABASE_*`; sem credencial, `supabase` fica `null` e o app não quebra. Expõe
+as 5 funções chamáveis (`plan_unit_limit`, `plan_owner_limit`, `is_member`, `is_owner`,
+`invite_helper`) — as outras 5 do banco são gatilhos internos. **Nenhuma tela importa
+daqui ainda.** Dependência nova: `@supabase/supabase-js`.
+
+**`DEPLOY.md`** na raiz: o que sobe, o que não sobe, as pendências marcadas com ⚠️, o
+passo a passo no VPS e a conferência pós-publicar. Nenhuma variável de ambiente é
+necessária — o único `process.env` do projeto é o `NODE_ENV` dentro do próprio proxy.
+
+**O deploy subiu errado.** `aluga.vibeai.com.br/design-system/admin` abriu mostrando o
+painel de template. Causa: o Easypanel deployou do `main`, que está parado em `33f6853`
+(importação inicial). A branch `arena` tem 62 commits na frente. **O `main` continua
+intocado** — quem tem acesso ao Easypanel é o Richard, e levar para o `main` depende de
+autorização do Rodrigo.
+
+---
+
 ## 5. Armadilhas conhecidas (já pagamos por elas)
 
 1. **`edit_file` em lote no MESMO arquivo perde edições.** Duas ou três edições no mesmo
@@ -515,10 +583,12 @@ não entrega.
 ## 7. Git — estado
 
 - Branch da sessão: `arena/8e2745c8-aluga-richard-rodrigo-importad`
-- **Último commit pushed: `f8a3741`** — *docs(textos): tarefa 10 — linguagem simples nas
-  telas da v1*. Antes dele, `b1342af` (mensagens com o schema real conferido), `4d208ff`
-  (contexto da tarefa 9), `dd1e841` (mensagens), `6b99c95` (token `--space-0-5` no
-  `PlanCard`), `bee0a42` e `82918a2`.
+- **Último commit pushed: `8e04bcf`** — *docs(produto): PRODUCT.md recebe o dossiê do nome
+  "Aluga Vibe"*. A fila desde a última vez que este documento foi atualizado: `81b1ca1`
+  (ponte com o Supabase, ainda sem ligar nas telas), `f0de9f7` (guia de publicação),
+  `0d15744` (rotas de template fechadas em produção), `89e1b4f` (marca "Aluga Vibe." e
+  páginas legais), `4940dc7` (rota `/demonstracao`), `4412eb6` e `542ec1d` (redesign da
+  landing), `f8a3741` (tarefa 10) e `b1342af` (tarefa 9).
 - O `main` do repo (`33f6853`) **não tem** nada desse trabalho. Para levar pra `main` é
   preciso autorização explícita do Rodrigo.
 
@@ -590,14 +660,25 @@ rodada ensinou uma coisa que não se vê no commit final:
   boleto/Pix gerado, baixa automática, assinatura eletrônica válida, PDF/CSV real,
   conexão bancária, portal do inquilino autenticado, vitrine publicada e cálculos
   fiscais com valores reais. Resolve com conta de homologação e dados sintéticos.
+- [x] **Sprint 1 — tarefa 2 (nome)** — **fechada** em 31/10/2026. O Richard fez a
+      pesquisa em 30/10 (INPI, Instagram, domínios) e Richard e Rodrigo fecharam
+      **"Aluga Vibe"** pelo WhatsApp em 31/10. Dossiê completo em `PRODUCT.md` → Em aberto.
+      Faltam duas ações futuras, que não bloqueiam nada: ouvir um especialista em marcas
+      antes de depositar o pedido no INPI, e registrar os domínios.
 - [ ] **Levar o commit para a `main`** — depende de autorização do Rodrigo.
 - [ ] **Limpar o Painel (dashboard).** Única tela do painel que ainda mostra o template
       genérico: "Visitas", "Novos Contratos", "Manutenção", "Insights (Assistente IA)" e
       "Saúde Financeira" com percentil inventado. **É a próxima tarefa grande.**
-- [ ] **Publicar no VPS e criar o cadastro** — a landing (`82918a2`) está pronta e aprovada
-      pelo Rodrigo, mas o "pronto quando" da tarefa 7 depende de subir no subdomínio e de
-      existir uma tela de cadastro para o botão "Começar teste grátis" chegar. Ambos são do
-      Richard.
+- [ ] **Publicar no VPS e criar o cadastro** — a landing está pronta e aprovada pelo
+      Rodrigo, e `/termos` e `/privacidade` já existem (R10 fechada do lado do código). O
+      deploy **subiu errado**: o Easypanel aponta para o `main`, que está parado em
+      `33f6853` (importação inicial), então `aluga.vibeai.com.br/design-system/admin`
+      abriu com o painel de template. Quem tem acesso ao Easypanel é o Richard. Falta
+      também a tela de cadastro para o botão "Começar teste grátis" chegar.
+      Ver `DEPLOY.md`.
+- [ ] **Preencher os ⚠️ das páginas legais** — `/privacidade` precisa de CNPJ, razão
+      social, endereço e e-mail do encarregado; `/termos` precisa de CNPJ e foro. Sem o
+      CNPJ e o canal do encarregado a política não atende a LGPD. Decisão do Rodrigo.
 - [ ] **Revisar as 7 telas com o Rodrigo.** Roteiro em `ROTEIRO-REVISAO-TELAS.md`. Faltam
       testar com clique: diálogos de cadastro, CEP (Imóveis), limite do plano e download do
       CSV (Despesas).
@@ -667,8 +748,11 @@ foram as telas que criaram os componentes que ela reusa (`PricingTable`, `HowItW
 
 **Decisões de produto que o backlog revela:**
 
-- **O nome "Aluga" é provisório.** Pesquisa de nome em curso, direções Old Parr /
-  Mustang / nome da V0, consulta ao INPI nas classes 36 e 42. Registro em `PRODUCT.md`.
+- **O nome é "Aluga Vibe"** — escolhido pelo Richard em 30/10/2026 e fechado por Richard e
+  Rodrigo pelo WhatsApp em 31/10/2026. Dossiê completo em `PRODUCT.md` → Em aberto:
+  consulta ao INPI (pePI, base 27/10) sem conflito direto, risco no "Vibe" nas classes 36 e
+  42, Instagram livre, domínios `alugavibe.com.br` e `.com` livres no RDAP. A marca já
+  está na landing, no título da aba e nas páginas legais.
 - **Preços do Aluga: R$ 59 / 99 / 209 / 269** — **diferentes** do AluggaPro
   (79/119/229/299). Ainda em validação com os 5 fundadores.
 - **Vocabulário da v1:** `Proprietário · Imóvel · Unidade · Cobrança · Recebimento`.

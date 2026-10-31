@@ -14,9 +14,8 @@
 > **14 delas por completo**; 1 ficou com título cortado (ver seção 5). Dessas 14,
 > **todas têm a observação completa**.
 >
-> **Estado em 30/10/2026: 8 das 15 tarefas feitas (1, 3, 4, 5, 7, 9, 10 + a 2 depende de
-> consulta externa).** Sprint 1 está fechada exceto a 2 (pesquisa de nome/INPI, do Rodrigo)
-> e a 6 (título desconhecido). Sprint 2: a 7 (landing) está **pronta e aprovada pelo
+> **Estado em 31/10/2026: 9 das 15 tarefas feitas (1, 2, 3, 4, 5, 7, 9, 10).** Sprint 1
+> está fechada exceto a 6 (título desconhecido). Sprint 2: a 7 (landing) está **pronta e aprovada pelo
 > Rodrigo** — *"Perfeito ficou tudo otimo"* — e em **30/10/2026 ele próprio refez a
 > página** (commit `542ec1d`, 9 seções; tour e planos preservados). A **9
 > (mensagens)** e a **10 (linguagem simples)** estão entregues. A 8 e a 11 (tutoriais) foram
@@ -122,9 +121,15 @@ ativada por `data-a11y="on"`) e o menu da engrenagem no template do painel.
 > Registrar em `PRODUCT.md` (Em aberto). Pronto quando: temos 1 a 3 nomes sem conflito no
 > INPI e com domínio livre. Ref.: `docs/specs/v1.md`
 
-**O nome do produto ainda não está fechado.** "Aluga" é provisório. Direções de marca:
-estilo **Old Parr**, **Mustang**, ou o nome da **Vó/V0** (ver nota de leitura, seção 4).
-Registro de marca nas classes **36** (financeiro/seguros) e **42** (software).
+**✅ NOME FECHADO: Aluga Vibe.** Escolhido pelo Richard em 30/10/2026 e fechado por
+Richard e Rodrigo pelo WhatsApp em 31/10/2026. A pesquisa não passou pelas direções
+originais (Old Parr / Mustang / nome da Vó) — o Richard consultou o **INPI** (pePI, base
+27/10) direto em "Aluga Vibe" e não achou pedido nem registro em nenhuma classe. O risco
+está no "Vibe", não no "Aluga": há marcas com "Vibe" em vigor nas classes **36**
+(Imovibe, URBAN VIBE, VIBE MARISTA, PagVibe, VibePay) e **42** (VIBE puro, finvibe,
+Pagvibe). Instagram livre; domínios `alugavibe.com.br` e `.com` livres no RDAP. Dossiê
+completo em `PRODUCT.md` → Em aberto. A marca já está na landing, no título da aba e nas
+páginas legais. Faltam: ouvir especialista antes de depositar, e registrar os domínios.
 
 ### 3. Desenhar o onboarding — 06/11 · 4h · Normal
 

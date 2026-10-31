@@ -1,4 +1,4 @@
-# PRODUCT.md — Aluga (nome provisório)
+# PRODUCT.md — Aluga Vibe
 
 Contrato de produto: o que estamos construindo, para quem, como cobramos e em que ordem.
 Decidido por Richard e Rodrigo em 24/10/2026, depois de 8 rodadas de planejamento.
@@ -129,7 +129,7 @@ As tarefas vivem no **Segundo Cérebro** (área Empresarial, título começando 
 | Bloqueio do WhatsApp do proprietário pela Meta (a Evolution não é a API oficial) | as proteções acima, o link manual como reserva e a API oficial no número central |
 | O Pix automático do Mercado Pago pode não funcionar para conta de pessoa física | teste técnico na sprint 1, limitado a 2 dias, com o boleto mais Pix copia-e-cola como reserva |
 | Limites do Supabase grátis (pausa projetos parados, banco pequeno) | migrar para o plano pago quando houver assinantes |
-| Nome provisório "Aluga" soa igual a "Alugga" | usar só como provisório; o nome definitivo passa pelo INPI antes do lançamento público |
+| Oposição ou indeferimento do "Aluga Vibe" no INPI por causa do "Vibe" | nome já consultado no pePI sem conflito direto; ouvir especialista em marcas antes de depositar o pedido |
 | Engenharia reversa do AluggaPro | copiar só estrutura e fluxos, nunca telas, textos, código ou preços |
 
 ## Em aberto
