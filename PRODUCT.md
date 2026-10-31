@@ -134,6 +134,14 @@ As tarefas vivem no **Segundo Cérebro** (área Empresarial, título começando 
 
 ## Em aberto
 
-- **Nome definitivo.** Descartados: Tá Pago, que é marca da TA PAGO Produtos Digitais S.A., e Locare, cujo `.com.br` é de uma locadora de eventos. As listas checadas estão no histórico do planejamento. Falta consultar o INPI nas classes 36 e 42.
+- **Nome definitivo: Aluga Vibe** (escolhido pelo Richard em 30/10/2026). Antes foram descartados Tá Pago, que é marca da TA PAGO Produtos Digitais S.A., e Locare, cujo `.com.br` é de uma locadora de eventos.
+  - **INPI** (pePI, consulta anônima em 30/10/2026, base atualizada até 27/10/2026): "Aluga Vibe" e "alugavibe" não têm pedido nem registro em nenhuma classe.
+  - **O risco está no "Vibe".** "Aluga" é descritivo: na classe 36 o INPI indeferiu vários "Aluga + palavra" (Aluga Fácil, Rede Aluga Já, Aluga Zap, Aluga DF) e registrou outros (Aluga Mais, Aluga ON, Aluga360). Então a parte que distingue a marca é "Vibe", e há marcas com "Vibe" em vigor nas duas classes:
+    - Classe 36: Imovibe Imóveis (925684180), URBAN VIBE studios (935239600), VIBE MARISTA (926806076), PagVibe e VibePay (937799580 e 937799734). Em exame: IMOBILIÁRIA VIBEON (943671868). O "VIBE" sozinho foi indeferido várias vezes na 36 (Vibe Tecnologia, vibe corretora de seguros, ViBe Promotora, Vibecash).
+    - Classe 42: VIBE (921583060, Vibe Tecnologia Ltda, em vigor), finvibe (930294440) e Pagvibe (937799688). Em exame: VIBESTAY (941955826). Na 42 convivem muitas marcas "palavra + Vibe" registradas (Vibelink, FotoVibe, MedVibe).
+  - **Leitura:** não há conflito direto com "Aluga Vibe", mas pode haver oposição ou indeferimento por causa do "Vibe", principalmente na 36 (imobiliárias com Vibe no nome) e pelo "VIBE" puro registrado na 42. Vale ouvir um especialista em marcas antes de depositar.
+  - **Instagram:** @alugavibe, @aluga.vibe e @aluga_vibe não existem (30/10/2026, sem login; um perfil existente abre normalmente na mesma checagem). A busca na web não achou empresa ou app chamado Aluga Vibe.
+  - **Domínios:** alugavibe.com.br e alugavibe.com livres no RDAP (registro.br e Verisign) em 30/10/2026.
+  - **Decidido (Richard e Rodrigo, 31/10/2026, pelo WhatsApp):** seguem com **Aluga Vibe**, aceitando o risco do "Vibe". A marca já está na landing, no título da aba e nas páginas legais. Continua valendo ouvir um especialista em marcas antes de depositar o pedido no INPI, e registrar os domínios assim que a decisão for confirmada.
 - **Pix automático em conta de pessoa física** pelo Mercado Pago: depende do teste da sprint 1.
 - **Preços B2B:** hipótese, a revisar antes da v3.
